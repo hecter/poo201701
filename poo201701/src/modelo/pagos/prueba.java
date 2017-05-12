@@ -7,8 +7,8 @@ package modelo.pagos;
 
 /**
  *
- * @author 8649840
+ * @author      
  */
 public class prueba {
-    
+     
 }

@@ -7,7 +7,7 @@ package report.atencion;
 
 /**
  *
- * @author 8649840
+ * @author 
  */
 public class prueba {
     

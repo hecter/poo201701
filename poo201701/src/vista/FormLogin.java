@@ -198,7 +198,7 @@ public class FormLogin extends javax.swing.JFrame {
             usuario = Usuario.getInstance(textUsuario.getText(),
                     textPassword.getText());
             usuario.iniciarSesion();
-            mostrarMensaje("Bienvenidos");
+            mostrarMensaje("Llamar al formulario Principal...");
             new FormPais().setVisible(true);
             dispose();
         } catch (SQLException ex) {

@@ -29,7 +29,7 @@ import java.util.Calendar;
 import oracle.jdbc.pool.OracleDataSource;
 
 /**
- *
+ * 
  * @author hteran
  */
 public class BaseDatosOracle {
@@ -187,8 +187,6 @@ public class BaseDatosOracle {
         } finally {
             cerrarSentencia();
         }
-
-        //sentencia.close();
         return cursor;
     }
 

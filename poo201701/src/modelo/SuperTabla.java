@@ -19,7 +19,6 @@ package modelo;
  * MA 02110-1301  USA
  */
 import basededatos.Crud;
-import modelo.ImprimibleJasper;
 
 /**
  *

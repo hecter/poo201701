@@ -4,10 +4,10 @@
  * and open the template in the editor.
  */
 package modelo.facturacion;
-
+  
 /**
  *
- * @author 8649840
+ * @author 
  */
 public class prueba {
     
