@@ -18,6 +18,7 @@
  */
 package basededatos;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -29,7 +30,7 @@ import java.util.Calendar;
 import oracle.jdbc.pool.OracleDataSource;
 
 /**
- * 
+ *
  * @author hteran
  */
 public class BaseDatosOracle {
@@ -39,21 +40,15 @@ public class BaseDatosOracle {
     private String password;
     private Connection conexion;
     private PreparedStatement sentencia;
+    private CallableStatement sentenciaMetodo;
     private static BaseDatosOracle instance;
 
-    /**
-     *
-     */
     public BaseDatosOracle() {
         setPassword(Usuario.getInstance().getPassword());
         setUsuario(Usuario.getInstance().getUsuario());
-        setUrl("jdbc:oracle:thin:@10.0.33.163:1521:usboracle");  
+        setUrl("jdbc:oracle:thin:@10.0.33.163:1521:usboracle");
     }
 
-    /**
-     *
-     * @return        
-     */
     public static BaseDatosOracle getInstance() {
         if (instance == null) {
             instance = new BaseDatosOracle();
@@ -61,18 +56,10 @@ public class BaseDatosOracle {
         return instance;
     }
 
-    /**
-     *
-     * @param aInstance
-     */
     public static void setInstance(BaseDatosOracle aInstance) {
         instance = aInstance;
     }
 
-    /**
-     *
-     * @throws SQLException
-     */
     public void conectar() throws SQLException {
         OracleDataSource dataSource;
         if (conexion == null || !conexion.isClosed()) {
@@ -119,10 +106,6 @@ public class BaseDatosOracle {
         }
     }
 
-    /**
-     *
-     * @return @throws SQLException
-     */
     public Savepoint crearSavePoint() throws SQLException {
         return conexion.setSavepoint();
     }
@@ -187,27 +170,75 @@ public class BaseDatosOracle {
         } finally {
             cerrarSentencia();
         }
+
+        //sentencia.close();
         return cursor;
+    }
+
+    public void prepararLLamadoMetodo(String sql)
+            throws SQLException {
+        sentenciaMetodo = conexion.prepareCall(sql);
+    }
+
+    public void asignarParametroMetodo(int indice, String valor)
+            throws SQLException {
+        sentenciaMetodo.setString(indice, valor);
+    }
+
+    public void asignarParametroMetodo(int indice, long valor)
+            throws SQLException {
+        sentenciaMetodo.setLong(indice, valor);
+    }
+
+    public void asignarParametroDeSalida(int indice, int sqlType)
+            throws SQLException {
+        sentenciaMetodo.registerOutParameter(indice, sqlType);
+    }
+
+    public void asignarParametroDeSalida(String nombre, int sqlType)
+            throws SQLException {
+        sentenciaMetodo.registerOutParameter(nombre, sqlType);
     }
 
     public ResultSet ejecutarQuery() throws SQLException {
         ResultSet cursor;
+        //sentencia =  conexion.prepareStatement(sql, resultSetType, resultSetConcurrency)
         try {
+
             cursor = sentencia.executeQuery();
         } finally {
             cerrarSentencia();
         }
+
+        //sentencia.close();
         return cursor;
     }
 
     public int ejecutar() throws SQLException {
-        return sentencia.executeUpdate();
+        int ejecucion;
+        //   try {
+        ejecucion = sentencia.executeUpdate();
+        //  } finally {
+        //       cerrarSentencia();
+        //  }
+        return ejecucion;
+    }
+
+    public int ejecutarMetodo() throws SQLException {
+        int ejecucion;
+
+        ejecucion = sentenciaMetodo.executeUpdate();
+
+        return ejecucion;
     }
 
     public int ejecutar(String sql) throws SQLException {
         int ejecucion;
+        //   try {
         ejecucion = sentencia.executeUpdate();
-
+        //  } finally {
+        //       cerrarSentencia();
+        //  }
         return ejecucion;
     }
 
@@ -247,6 +278,14 @@ public class BaseDatosOracle {
     public String toString() {
         return "BaseDatosOracle{" + "url=" + url + ", usuario=" + usuario
                 + ", password=" + password + '}';
+    }
+
+    public CallableStatement getSentenciaMetodo() {
+        return sentenciaMetodo;
+    }
+
+    public void setSentenciaMetodo(CallableStatement sentenciaMetodo) {
+        this.sentenciaMetodo = sentenciaMetodo;
     }
 
 }
