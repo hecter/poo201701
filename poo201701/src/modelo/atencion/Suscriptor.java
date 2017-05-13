@@ -8,6 +8,7 @@ package modelo.atencion;
 import java.sql.SQLException;
 import modelo.SuperTabla;
 import basededatos.*;
+import java.sql.Date;
 
 import java.sql.ResultSet;
 import java.time.LocalDate;
@@ -23,14 +24,14 @@ public class Suscriptor implements SuperTabla{
     private String nombre;
     private String apellidos;
     private long tipo_documento_id;
-    private LocalDate  f_expedicion;
+    private Date  f_expedicion;
     private String ciudad_expedicion;
 
     public Suscriptor() {
     }
 
     public Suscriptor(long id,String nombre, String apellidos, long tipo_documento_id, 
-            LocalDate  f_expedicion, String ciudad_expedicion) throws SQLException, Exception {
+            Date  f_expedicion, String ciudad_expedicion) throws SQLException, Exception {
         setId(getconsecutivo());
         setNombre(nombre);
         setApellidos(apellidos);
@@ -38,6 +39,16 @@ public class Suscriptor implements SuperTabla{
         setF_expedicion(f_expedicion);
         setCiudad_expedicion(ciudad_expedicion);
     }
+
+    public Suscriptor(String nombre, String apellidos, long tipo_documento_id, Date f_expedicion, String ciudad_expedicion) {
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.tipo_documento_id = tipo_documento_id;
+        this.f_expedicion = f_expedicion;
+        this.ciudad_expedicion = ciudad_expedicion;
+    }
+    
+    
     
     
     public String obtenerNombreSecuencia() {
@@ -69,7 +80,7 @@ public class Suscriptor implements SuperTabla{
         basededatos.asignarParametro(1, getId());
         basededatos.asignarParametro(2, getNombre());
         basededatos.asignarParametro(3, getTipo_documento_id());
-        basededatos.asignarParametro(4, java.sql.Date.valueOf( getF_expedicion()));
+        basededatos.asignarParametro(4, getF_expedicion());
         basededatos.asignarParametro(5, getCiudad_expedicion());
         ejecucion = basededatos.ejecutar();
         basededatos.cerrarSentencia();
@@ -138,7 +149,7 @@ public class Suscriptor implements SuperTabla{
                     cursor.getString("NOMBRES"),
                     cursor.getString("APELLIDOS"),
                     cursor.getLong("TIPO_DOCUMENTO_ID"),
-                   cursor.getDate("F_EXPEDICION").toLocalDate(),
+                    cursor.getDate("F_EXPEDICION"),
                     cursor.getString("CIUDAD_EXPEDICION")
             );
         }
@@ -166,7 +177,7 @@ public class Suscriptor implements SuperTabla{
                     cursor.getString("NOMBRES"),
                     cursor.getString("APELLIDOS"),
                     cursor.getLong("TIPO_DOCUMENTO_ID"),
-                    cursor.getDate("F_EXPEDICION").toLocalDate(),
+                    cursor.getDate("F_EXPEDICION"),
                     cursor.getString("CIUDAD_EXPEDICION")
             ));
         }
@@ -231,11 +242,11 @@ public class Suscriptor implements SuperTabla{
         this.tipo_documento_id = tipo_documento_id;
     }
 
-    public LocalDate  getF_expedicion() {
+    public Date  getF_expedicion() {
         return f_expedicion;
     }
 
-    public void setF_expedicion(LocalDate  f_expedicion) {
+    public void setF_expedicion(Date  f_expedicion) {
         this.f_expedicion = f_expedicion;
     }
 
@@ -254,12 +265,5 @@ public class Suscriptor implements SuperTabla{
     }
 
    
-    
-    
-    
-    
-    
-    
-    
     
 }

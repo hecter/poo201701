@@ -17,10 +17,10 @@ import modelo.SuperTabla;
 public class Atencion implements SuperTabla{
     private long id;
     private Casa casa;
-    private long estado;
+    private Estado estado;
     private Date fecha;
     private Date fecha_solucion;
-    private long motivos;
+    private Motivo motivos;
     private long usuario;
 
     public Atencion() {
@@ -101,10 +101,10 @@ public class Atencion implements SuperTabla{
         basededatos.prepararSql(sql);
         basededatos.asignarParametro(1, getId());
         basededatos.asignarParametro(2, getCasa().getId());
-        basededatos.asignarParametro(3, getEstado()));
+       // basededatos.asignarParametro(3, getEstado()));
         basededatos.asignarParametro(4, getFecha());
         basededatos.asignarParametro(4, getFecha_solucion());
-        basededatos.asignarParametro(4, getMotivos());
+       // basededatos.asignarParametro(4, getMotivos());
         basededatos.asignarParametro(4, getUsuario());
         ejecucion = basededatos.ejecutar();
         basededatos.cerrarSentencia();
