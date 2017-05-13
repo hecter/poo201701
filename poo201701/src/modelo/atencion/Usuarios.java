@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package modelo.lectura;
+package modelo.atencion;
 
 /**
  *
- * @author    
+ * @author 20102122476
  */
-public class prueba {
+public class Usuarios {
     
 }
