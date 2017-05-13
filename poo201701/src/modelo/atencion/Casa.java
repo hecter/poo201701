@@ -5,6 +5,8 @@
  */
 package modelo.atencion;
 
+import modelo.lectura.Sector;
+
 /**
  *
  * @author 20111532577
