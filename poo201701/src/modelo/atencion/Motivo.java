@@ -7,8 +7,8 @@ package modelo.atencion;
 
 /**
  *
- * @author 20102122476
+ * @author 20111532577
  */
-public class Usuarios {
+public class Motivo {
     
 }
