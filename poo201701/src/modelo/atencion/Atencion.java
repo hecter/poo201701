@@ -17,10 +17,10 @@ import modelo.SuperTabla;
 public class Atencion implements SuperTabla{
     private long id;
     private Casa casa;
-    private Estado estado;
+    private long estado;
     private Date fecha;
     private Date fecha_solucion;
-    private Motivo motivos;
+    private long motivos;
     private long usuario;
 
     public Atencion() {
@@ -56,7 +56,7 @@ public class Atencion implements SuperTabla{
         
         System.out.println(this);
         basededatos.asignarParametro(1, getId());
-        //basededatos.asignarParametro(2, getCasa());
+        basededatos.asignarParametro(2, getCasa().getId());
         //basededatos.asignarParametro(3, getEstado());
         basededatos.asignarParametro(4, getFecha());
         basededatos.asignarParametro(4, getFecha_solucion());
@@ -69,12 +69,46 @@ public class Atencion implements SuperTabla{
 
     @Override
     public int eliminar() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BaseDatosOracle basededatos;
+        basededatos = BaseDatosOracle.getInstance();
+        String sql;
+        int ejecucion;
+        sql = "DELETE ATENCIONES WHERE ID = ?";
+        basededatos.conectar();
+        basededatos.prepararSql(sql);
+        basededatos.asignarParametro(1, getId());
+        ejecucion = basededatos.ejecutar();
+        basededatos.cerrarSentencia();
+        return ejecucion;
     }
 
     @Override
     public int actualizar() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BaseDatosOracle basededatos;
+        basededatos = BaseDatosOracle.getInstance();
+        String sql;
+        int ejecucion;
+        sql = "UPDATE ATENCIONES "
+                + "SET ID = ?, "
+                + "CASA_ID = ?, "
+                + "ESTADO_ID = ? "
+                + "FECHA = ?, "
+                + "FECHA_SOLUCION = ? "
+                + "MOTIVOS_ID = ? "
+                + "USUARIOS_ID = ? "
+                + "WHERE ID = ?";
+        basededatos.conectar();
+        basededatos.prepararSql(sql);
+        basededatos.asignarParametro(1, getId());
+        basededatos.asignarParametro(2, getCasa().getId());
+        basededatos.asignarParametro(3, getEstado()));
+        basededatos.asignarParametro(4, getFecha());
+        basededatos.asignarParametro(4, getFecha_solucion());
+        basededatos.asignarParametro(4, getMotivos());
+        basededatos.asignarParametro(4, getUsuario());
+        ejecucion = basededatos.ejecutar();
+        basededatos.cerrarSentencia();
+        return ejecucion;
     }
 
     @Override
