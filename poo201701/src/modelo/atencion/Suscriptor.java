@@ -23,27 +23,27 @@ public class Suscriptor implements SuperTabla{
     private long id;
     private String nombre;
     private String apellidos;
-    private long tipo_documento_id;
+    private String tipo_documento;
     private Date  f_expedicion;
     private String ciudad_expedicion;
 
     public Suscriptor() {
     }
 
-    public Suscriptor(long id,String nombre, String apellidos, long tipo_documento_id, 
+    public Suscriptor(long id,String nombre, String apellidos, String tipo_documento, 
             Date  f_expedicion, String ciudad_expedicion) throws SQLException, Exception {
         setId(getconsecutivo());
         setNombre(nombre);
         setApellidos(apellidos);
-        setTipo_documento_id(tipo_documento_id);
+        setTipo_documento(tipo_documento);
         setF_expedicion(f_expedicion);
         setCiudad_expedicion(ciudad_expedicion);
     }
 
-    public Suscriptor(String nombre, String apellidos, long tipo_documento_id, Date f_expedicion, String ciudad_expedicion) {
+    public Suscriptor(String nombre, String apellidos, String tipo_documento, Date f_expedicion, String ciudad_expedicion) {
         this.nombre = nombre;
         this.apellidos = apellidos;
-        this.tipo_documento_id = tipo_documento_id;
+        this.tipo_documento= tipo_documento;
         this.f_expedicion = f_expedicion;
         this.ciudad_expedicion = ciudad_expedicion;
     }
@@ -70,7 +70,7 @@ public class Suscriptor implements SuperTabla{
         String sql;
         int ejecucion;
         sql = "INSERT INTO SUSCRIPTORES "
-                + "(ID, NOMBRES, APELLIDOS, TIPO_DOCUMENTO_ID,F_EXPEDICION,CIUDAD_EXPEDICION)"
+                + "(ID, NOMBRES, APELLIDOS, TIPO_DOCUMENTO,F_EXPEDICION,CIUDAD_EXPEDICION)"
                 + " VALUES "
                 + "(?, ?, ?, ?, ?, ?)";
         basededatos.conectar();
@@ -79,7 +79,7 @@ public class Suscriptor implements SuperTabla{
         System.out.println(this);
         basededatos.asignarParametro(1, getId());
         basededatos.asignarParametro(2, getNombre());
-        basededatos.asignarParametro(3, getTipo_documento_id());
+        basededatos.asignarParametro(3, getTipo_documento());
         basededatos.asignarParametro(4, getF_expedicion());
         basededatos.asignarParametro(5, getCiudad_expedicion());
         ejecucion = basededatos.ejecutar();
@@ -111,7 +111,7 @@ public class Suscriptor implements SuperTabla{
         sql = "UPDATE SUSCRIPTORES "
                 + "SET NOMBRES = ?, "
                 + "APELLIDOS = ?, "
-                + "TIPO_DOCUMENTO_ID = ? "
+                + "TIPO_DOCUMENTO = ? "
                 + "F_EXPEDICION = ? "
                 + "CIUDAD_EXPEDICION = ? "
                 + "WHERE ID = ?";
@@ -119,7 +119,7 @@ public class Suscriptor implements SuperTabla{
         basededatos.prepararSql(sql);
         basededatos.asignarParametro(1, getNombre());
         basededatos.asignarParametro(2, getApellidos());
-        basededatos.asignarParametro(3, getTipo_documento_id());
+        basededatos.asignarParametro(3, getTipo_documento());
         basededatos.asignarParametro(4, getF_expedicion());
         basededatos.asignarParametro(5, getCiudad_expedicion());
         ejecucion = basededatos.ejecutar();
@@ -134,7 +134,7 @@ public class Suscriptor implements SuperTabla{
         ResultSet cursor;
         String sql;
         basededatos = BaseDatosOracle.getInstance();
-        sql = "SELECT ID, NOMBRES, APELLIDOS, TIPO_DOCUMENTO_ID,F_EXPEDICION,"
+        sql = "SELECT ID, NOMBRES, APELLIDOS, TIPO_DOCUMENTO,F_EXPEDICION,"
                 + "CIUDAD_EXPEDICION "
                 + "FROM SUSCRIPTORES "
                 + "WHERE ID = ?";
@@ -148,7 +148,7 @@ public class Suscriptor implements SuperTabla{
                     cursor.getLong("ID"),
                     cursor.getString("NOMBRES"),
                     cursor.getString("APELLIDOS"),
-                    cursor.getLong("TIPO_DOCUMENTO_ID"),
+                    cursor.getString("TIPO_DOCUMENTO"),
                     cursor.getDate("F_EXPEDICION"),
                     cursor.getString("CIUDAD_EXPEDICION")
             );
@@ -163,7 +163,7 @@ public class Suscriptor implements SuperTabla{
         ResultSet cursor;
         String sql;
         basededatos = BaseDatosOracle.getInstance();
-        sql = "SELECT ID, NOMBRES, APELLIDOS, TIPO_DOCUMENTO_ID,F_EXPEDICION,"
+        sql = "SELECT ID, NOMBRES, APELLIDOS, TIPO_DOCUMENTO,F_EXPEDICION,"
                 + "CIUDAD_EXPEDICION "
                 + "FROM SUSCRIPTORES "
                 + "ORDER BY ID";
@@ -176,7 +176,7 @@ public class Suscriptor implements SuperTabla{
                     cursor.getLong("ID"),
                     cursor.getString("NOMBRES"),
                     cursor.getString("APELLIDOS"),
-                    cursor.getLong("TIPO_DOCUMENTO_ID"),
+                    cursor.getString("TIPO_DOCUMENTO"),
                     cursor.getDate("F_EXPEDICION"),
                     cursor.getString("CIUDAD_EXPEDICION")
             ));
@@ -231,15 +231,18 @@ public class Suscriptor implements SuperTabla{
         this.apellidos = apellidos;
     }
 
-    public long getTipo_documento_id() {
-        return tipo_documento_id;
+    public String getTipo_documento() {
+        return tipo_documento;
     }
 
-    public void setTipo_documento_id(long tipo_documento_id) throws Exception {
-        if(tipo_documento_id<0){
-            throw new Exception("El tipo documento no puede ser negativo");
+    public void setTipo_documento(String tipo_documento) throws Exception {
+        if(tipo_documento==null){
+            throw new Exception("El tipo documento no puede ser nulo");
         }
-        this.tipo_documento_id = tipo_documento_id;
+        if(tipo_documento.equals("")){
+            throw new Exception("El tipo documento no puede ser vacio");
+        }
+        this.tipo_documento = tipo_documento;
     }
 
     public Date  getF_expedicion() {

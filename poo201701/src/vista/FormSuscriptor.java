@@ -51,7 +51,7 @@ public class FormSuscriptor extends FormTemplate {
             txt_codigo.setText(susc.getId()+"");
             txt_nombres.setText(susc.getNombre());
             txt_apellidos.setText(susc.getApellidos());
-            txt_documento.setText(susc.getTipo_documento_id()+"");
+            txt_documento.setText(susc.getTipo_documento()+"");
             txt_fechaexp.setDate(susc.getF_expedicion());
             txt_ciudad_ex.setText(susc.getCiudad_expedicion());
         }
@@ -74,7 +74,7 @@ public class FormSuscriptor extends FormTemplate {
     public SuperTabla getNuevoRegistro() throws Exception {
         Suscriptor sub;
         sub = new Suscriptor(txt_nombres.getText(), txt_apellidos.getText(),
-                Long.valueOf( txt_documento.getText()), (java.sql.Date) txt_fechaexp.getDate(),
+                txt_documento.getText(), (java.sql.Date) txt_fechaexp.getDate(),
                 txt_ciudad_ex.getText());
         return sub;//To change body of generated methods, choose Tools | Templates.
     }
@@ -87,7 +87,7 @@ public class FormSuscriptor extends FormTemplate {
         sub.setApellidos(txt_apellidos.getText());
         sub.setNombre(txt_nombres.getText());
         sub.setCiudad_expedicion(txt_ciudad_ex.getText());
-        sub.setTipo_documento_id(Long.valueOf( txt_documento.getText()));
+        sub.setTipo_documento(txt_documento.getText());
         sub.setF_expedicion((java.sql.Date) txt_fechaexp.getDate());
 //To change body of generated methods, choose Tools | Templates.
     }

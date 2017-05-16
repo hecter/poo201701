@@ -47,6 +47,7 @@ public class BaseDatosOracle {
     public BaseDatosOracle() {
         setPassword(Usuario.getInstance().getPassword());
         setUsuario(Usuario.getInstance().getUsuario());
+        //setUrl("jdbc:oracle:thin:@localhost:1521:xe");
         setUrl("jdbc:oracle:thin:@10.0.33.163:1521:usboracle");
     }
 

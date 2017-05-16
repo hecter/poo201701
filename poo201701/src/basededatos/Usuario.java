@@ -85,6 +85,7 @@ public class Usuario {
     public String getUsuario() {
 
         if (usuario == null) {
+            //return "system";
             return "oraelectivapoo";
         } // quitar en ambiente productivo
         return usuario;
@@ -104,6 +105,7 @@ public class Usuario {
      */
     public String getPassword() {
         if (password == null) {
+            //return "123456";
             return "oraelectivapoo";
         }
         return password;
