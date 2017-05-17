@@ -24,18 +24,18 @@ public class FormSuscriptor extends FormTemplate {
      */
     public FormSuscriptor() {
         initComponents();
+        mostrarRegistro(0);
         txt_codigo.setEditable(false);
     }
 
     
     @Override
     public void limpiarFormulario() {
-            txt_codigo.setText("");
-            txt_nombres.setText("");
-            txt_apellidos.setText("");
-            txt_documento.setText("");
-            txt_fechaexp.setDate(new Date());
-            txt_ciudad_ex.setText("");
+            txt_codigo.setValue(null);
+            txt_nombres.setText(null);
+            txt_apellidos.setText(null);
+            txt_documento.setText(null);
+            txt_ciudad_ex.setText(null);
     }
 
     @Override
@@ -63,7 +63,6 @@ public class FormSuscriptor extends FormTemplate {
             listaDatos = new ArrayList<>();
             listaDatos.addAll(Suscriptor.buscar());
             indiceActual = 0;
-
             habilitarNavegacion();
         } catch (Exception ex) {
             Logger.getLogger(FormPais.class.getName()).log(Level.SEVERE, null, ex);
@@ -73,8 +72,10 @@ public class FormSuscriptor extends FormTemplate {
     @Override
     public SuperTabla getNuevoRegistro() throws Exception {
         Suscriptor sub;
+        java.sql.Date sqlDate = new java.sql.Date(txt_fechaexp.getDate().getTime());
+        
         sub = new Suscriptor(txt_nombres.getText(), txt_apellidos.getText(),
-                txt_documento.getText(), (java.sql.Date) txt_fechaexp.getDate(),
+                txt_documento.getText(), sqlDate,
                 txt_ciudad_ex.getText());
         return sub;//To change body of generated methods, choose Tools | Templates.
     }
@@ -88,7 +89,8 @@ public class FormSuscriptor extends FormTemplate {
         sub.setNombre(txt_nombres.getText());
         sub.setCiudad_expedicion(txt_ciudad_ex.getText());
         sub.setTipo_documento(txt_documento.getText());
-        sub.setF_expedicion((java.sql.Date) txt_fechaexp.getDate());
+        java.sql.Date sqlDate = new java.sql.Date(txt_fechaexp.getDate().getTime());
+        sub.setF_expedicion(sqlDate);
 //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -108,7 +110,7 @@ public class FormSuscriptor extends FormTemplate {
     @Override
     public void habilitarBusqueda() {
      txt_codigo.setEditable(true);
-        txt_codigo.requestFocus(); //To change body of generated methods, choose Tools | Templates.
+     txt_codigo.requestFocus(); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -143,61 +145,59 @@ public class FormSuscriptor extends FormTemplate {
         txt_documento = new javax.swing.JTextField();
         txt_ciudad_ex = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        txt_codigo = new javax.swing.JTextField();
         txt_fechaexp = new com.toedter.calendar.JDateChooser();
+        txt_codigo = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Nombres:");
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("Apellidos:");
 
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("Documento:");
 
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Fecha de expedicion:");
 
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("Ciudad de expedicion:");
 
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel6.setText("Codigo:");
+
+        txt_codigo.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter()));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(45, 45, 45)
+                .addGap(120, 120, 120)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(18, 18, 18)
-                        .addComponent(txt_apellidos))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txt_documento))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txt_ciudad_ex, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
-                            .addComponent(txt_fechaexp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel6))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txt_nombres)
-                            .addComponent(txt_codigo))))
-                .addContainerGap(70, Short.MAX_VALUE))
+                    .addComponent(txt_codigo)
+                    .addComponent(txt_fechaexp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                    .addComponent(txt_documento)
+                    .addComponent(txt_apellidos)
+                    .addComponent(txt_nombres)
+                    .addComponent(txt_ciudad_ex))
+                .addContainerGap(225, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(81, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(93, 93, 93)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel6)
                     .addComponent(txt_codigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -220,7 +220,7 @@ public class FormSuscriptor extends FormTemplate {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(txt_ciudad_ex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(100, 100, 100))
+                .addContainerGap(202, Short.MAX_VALUE))
         );
 
         pack();
@@ -270,7 +270,7 @@ public class FormSuscriptor extends FormTemplate {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JTextField txt_apellidos;
     private javax.swing.JTextField txt_ciudad_ex;
-    private javax.swing.JTextField txt_codigo;
+    private javax.swing.JFormattedTextField txt_codigo;
     private javax.swing.JTextField txt_documento;
     private com.toedter.calendar.JDateChooser txt_fechaexp;
     private javax.swing.JTextField txt_nombres;

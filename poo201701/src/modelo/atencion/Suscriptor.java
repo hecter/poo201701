@@ -48,9 +48,7 @@ public class Suscriptor implements SuperTabla{
         this.ciudad_expedicion = ciudad_expedicion;
     }
     
-    
-    
-    
+   
     public String obtenerNombreSecuencia() {
         return "SUSCRIPTORES_SEQ";
     }
@@ -79,9 +77,10 @@ public class Suscriptor implements SuperTabla{
         System.out.println(this);
         basededatos.asignarParametro(1, getId());
         basededatos.asignarParametro(2, getNombre());
-        basededatos.asignarParametro(3, getTipo_documento());
-        basededatos.asignarParametro(4, getF_expedicion());
-        basededatos.asignarParametro(5, getCiudad_expedicion());
+        basededatos.asignarParametro(3, getApellidos());
+        basededatos.asignarParametro(4, getTipo_documento());
+        basededatos.asignarParametro(5, getF_expedicion());
+        basededatos.asignarParametro(6, getCiudad_expedicion());
         ejecucion = basededatos.ejecutar();
         basededatos.cerrarSentencia();
         return ejecucion;
