@@ -40,12 +40,13 @@ public class Suscriptor implements SuperTabla{
         setCiudad_expedicion(ciudad_expedicion);
     }
 
-    public Suscriptor(String nombre, String apellidos, String tipo_documento, Date f_expedicion, String ciudad_expedicion) {
-        this.nombre = nombre;
-        this.apellidos = apellidos;
-        this.tipo_documento= tipo_documento;
-        this.f_expedicion = f_expedicion;
-        this.ciudad_expedicion = ciudad_expedicion;
+    public Suscriptor(String nombre, String apellidos, String tipo_documento,
+            Date f_expedicion, String ciudad_expedicion) throws SQLException, Exception {
+        setNombre(nombre);
+        setApellidos(apellidos);
+        setTipo_documento(tipo_documento);
+        setF_expedicion(f_expedicion);
+        setCiudad_expedicion(ciudad_expedicion);
     }
     
    
@@ -121,6 +122,7 @@ public class Suscriptor implements SuperTabla{
         basededatos.asignarParametro(3, getTipo_documento());
         basededatos.asignarParametro(4, getF_expedicion());
         basededatos.asignarParametro(5, getCiudad_expedicion());
+        basededatos.asignarParametro(6, getId());
         ejecucion = basededatos.ejecutar();
         basededatos.cerrarSentencia();
         return ejecucion;

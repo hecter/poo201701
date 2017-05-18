@@ -40,6 +40,7 @@ public class FormSuscriptor extends FormTemplate {
 
     @Override
     public void mostrarRegistro(int indice) {
+        txt_codigo.requestFocus();
          if (indice < 0 || listaDatos.isEmpty()) {
             limpiarFormulario();
             return;
@@ -48,12 +49,14 @@ public class FormSuscriptor extends FormTemplate {
         susc = (Suscriptor) listaDatos.get(indice);
        
         if (susc != null) {
-            txt_codigo.setText(susc.getId()+"");
+            System.out.println(susc);
+            txt_codigo.setValue(susc.getId());
             txt_nombres.setText(susc.getNombre());
             txt_apellidos.setText(susc.getApellidos());
             txt_documento.setText(susc.getTipo_documento()+"");
             txt_fechaexp.setDate(susc.getF_expedicion());
             txt_ciudad_ex.setText(susc.getCiudad_expedicion());
+            txt_codigo.requestFocus();
         }
     }
 
@@ -73,11 +76,9 @@ public class FormSuscriptor extends FormTemplate {
     public SuperTabla getNuevoRegistro() throws Exception {
         Suscriptor sub;
         java.sql.Date sqlDate = new java.sql.Date(txt_fechaexp.getDate().getTime());
-        
         sub = new Suscriptor(txt_nombres.getText(), txt_apellidos.getText(),
-                txt_documento.getText(), sqlDate,
-                txt_ciudad_ex.getText());
-        return sub;//To change body of generated methods, choose Tools | Templates.
+                txt_documento.getText(), sqlDate,txt_ciudad_ex.getText());
+        return sub;
     }
 
     @Override
@@ -97,7 +98,9 @@ public class FormSuscriptor extends FormTemplate {
     @Override
     public void ejecutarBusqueda() throws Exception {
           long codigo = 0;
-        codigo = (txt_codigo.getText().isEmpty()) ? -1 : Long.parseLong(txt_codigo.getText());
+        codigo = (txt_codigo.getText().isEmpty()) 
+                ? -1 
+                : Long.parseLong(txt_codigo.getText());
         listaDatos = new ArrayList<>();
         if(codigo == -1){
            listaDatos.addAll(Suscriptor.buscar());

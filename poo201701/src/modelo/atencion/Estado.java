@@ -10,5 +10,16 @@ package modelo.atencion;
  * @author 20111532577
  */
 public class Estado {
+    private long id;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+    
+    
     
 }
