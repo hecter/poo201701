@@ -2,7 +2,6 @@ package modelo.lectura;
 // Generated May 12, 2017 7:15:35 PM by Hibernate Tools 4.3.1
 
 
-import java.math.BigDecimal;
 import java.util.Date;
 import modelo.pagos.Usuario;
 
