@@ -139,22 +139,15 @@ public class Atencion implements SuperTabla{
         ResultSet cursor;
         String sql;
         basededatos = BaseDatosOracle.getInstance();
-        sql = "SELECT ID, CASA_ID, ESTADOS_ID, FECHA, FECHA_SOLUCION,"
-                + "MOTIVOS_ID, USUARIOS_ID "
-                + "FROM ATENCIONES "
-                + "IINER"
-                + "WHERE ID = ?";
-        
-        /*
-        SELECT ATN.ID, ATN.CASA_ID, ATN.ESTADOS_ID,ET.ESTADO, ATN.FECHA, ATN.FECHA_SOLUCION,
-                ATN.MOTIVOS_ID,MT.MOTIVO, ATN.USUARIOS_ID,US.NOMBRE 
-                FROM ATENCIONES ATN
-                INNER JOIN CASA CS ON CS.ID = ATN.CASA_ID
-                INNER JOIN ESTADOS ET ON ET.ID = ATN.ESTADOS_ID
-                INNER JOIN MOTIVOS MT ON MT.ID = ATN.MOTIVOS_ID
-                INNER JOIN USUARIOS US ON US.ID = ATN.USUARIOS_ID
-                WHERE ATN.ID = 1
-        */
+        sql = "SELECT ATN.ID, ATN.CASA_ID, ATN.ESTADOS_ID,ET.ESTADO, ATN.FECHA, ATN.FECHA_SOLUCION," +
+                "  ATN.MOTIVOS_ID,MT.MOTIVO, ATN.USUARIOS_ID,US.NOMBRE " +
+                "  FROM ATENCIONES ATN " +
+                "  INNER JOIN CASA CS ON CS.ID = ATN.CASA_ID " +
+                "  INNER JOIN ESTADOS ET ON ET.ID = ATN.ESTADOS_ID " +
+                "  INNER JOIN MOTIVOS MT ON MT.ID = ATN.MOTIVOS_ID " +
+                "  INNER JOIN USUARIOS US ON US.ID = ATN.USUARIOS_ID " +
+                "  WHERE ATN.ID = ?";
+              
         basededatos.conectar();
         basededatos.prepararSql(sql);
         basededatos.asignarParametro(1, codigo);
@@ -165,11 +158,13 @@ public class Atencion implements SuperTabla{
             casa.setId(cursor.getInt("CASA_ID"));
             estado = new Estado();
             estado.setId(cursor.getInt("ESTADOS_ID"));
+            estado.setNombre(cursor.getString("ESTADO"));
             motivo = new Motivo();
             motivo.setId(cursor.getInt("MOTIVOS_ID"));
+            motivo.setMotivos(cursor.getString("MOTIVO"));
             usuario = new Usuario();
             usuario.setId(cursor.getInt("USUARIOS_ID"));
-            
+            usuario.setNombre(cursor.getString("NOMBRE"));
             atencion = new Atencion(
                     cursor.getLong("ID"),
                     casa,
@@ -207,14 +202,17 @@ public class Atencion implements SuperTabla{
         listaAtencion = new ArrayList<>();
         
         while (cursor.next()) {
-            casa = new Casa();
+             casa = new Casa();
             casa.setId(cursor.getInt("CASA_ID"));
             estado = new Estado();
             estado.setId(cursor.getInt("ESTADOS_ID"));
+            estado.setNombre(cursor.getString("ESTADO"));
             motivo = new Motivo();
             motivo.setId(cursor.getInt("MOTIVOS_ID"));
+            motivo.setMotivos(cursor.getString("MOTIVO"));
             usuario = new Usuario();
             usuario.setId(cursor.getInt("USUARIOS_ID"));
+            usuario.setNombre(cursor.getString("NOMBRE"));
             
             listaAtencion.add(new Atencion(
                     cursor.getLong("ID"),
