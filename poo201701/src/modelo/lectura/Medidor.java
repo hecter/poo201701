@@ -15,27 +15,27 @@ import modelo.atencion.Casa;
 public class Medidor {
 
 
-     private BigDecimal id;
+     private long id;
      private Casa casas;
      private String serial;
-     private BigDecimal costo;
+     private long costo;
 
     public Medidor() {
     }
 
 	
-    public Medidor(BigDecimal id, Casa casas, String serial, BigDecimal costo) {
+    public Medidor(long id, Casa casas, String serial, long costo) {
         this.id = id;
         this.casas = casas;
         this.serial = serial;
         this.costo = costo;
     }
    
-    public BigDecimal getId() {
+    public long getId() {
         return this.id;
     }
     
-    public void setId(BigDecimal id) {
+    public void setId(long id) {
         this.id = id;
     }
     public Casa getCasas() {
@@ -52,11 +52,11 @@ public class Medidor {
     public void setSerial(String serial) {
         this.serial = serial;
     }
-    public BigDecimal getCosto() {
+    public long getCosto() {
         return this.costo;
     }
     
-    public void setCosto(BigDecimal costo) {
+    public void setCosto(long costo) {
         this.costo = costo;
     }
 

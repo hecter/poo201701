@@ -12,19 +12,19 @@ import modelo.pagos.Usuario;
 public class Lectura {
 
 
-     private BigDecimal id;
+     private long id;
      private Usuario usuarios;
      private Periodo periodos;
      private Medidor medidores;
-     private BigDecimal lectura;
+     private long lectura;
      private Date fecha;
      private String causal;
-     private BigDecimal estado;
+     private long estado;
 
     public Lectura() {
     }
 
-    public Lectura(BigDecimal id, Usuario usuarios, Periodo periodos, Medidor medidores, BigDecimal lectura, Date fecha, String causal, BigDecimal estado) {
+    public Lectura(long id, Usuario usuarios, Periodo periodos, Medidor medidores, long lectura, Date fecha, String causal, long estado) {
        this.id = id;
        this.usuarios = usuarios;
        this.periodos = periodos;
@@ -35,11 +35,11 @@ public class Lectura {
        this.estado = estado;
     }
    
-    public BigDecimal getId() {
+    public long getId() {
         return this.id;
     }
     
-    public void setId(BigDecimal id) {
+    public void setId(long id) {
         this.id = id;
     }
     public Usuario getUsuarios() {
@@ -63,11 +63,11 @@ public class Lectura {
     public void setMedidores(Medidor medidores) {
         this.medidores = medidores;
     }
-    public BigDecimal getLectura() {
+    public long getLectura() {
         return this.lectura;
     }
     
-    public void setLectura(BigDecimal lectura) {
+    public void setLectura(long lectura) {
         this.lectura = lectura;
     }
     public Date getFecha() {
@@ -84,11 +84,11 @@ public class Lectura {
     public void setCausal(String causal) {
         this.causal = causal;
     }
-    public BigDecimal getEstado() {
+    public long getEstado() {
         return this.estado;
     }
     
-    public void setEstado(BigDecimal estado) {
+    public void setEstado(long estado) {
         this.estado = estado;
     }
 

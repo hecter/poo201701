@@ -108,23 +108,4 @@ public class Sector{
         }
         return datos;
     }
-    
-    /*public static long Key(String secuencia) throws SQLException {
-        BaseDatosOracle basedatos;
-        String sql;
-        ResultSet cursor;
-        basedatos = BaseDatosOracle.getInstance();
-        long consecutivo;
-        sql = "select " + secuencia + ".NEXTVAL as SIGUIENTE from dual";
-        basedatos.conectar();
-        basedatos.prepararSql(sql);
-        cursor = basedatos.ejecutarQuery(sql);
-        consecutivo = 0;
-        if (cursor.next()) {
-            consecutivo = cursor.getLong("SIGUIENTE");
-        }
-        BaseDatosOracle.cerrarCursor(cursor);
-        JOptionPane.showMessageDialog(null, consecutivo);
-        return consecutivo;
-    }*/
 }
