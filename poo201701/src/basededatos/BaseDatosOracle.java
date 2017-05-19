@@ -131,10 +131,6 @@ public class BaseDatosOracle {
     public void asignarParametro(int indice, float valor) throws SQLException {
         sentencia.setFloat(indice, valor);
     }
-    
-    public void asignarParametro(int indice, BigDecimal valor) throws SQLException {
-        sentencia.setBigDecimal(indice, valor);
-    }
 
     public void asignarParametro(int indice, int valor) throws SQLException {
         sentencia.setInt(indice, valor);

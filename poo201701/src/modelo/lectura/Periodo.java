@@ -62,73 +62,85 @@ public class Periodo {
     
     public int insertar() throws SQLException{
         long secuencia = nextVal("PERIODOS_SEQ");
-        BaseDatosOracle basededatos = BaseDatosOracle.getInstance();
-        String sql = "INSERT INTO PERIODOS (ID,PERIODO,LECTURA,FACTURADO) VALUES (?, ?, ?, ?)";
+        BaseDatosOracle db = BaseDatosOracle.getInstance();
+        String sql = "INSERT INTO PERIODOS (ID,PERIODO,LECTURA,FACTURADO) "
+                + "VALUES (?, ?, ?, ?)";
         int ejecucion;
-        basededatos.conectar();
-        basededatos.prepararSql(sql);
-        basededatos.asignarParametro(1, secuencia);
-        basededatos.asignarParametro(2, getPeriodo());
-        basededatos.asignarParametro(3, getLectura());
-        basededatos.asignarParametro(4, getFacturado());
-        ejecucion = basededatos.ejecutar();
-        basededatos.cerrarSentencia();
+        db.conectar();
+        db.prepararSql(sql);
+        db.asignarParametro(1, secuencia);
+        db.asignarParametro(2, getPeriodo());
+        db.asignarParametro(3, getLectura());
+        db.asignarParametro(4, getFacturado());
+        ejecucion = db.ejecutar();
+        db.cerrarSentencia();
         return ejecucion;
     }
     
     public int actualizar() throws SQLException{
-       BaseDatosOracle basededatos;
-        basededatos = BaseDatosOracle.getInstance();
+       BaseDatosOracle db = BaseDatosOracle.getInstance();
         String sql;
         int ejecucion;
-        sql = "UPDATE PERIODOS SET PERIODO = ?, LECTURA = ? ,FACTURADO = ? WHERE ID = ?";
-        basededatos.conectar();
-        basededatos.prepararSql(sql);
-        basededatos.asignarParametro(1, getPeriodo());
-        basededatos.asignarParametro(2, getLectura());
-        basededatos.asignarParametro(3, getFacturado());
-        basededatos.asignarParametro(4, getId());
-        ejecucion = basededatos.ejecutar();
-        basededatos.cerrarSentencia();
+        sql = "UPDATE PERIODOS "
+                + "SET PERIODO = ?, "
+                + "LECTURA = ? ,"
+                + "FACTURADO = ? "
+                + "WHERE ID = ?";
+        db.conectar();
+        db.prepararSql(sql);
+        db.asignarParametro(1, getPeriodo());
+        db.asignarParametro(2, getLectura());
+        db.asignarParametro(3, getFacturado());
+        db.asignarParametro(4, getId());
+        ejecucion = db.ejecutar();
+        db.cerrarSentencia();
         return ejecucion;
     }
     
     public int eliminar() throws SQLException{
-        BaseDatosOracle basededatos;
-        basededatos = BaseDatosOracle.getInstance();
-        String sql;
+        BaseDatosOracle db = BaseDatosOracle.getInstance();
+        String sql = "DELETE FROM PERIODOS WHERE ID = ?";
         int ejecucion;
-        sql = "DELETE FROM PERIODOS WHERE ID = ?";
-        basededatos.conectar();
-        basededatos.prepararSql(sql);
-        basededatos.asignarParametro(1, getId());
-        ejecucion = basededatos.ejecutar();
-        basededatos.cerrarSentencia();
+        db.conectar();
+        db.prepararSql(sql);
+        db.asignarParametro(1, getId());
+        ejecucion = db.ejecutar();
+        db.cerrarSentencia();
         return ejecucion;
     }
     
     public static ArrayList<Periodo> listar() throws SQLException {
         ArrayList<Periodo> datos = new ArrayList<>();
-        BaseDatosOracle basededatos;
-        ResultSet cursor;
-        String sql;
-        basededatos = BaseDatosOracle.getInstance();
-        sql = "SELECT ID, PERIODO,LECTURA,FACTURADO FROM PERIODOS";
-        basededatos.conectar();
-        basededatos.prepararSql(sql);
-        cursor = basededatos.ejecutarQuery();
+        BaseDatosOracle db  = BaseDatosOracle.getInstance();
+        String sql = "SELECT ID, PERIODO,LECTURA,FACTURADO FROM PERIODOS";
+        db.conectar();
+        db.prepararSql(sql);
+        ResultSet reg = db.ejecutarQuery();
         datos.clear();
-        while (cursor.next()) {
-            datos.add(
-                    new Periodo(
-                            cursor.getLong("ID"),
-                            cursor.getLong("PERIODO"),
-                            cursor.getLong("LECTURA"),
-                            cursor.getLong("FACTURADO")
-                    )
-            );
+        while (reg.next()) {
+            datos.add(new Periodo(reg.getLong("ID"),reg.getLong("PERIODO"),
+                    reg.getLong("LECTURA"),
+                    reg.getLong("FACTURADO")
+            ));
         }
         return datos;
+    }
+    
+    public static Periodo listar(long id) throws SQLException {
+        Periodo dato = null;
+        BaseDatosOracle db  = BaseDatosOracle.getInstance();
+        String sql = "SELECT PERIODO,LECTURA,FACTURADO FROM PERIODOS";
+        db.conectar();
+        db.prepararSql(sql);
+        db.asignarParametro(1, id);
+        ResultSet reg = db.ejecutarQuery();
+        long periodo = reg.getLong("PERIODO");
+        long lectura = reg.getLong("LECTURA");
+        long facturado = reg.getLong("FACTURADO");
+        while (reg.next()) {
+            dato = new Periodo(id,periodo,lectura,facturado);
+        }
+        return dato;
     }
 }
 
