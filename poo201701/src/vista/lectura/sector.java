@@ -6,6 +6,8 @@
 package vista.lectura;
 
 import static JTable.Tablas.limpiarTabla;
+import Messages.Mensajes;
+import static Messages.Mensajes.msn;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -196,7 +198,7 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
             // TODO add your handling code here:
             Sector sector = new Sector(Long.parseLong(txid.getText()), txdet.getText());
             int insertados = sector.insertar();
-            JOptionPane.showMessageDialog(this, "SE INSERTÓ "+insertados+" REGISTROS");
+            msn(this, "SE INSERTÓ "+insertados+" REGISTROS", "MENSAJE", 1);
             if(insertados>0){
                 loadTable();
             }
