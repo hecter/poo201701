@@ -8,13 +8,13 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
+import modelo.SuperTabla;
 
 /**
  * Luis Rueda
  */
 public class Periodo {
-
-
      private long id;
      private long periodo;
      private long lectura;
@@ -125,6 +125,7 @@ public class Periodo {
         }
         return datos;
     }
+ 
     
     public static Periodo listar(long id) throws SQLException {
         Periodo dato = null;

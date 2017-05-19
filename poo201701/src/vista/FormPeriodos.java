@@ -5,17 +5,24 @@
  */
 package vista;
 
+import java.util.ArrayList;
+import modelo.SuperTabla;
+import modelo.lectura.Periodo;
+
 /**
  *
  * @author 201221230382
  */
-public class FormPeriodos extends javax.swing.JFrame {
+public class FormPeriodos extends FormTemplate {
 
     /**
      * Creates new form FormPeriodo
      */
     public FormPeriodos() {
         initComponents();
+        mostrarRegistro(0);
+        setLocationRelativeTo(null);
+
     }
 
     /**
@@ -142,4 +149,89 @@ public class FormPeriodos extends javax.swing.JFrame {
     private javax.swing.JTextField txt_lectura;
     private javax.swing.JTextField txt_periodo;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void inicializar() {
+        try {
+            listaDatos = new ArrayList<>();
+            listaDatos.addAll(Periodo.listar());
+            indiceActual = 0;
+
+            habilitarNavegacion();
+        } catch (Exception ex) {
+            mostrarException(ex);
+        }
+    }
+
+    @Override
+    public void limpiarFormulario() {
+        txt_id.setText("");
+        txt_lectura.setText("");
+        txt_periodo.setText("");
+        txt_facturado.setText("");
+    }
+
+    @Override
+    public void mostrarRegistro(int indice) {
+        Periodo periodos;
+        periodos = (Periodo) listaDatos.get(indice);
+        if (periodos != null) {
+            txt_id.setText(periodos.getId() + "");
+            txt_periodo.setText(periodos.getPeriodo() + "");
+            txt_lectura.setText(periodos.getLectura() + "");
+            txt_facturado.setText(periodos.getFacturado() + "");
+        }
+    }
+
+    @Override
+    public SuperTabla getNuevoRegistro() throws Exception {
+        Periodo periodo;
+        periodo = new Periodo(Long.parseLong(txt_id.getText()),
+                Long.parseLong(txt_lectura.getText()),
+                Long.parseLong(txt_periodo.getText()),
+                Long.parseLong(txt_facturado.getText()));
+        return (SuperTabla) periodo;
+    }
+
+    @Override
+    public void setRegistroActual(SuperTabla registro) throws Exception {
+        Periodo periodos;
+        periodos = (Periodo) registro;
+        periodos.setId(Long.parseLong(txt_id.getText()));
+        periodos.setPeriodo(Long.parseLong(txt_periodo.getText()));
+        periodos.setLectura(Long.parseLong(txt_lectura.getText()));
+        periodos.setFacturado(Long.parseLong(txt_facturado.getText()));
+    }
+
+    @Override
+    public void ejecutarBusqueda() throws Exception {
+        long id = 0;
+
+        id = (txt_id.getText().isEmpty())
+                ? 0 : Long.parseLong(txt_id.getText());
+        listaDatos = new ArrayList<>();
+        if (id == 0) {
+            listaDatos.addAll(Periodo.listar());
+        } else {
+            listaDatos.add((SuperTabla) Periodo.listar(id));
+        }
+        txt_id.setEditable(false);
+    }
+
+    @Override
+    public void habilitarBusqueda() {
+        txt_id.setEditable(true);
+        txt_lectura.requestFocus();
+    }
+
+    @Override
+    public void imprimirJasper() {
+        try {
+            listaDatos.get(indiceActual)
+                    .abrirReporte(basededatos.BaseDatosOracle
+                            .getInstance().getConexion());
+        } catch (Exception ex) {
+            mostrarException(ex);
+        }
+    }
 }
