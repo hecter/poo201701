@@ -4,7 +4,7 @@ package modelo.lectura;
 
 import basededatos.BaseDatosOracle;
 import static basededatos.Secuencia.nextVal;
-import java.math.BigDecimal;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import modelo.atencion.Casa;
@@ -61,15 +61,14 @@ public class Medidor {
     }
 
     public int insertar() throws SQLException{
-         BaseDatosOracle basededatos;
-        basededatos = BaseDatosOracle.getInstance();
-        String sql;
-        int ejecucion;
-        sql = "INSERT INTO MEDIDORES (ID,SERIAL,COSTO,CASA_ID) "
+        long secuencia = nextVal("SECTORES_SEQ");
+         BaseDatosOracle basededatos = BaseDatosOracle.getInstance();
+        String sql = "INSERT INTO MEDIDORES (ID,SERIAL,COSTO,CASA_ID) "
                 + "VALUES(?,?,?,?)";
+        int ejecucion;
         basededatos.conectar();
         basededatos.prepararSql(sql);
-        basededatos.asignarParametro(1, new BigDecimal(nextVal("SECTORES_SEQ")));
+        basededatos.asignarParametro(1, secuencia);
         basededatos.asignarParametro(2, getSerial());
         basededatos.asignarParametro(3, getCosto());
         basededatos.asignarParametro(4, getCasas().getId());
@@ -79,46 +78,42 @@ public class Medidor {
     }
     
     public int actualizar() throws SQLException{
-       /*BaseDatosOracle basededatos;
-        basededatos = BaseDatosOracle.getInstance();
+       BaseDatosOracle basededatos = BaseDatosOracle.getInstance();
         String sql;
         int ejecucion;
-        sql = "UPDATE SECTORES SET DET = ? WHERE ID = ?";
+        sql = "UPDATE MEDIDORES SET SERIAL = ?,COSTO = ?,CASA_ID = ? WHERE ID = ?";
         basededatos.conectar();
         basededatos.prepararSql(sql);
-        basededatos.asignarParametro(1, getDet());
-        basededatos.asignarParametro(2, getId());
+        basededatos.asignarParametro(1, getSerial());
+        basededatos.asignarParametro(2, getCosto());
+        basededatos.asignarParametro(3, getCasas().getId());
+        basededatos.asignarParametro(4, getId());
         ejecucion = basededatos.ejecutar();
         basededatos.cerrarSentencia();
-        return ejecucion;*/
-       return 0;
+        return ejecucion;
     }
     
     public int eliminar() throws SQLException{
-        /*BaseDatosOracle basededatos;
+        BaseDatosOracle basededatos;
         basededatos = BaseDatosOracle.getInstance();
         String sql;
         int ejecucion;
-        sql = "DELETE FROM SECTORES WHERE ID = ?";
+        sql = "DELETE MEDIDORES SECTORES WHERE ID = ?";
         basededatos.conectar();
         basededatos.prepararSql(sql);
         basededatos.asignarParametro(1, getId());
         ejecucion = basededatos.ejecutar();
         basededatos.cerrarSentencia();
-        return ejecucion;*/
-        return 0;
+        return ejecucion;
     }
     
-    public ArrayList<Sector> listar() throws SQLException {
-        /*ArrayList<Sector> datos = new ArrayList<>();
-        BaseDatosOracle basededatos;
-        ResultSet cursor;
-        String sql;
-        basededatos = BaseDatosOracle.getInstance();
-        sql = "SELECT ID, DET FROM SECTORES";
-        basededatos.conectar();
-        basededatos.prepararSql(sql);
-        cursor = basededatos.ejecutarQuery();
+    /*public ArrayList<Sector> listar() throws SQLException {
+        ArrayList<Medidor> datos = new ArrayList<>();
+        BaseDatosOracle bd = BaseDatosOracle.getInstance();
+        String sql = "SELECT ID, SERIAL, COSTO, CASA_ID FROM MEDIDORES";
+        bd.conectar();
+        bd.prepararSql(sql);
+        ResultSet cursor = bd.ejecutarQuery();
         datos.clear();
         while (cursor.next()) {
             datos.add(
@@ -128,8 +123,7 @@ public class Medidor {
                     )
             );
         }
-        return datos;*/
-        return null;
-    }
+        return datos;
+    }*/
 }
 
