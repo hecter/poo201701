@@ -11,7 +11,16 @@ package modelo.atencion;
  */
 public class Motivo {
     private long id;
+    private String motivos;
 
+    public String getMotivos() {
+        return motivos;
+    }
+
+    public void setMotivos(String motivos) {
+        this.motivos = motivos;
+    }
+    
     public long getId() {
         return id;
     }
