@@ -108,4 +108,36 @@ public class Sector{
         }
         return datos;
     }
+    
+    public static Sector listar(long id) throws SQLException {
+        Sector dato = null;
+        BaseDatosOracle basededatos;
+        ResultSet cursor;
+        String sql;
+        basededatos = BaseDatosOracle.getInstance();
+        sql = "SELECT DET FROM SECTORES WHERE ID = ?";
+        basededatos.conectar();
+        basededatos.prepararSql(sql);
+        basededatos.asignarParametro(1, id);
+        cursor = basededatos.ejecutarQuery();
+        if (cursor.next()) {
+            dato = new Sector(id, cursor.getString("DET"));
+        }
+        return dato;
+    }
+    
+    public static ArrayList<Sector> listar(String det) throws SQLException {
+        ArrayList<Sector> datos = new ArrayList<>();
+        BaseDatosOracle bd = BaseDatosOracle.getInstance();
+        String sql = "SELECT ID, DET FROM SECTORES WHERE DET LIKE ?";
+        bd.conectar();
+        bd.prepararSql(sql);
+        bd.asignarParametro(1, "%"+det+"%");
+        ResultSet reg = bd.ejecutarQuery();
+        datos.clear();
+        while (reg.next()) {
+            datos.add(new Sector(reg.getLong("ID"), reg.getString("DET")));
+        }
+        return datos;
+    }
 }
