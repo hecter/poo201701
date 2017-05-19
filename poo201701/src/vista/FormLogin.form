@@ -49,10 +49,10 @@
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="buttonAceptar2" min="-2" pref="89" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="textUsuario" alignment="0" pref="199" max="32767" attributes="0"/>
+                  <Component id="textUsuario" alignment="0" max="32767" attributes="0"/>
                   <Component id="textPassword" alignment="0" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="433" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
