@@ -14,7 +14,7 @@ import modelo.SuperTabla;
 /**
  * Luis Rueda
  */
-public class Periodo {
+public class Periodo implements SuperTabla{
      private long id;
      private long periodo;
      private long lectura;
@@ -60,6 +60,7 @@ public class Periodo {
         this.facturado = facturado;
     }
     
+     @Override
     public int insertar() throws SQLException{
         long secuencia = nextVal("PERIODOS_SEQ");
         BaseDatosOracle db = BaseDatosOracle.getInstance();
@@ -77,6 +78,7 @@ public class Periodo {
         return ejecucion;
     }
     
+     @Override
     public int actualizar() throws SQLException{
        BaseDatosOracle db = BaseDatosOracle.getInstance();
         String sql;
@@ -97,6 +99,7 @@ public class Periodo {
         return ejecucion;
     }
     
+     @Override
     public int eliminar() throws SQLException{
         BaseDatosOracle db = BaseDatosOracle.getInstance();
         String sql = "DELETE FROM PERIODOS WHERE ID = ?";
@@ -142,6 +145,11 @@ public class Periodo {
             dato = new Periodo(id,periodo,lectura,facturado);
         }
         return dato;
+    }
+
+    @Override
+    public String obtenerNombreReporte() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
 
