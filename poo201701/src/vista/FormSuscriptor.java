@@ -92,7 +92,6 @@ public class FormSuscriptor extends FormTemplate {
         sub.setTipo_documento(txt_documento.getText());
         java.sql.Date sqlDate = new java.sql.Date(txt_fechaexp.getDate().getTime());
         sub.setF_expedicion(sqlDate);
-//To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
