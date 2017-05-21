@@ -110,6 +110,11 @@ public abstract class FormTemplate extends javax.swing.JFrame {
         buttonEjecutar.setFocusable(false);
         buttonEjecutar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         buttonEjecutar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        buttonEjecutar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonEjecutarActionPerformed(evt);
+            }
+        });
         jToolBar1.add(buttonEjecutar);
 
         jSeparator1.setForeground(new java.awt.Color(153, 153, 153));
@@ -139,6 +144,7 @@ public abstract class FormTemplate extends javax.swing.JFrame {
         jToolBar1.add(buttonNuevo);
 
         buttonGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/guardar2.png"))); // NOI18N
+        buttonGuardar.setEnabled(false);
         buttonGuardar.setFocusable(false);
         buttonGuardar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         buttonGuardar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -351,6 +357,7 @@ public abstract class FormTemplate extends javax.swing.JFrame {
 
     private void buttonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonBuscarActionPerformed
         // TODO add your handling code here:
+       
         buscar();
     }//GEN-LAST:event_buttonBuscarActionPerformed
 
@@ -387,6 +394,10 @@ public abstract class FormTemplate extends javax.swing.JFrame {
     private void buttonReloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonReloadActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_buttonReloadActionPerformed
+
+    private void buttonEjecutarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEjecutarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttonEjecutarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -595,10 +606,12 @@ public abstract class FormTemplate extends javax.swing.JFrame {
     public void crearRegistro() {
         ImageIcon icon;
         if (buttonNuevo.isSelected()) {
+            buttonGuardar.setEnabled(true);
             icon = new ImageIcon(getClass()
                     .getResource("/image/delete_1.png"));
             limpiarFormulario();
         } else {
+            buttonGuardar.setEnabled(false);
             icon = new ImageIcon(getClass()
                     .getResource("/image/nuevo1.png"));
             mostrarRegistro(indiceActual);
@@ -614,7 +627,6 @@ public abstract class FormTemplate extends javax.swing.JFrame {
                         .getResource("/image/buscar_2.png"));
                 limpiarFormulario();
                 habilitarBusqueda();
-
             } else {
                 ejecutarBusqueda();
                 mostrarRegistro(indiceActual);
