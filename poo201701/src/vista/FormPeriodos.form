@@ -39,8 +39,8 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="txt_id" alignment="0" min="-2" pref="213" max="-2" attributes="0"/>
                   <Component id="txt_periodo" alignment="0" min="-2" pref="213" max="-2" attributes="0"/>
-                  <Component id="txt_lectura" alignment="0" min="-2" pref="213" max="-2" attributes="0"/>
-                  <Component id="txt_facturado" alignment="0" min="-2" pref="213" max="-2" attributes="0"/>
+                  <Component id="checkBoxLectura" min="-2" max="-2" attributes="0"/>
+                  <Component id="checkBoxFacturado" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="134" max="32767" attributes="0"/>
           </Group>
@@ -62,14 +62,14 @@
               <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txt_lectura" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="checkBoxLectura" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txt_facturado" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="checkBoxFacturado" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="105" max="32767" attributes="0"/>
+              <EmptySpace pref="111" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -111,9 +111,9 @@
     </Component>
     <Component class="javax.swing.JTextField" name="txt_periodo">
     </Component>
-    <Component class="javax.swing.JTextField" name="txt_lectura">
+    <Component class="javax.swing.JCheckBox" name="checkBoxLectura">
     </Component>
-    <Component class="javax.swing.JTextField" name="txt_facturado">
+    <Component class="javax.swing.JCheckBox" name="checkBoxFacturado">
     </Component>
   </SubComponents>
 </Form>

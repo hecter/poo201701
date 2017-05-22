@@ -20,9 +20,9 @@ public class FormPeriodos extends FormTemplate {
      */
     public FormPeriodos() {
         initComponents();
+        inicializar();
         mostrarRegistro(0);
         setLocationRelativeTo(null);
-
     }
 
     /**
@@ -40,8 +40,8 @@ public class FormPeriodos extends FormTemplate {
         jLabel4 = new javax.swing.JLabel();
         txt_id = new javax.swing.JTextField();
         txt_periodo = new javax.swing.JTextField();
-        txt_lectura = new javax.swing.JTextField();
-        txt_facturado = new javax.swing.JTextField();
+        checkBoxLectura = new javax.swing.JCheckBox();
+        checkBoxFacturado = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -74,8 +74,8 @@ public class FormPeriodos extends FormTemplate {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txt_id, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txt_periodo, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txt_lectura, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txt_facturado, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(checkBoxLectura)
+                    .addComponent(checkBoxFacturado))
                 .addContainerGap(134, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -92,12 +92,12 @@ public class FormPeriodos extends FormTemplate {
                 .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(txt_lectura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36)
+                    .addComponent(checkBoxLectura))
+                .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(txt_facturado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(105, Short.MAX_VALUE))
+                    .addComponent(checkBoxFacturado))
+                .addContainerGap(111, Short.MAX_VALUE))
         );
 
         pack();
@@ -140,13 +140,13 @@ public class FormPeriodos extends FormTemplate {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox checkBoxFacturado;
+    private javax.swing.JCheckBox checkBoxLectura;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JTextField txt_facturado;
     private javax.swing.JTextField txt_id;
-    private javax.swing.JTextField txt_lectura;
     private javax.swing.JTextField txt_periodo;
     // End of variables declaration//GEN-END:variables
 
@@ -166,9 +166,10 @@ public class FormPeriodos extends FormTemplate {
     @Override
     public void limpiarFormulario() {
         txt_id.setText("");
-        txt_lectura.setText("");
         txt_periodo.setText("");
-        txt_facturado.setText("");
+        checkBoxFacturado.setSelected(false);
+        checkBoxLectura.setSelected(false);
+      
     }
 
     @Override
@@ -178,8 +179,8 @@ public class FormPeriodos extends FormTemplate {
         if (periodos != null) {
             txt_id.setText(periodos.getId() + "");
             txt_periodo.setText(periodos.getPeriodo() + "");
-            txt_lectura.setText(periodos.getLectura() + "");
-            txt_facturado.setText(periodos.getFacturado() + "");
+            checkBoxLectura.setSelected(Boolean.parseBoolean(periodos.getLectura()+""));
+            checkBoxFacturado.setSelected(Boolean.parseBoolean(periodos.getFacturado()+""));
         }
     }
 
@@ -187,9 +188,11 @@ public class FormPeriodos extends FormTemplate {
     public SuperTabla getNuevoRegistro() throws Exception {
         Periodo periodo;
         periodo = new Periodo(Long.parseLong(txt_id.getText()),
-                Long.parseLong(txt_lectura.getText()),
                 Long.parseLong(txt_periodo.getText()),
-                Long.parseLong(txt_facturado.getText()));
+                Boolean.compare(checkBoxLectura.isSelected(), false),
+                Boolean.compare(checkBoxFacturado.isSelected(), false));
+        
+ 
         return (SuperTabla) periodo;
     }
 
@@ -199,8 +202,8 @@ public class FormPeriodos extends FormTemplate {
         periodos = (Periodo) registro;
         periodos.setId(Long.parseLong(txt_id.getText()));
         periodos.setPeriodo(Long.parseLong(txt_periodo.getText()));
-        periodos.setLectura(Long.parseLong(txt_lectura.getText()));
-        periodos.setFacturado(Long.parseLong(txt_facturado.getText()));
+        periodos.setLectura(Boolean.compare(checkBoxLectura.isSelected(), false));
+        periodos.setFacturado(Boolean.compare(checkBoxFacturado.isSelected(), false));
     }
 
     @Override
@@ -221,7 +224,7 @@ public class FormPeriodos extends FormTemplate {
     @Override
     public void habilitarBusqueda() {
         txt_id.setEditable(true);
-        txt_lectura.requestFocus();
+        txt_id.requestFocus();
     }
 
     @Override
