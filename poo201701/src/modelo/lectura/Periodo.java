@@ -13,7 +13,12 @@ import java.util.Map;
 import modelo.SuperTabla;
 
 /**
- * Luis Rueda
+ *
+ * periodo.
+ *
+ * @author Ricardo Aragon, email: <ricardoaragon12@hotmail.com>
+ * @version 1.0
+ * @since 2017
  */
 public class Periodo implements SuperTabla {
 
