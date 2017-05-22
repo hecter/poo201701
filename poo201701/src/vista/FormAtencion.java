@@ -17,10 +17,10 @@ import modelo.pagos.Usuario;
 
 /**
  *
- * @author leydi
+ * @author LEo
  */
 public class FormAtencion extends FormTemplate {
-
+private  Atencion atencion = new  Atencion();
     /**
      * Creates new form FormAtencion
      */
@@ -31,9 +31,9 @@ public class FormAtencion extends FormTemplate {
     }
     
     
-    @Override
+      @Override
     public void limpiarFormulario() {
-         txt_codigo.setValue(null);
+       //  txt_codigo.setValue("");
          txt_casa.setSelectedIndex(0);
          txt_motivos.setSelectedIndex(0);
          txt_usuario.setSelectedIndex(0);
@@ -51,14 +51,15 @@ public class FormAtencion extends FormTemplate {
         aten = (Atencion) listaDatos.get(indice);
        
         if (aten != null) {
+        
             System.out.println(aten);
             txt_codigo.setValue(aten.getId());
-            txt_casa.setSelectedItem(aten.getCasa());
-            txt_estado.setSelectedItem(aten.getEstado());
+            txt_casa.addItem(String.valueOf(aten.getCasa().getId())+" "+aten.getCasa().getDireccion());
+            txt_estado.addItem(aten.getEstado().getId()+" "+String.valueOf(aten.getEstado().getNombre()));
             txt_fecha.setDate(aten.getFecha());
             txt_fechas.setDate(aten.getFecha_solucion());
-            txt_motivos.setSelectedItem(aten.getMotivos());
-            txt_usuario.setSelectedItem(aten.getUsuario());
+            txt_motivos.addItem(String.valueOf(aten.getMotivos().getId()+" "+aten.getMotivos().getMotivos()));
+            txt_usuario.addItem(aten.getUsuario().getId()+" "+aten.getUsuario().getNombre());
             txt_codigo.requestFocus();
         }
     }
@@ -77,47 +78,72 @@ public class FormAtencion extends FormTemplate {
 
     @Override
     public SuperTabla getNuevoRegistro() throws Exception {
-        Atencion aten;
+        Atencion aten = new Atencion();
         String casa = String.valueOf(txt_casa.getSelectedItem());
         String estado = String.valueOf(txt_estado.getSelectedItem());
         String motivos = String.valueOf(txt_motivos.getSelectedItem());
         String usuario = String.valueOf(txt_usuario.getSelectedItem());
 
-        Casa cs = new  Casa();
-        Estado et = new  Estado();
-        Motivo mt = new  Motivo();
-        Usuario us = new  Usuario();
-        
         java.sql.Date fecha1 = new java.sql.Date(txt_fecha.getDate().getTime());
         java.sql.Date fecha2 = new java.sql.Date(txt_fechas.getDate().getTime());
-        cs.setId(Long.parseLong(casa.substring(0,1)));
-        et.setId(Long.parseLong(estado.substring(0,1)));
-        mt.setId(Long.parseLong(motivos.substring(0,1)));
-        us.setId(Integer.parseInt(usuario.substring(0,1)));
-        aten = new Atencion(Long.parseLong(txt_codigo.getText()),cs,et,fecha1,fecha2,mt,us);
+       aten.getCasa().setId(Long.parseLong(casa.substring(0,1)));
+       aten.getEstado().setId(Long.parseLong(estado.substring(0,1)));
+       aten.getMotivos().setId(Long.parseLong(motivos.substring(0,1)));
+       aten.getUsuario().setId(Integer.parseInt(usuario.substring(0,1)));
+       aten.setId(Long.parseLong(txt_codigo.getText()));
+       aten.setFecha(fecha1);
+       aten.setFecha_solucion(fecha2);
         return aten;
     }
 
     @Override
     public void setRegistroActual(SuperTabla registro) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         String casa = String.valueOf(txt_casa.getSelectedItem());
+        String estado = String.valueOf(txt_estado.getSelectedItem());
+        String motivos = String.valueOf(txt_motivos.getSelectedItem());
+        String usuario = String.valueOf(txt_usuario.getSelectedItem());
+           java.sql.Date fecha1 = new java.sql.Date(txt_fecha.getDate().getTime());
+        java.sql.Date fecha2 = new java.sql.Date(txt_fechas.getDate().getTime());
+        Atencion ate;
+        ate = (Atencion) registro;
+        ate.getCasa().setId(Long.parseLong(casa.substring(0,1)));
+        ate.getEstado().setId(Long.parseLong(estado.substring(0,1)));
+        ate.getMotivos().setId(Long.parseLong(motivos.substring(0,1)));
+        ate.getUsuario().setId(Integer.parseInt(usuario.substring(0,1)));
+        ate.setId(Long.parseLong(txt_codigo.getText()));
+        ate.setFecha(fecha1);
+        ate.setFecha_solucion(fecha2);
+     
+//To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void ejecutarBusqueda() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+            long codigo = 0;
+        codigo = (txt_codigo.getText().isEmpty()) 
+                ? -1 
+                : Long.parseLong(txt_codigo.getText());
+        listaDatos = new ArrayList<>();
+        if(codigo == -1){
+           listaDatos.addAll(Atencion.buscar());
+        }else{
+          listaDatos.add(Atencion.buscar(codigo));  
+        }
+        txt_codigo.setEditable(false);
+    //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void habilitarBusqueda() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         txt_codigo.setEditable(true);
+     txt_codigo.requestFocus();//To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void imprimirJasper() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -148,11 +174,7 @@ public class FormAtencion extends FormTemplate {
 
         jLabel2.setText("Casa:");
 
-        txt_casa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jLabel3.setText("Estado:");
-
-        txt_estado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel4.setText("Fecha:");
 
@@ -160,11 +182,7 @@ public class FormAtencion extends FormTemplate {
 
         jLabel6.setText("Motivos:");
 
-        txt_motivos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jLabel7.setText("Usuario:");
-
-        txt_usuario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
