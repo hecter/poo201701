@@ -11,7 +11,11 @@ import modelo.lectura.Periodo;
 
 /**
  *
- * @author 201221230382
+ * Formulario de los periodos,
+ *
+ * @author Ricardo Aragon, email: <ricardoaragon12@hotmail.com>
+ * @version 1.0
+ * @since 2017
  */
 public class FormPeriodos extends FormTemplate {
 
@@ -149,8 +153,13 @@ public class FormPeriodos extends FormTemplate {
     private javax.swing.JTextField txt_id;
     private javax.swing.JTextField txt_periodo;
     // End of variables declaration//GEN-END:variables
-
+  
+    
+    
     @Override
+    /**
+     * funcion de inicializar con el formulario periodos
+     */
     public void inicializar() {
         try {
             listaDatos = new ArrayList<>();
@@ -164,6 +173,9 @@ public class FormPeriodos extends FormTemplate {
     }
 
     @Override
+    /**
+     * funcion para limpiar el formulario de el form. Periodos
+     */
     public void limpiarFormulario() {
         txt_id.setText("");
         txt_periodo.setText("");
@@ -173,6 +185,9 @@ public class FormPeriodos extends FormTemplate {
     }
 
     @Override
+    /**
+     * funcion para mostrar registros en el form. Periodos
+     */
     public void mostrarRegistro(int indice) {
         Periodo periodos;
         periodos = (Periodo) listaDatos.get(indice);
@@ -185,6 +200,9 @@ public class FormPeriodos extends FormTemplate {
     }
 
     @Override
+      /**
+     * funcion para obtener los nuevos registros en el form. Periodos
+     */
     public SuperTabla getNuevoRegistro() throws Exception {
         Periodo periodo;
         periodo = new Periodo(Long.parseLong(txt_id.getText()),
@@ -197,6 +215,9 @@ public class FormPeriodos extends FormTemplate {
     }
 
     @Override
+      /**
+     * funcion para llenar los campos con registros en el form. Periodos
+     */
     public void setRegistroActual(SuperTabla registro) throws Exception {
         Periodo periodos;
         periodos = (Periodo) registro;
@@ -207,6 +228,9 @@ public class FormPeriodos extends FormTemplate {
     }
 
     @Override
+      /**
+     * funcion para ejecutar una busqueda de registros en el form. Periodos
+     */
     public void ejecutarBusqueda() throws Exception {
         long id = 0;
 
@@ -222,12 +246,18 @@ public class FormPeriodos extends FormTemplate {
     }
 
     @Override
+      /**
+     * funcion para habilitar la busqueda por el (id) del  registros en el form. Periodos
+     */
     public void habilitarBusqueda() {
         txt_id.setEditable(true);
         txt_id.requestFocus();
     }
 
     @Override
+      /**
+     * funcion para imprimir reporte de registros en el form. Periodos
+     */
     public void imprimirJasper() {
         try {
             listaDatos.get(indiceActual)
