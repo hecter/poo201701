@@ -26,7 +26,7 @@ public class FormPeriodos extends FormTemplate {
         initComponents();
         inicializar();
         mostrarRegistro(0);
-        setLocationRelativeTo(null);
+
     }
 
     /**
@@ -43,8 +43,8 @@ public class FormPeriodos extends FormTemplate {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         txt_id = new javax.swing.JTextField();
-        txt_periodo = new javax.swing.JTextField();
         checkBoxLectura = new javax.swing.JCheckBox();
+        txt_periodo = new javax.swing.JTextField();
         checkBoxFacturado = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -76,9 +76,10 @@ public class FormPeriodos extends FormTemplate {
                             .addComponent(jLabel2))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txt_id, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txt_periodo, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(checkBoxLectura)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(txt_id, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
+                        .addComponent(checkBoxLectura)
+                        .addComponent(txt_periodo))
                     .addComponent(checkBoxFacturado))
                 .addContainerGap(134, Short.MAX_VALUE))
         );
@@ -134,6 +135,8 @@ public class FormPeriodos extends FormTemplate {
         }
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -153,9 +156,7 @@ public class FormPeriodos extends FormTemplate {
     private javax.swing.JTextField txt_id;
     private javax.swing.JTextField txt_periodo;
     // End of variables declaration//GEN-END:variables
-  
-    
-    
+
     @Override
     /**
      * funcion de inicializar con el formulario periodos
@@ -181,7 +182,7 @@ public class FormPeriodos extends FormTemplate {
         txt_periodo.setText("");
         checkBoxFacturado.setSelected(false);
         checkBoxLectura.setSelected(false);
-      
+
     }
 
     @Override
@@ -194,14 +195,14 @@ public class FormPeriodos extends FormTemplate {
         if (periodos != null) {
             txt_id.setText(periodos.getId() + "");
             txt_periodo.setText(periodos.getPeriodo() + "");
-            checkBoxLectura.setSelected(Boolean.parseBoolean(periodos.getLectura()+""));
-            checkBoxFacturado.setSelected(Boolean.parseBoolean(periodos.getFacturado()+""));
+            checkBoxLectura.setSelected(periodos.getLectura() == 1);
+            checkBoxFacturado.setSelected(periodos.getFacturado() == 1);
         }
     }
 
     @Override
-      /**
-     * funcion para  obtener los nuevos registros en el form. Periodos
+    /**
+     * funcion para obtener los nuevos registros en el form. Periodos
      */
     public SuperTabla getNuevoRegistro() throws Exception {
         Periodo periodo;
@@ -209,13 +210,12 @@ public class FormPeriodos extends FormTemplate {
                 Long.parseLong(txt_periodo.getText()),
                 Boolean.compare(checkBoxLectura.isSelected(), false),
                 Boolean.compare(checkBoxFacturado.isSelected(), false));
-        
- 
+
         return (SuperTabla) periodo;
     }
 
     @Override
-      /**
+    /**
      * funcion para llenar los campos con registros en el form. Periodos
      */
     public void setRegistroActual(SuperTabla registro) throws Exception {
@@ -223,12 +223,15 @@ public class FormPeriodos extends FormTemplate {
         periodos = (Periodo) registro;
         periodos.setId(Long.parseLong(txt_id.getText()));
         periodos.setPeriodo(Long.parseLong(txt_periodo.getText()));
-        periodos.setLectura(Boolean.compare(checkBoxLectura.isSelected(), false));
-        periodos.setFacturado(Boolean.compare(checkBoxFacturado.isSelected(), false));
+        periodos.setLectura(
+                Boolean.valueOf(checkBoxLectura.isSelected()).compareTo(true) + 1);
+        periodos.setFacturado(
+                Boolean.valueOf(checkBoxFacturado.isSelected()).compareTo(true) + 1);
+
     }
 
     @Override
-      /**
+    /**
      * funcion para ejecutar una busqueda de registros en el form. Periodos
      */
     public void ejecutarBusqueda() throws Exception {
@@ -246,8 +249,9 @@ public class FormPeriodos extends FormTemplate {
     }
 
     @Override
-      /**
-     * funcion para habilitar la busqueda por el (id) del  registros en el form. Periodos
+    /**
+     * funcion para habilitar la busqueda por el (id) del registros en el form.
+     * Periodos
      */
     public void habilitarBusqueda() {
         txt_id.setEditable(true);
@@ -255,7 +259,7 @@ public class FormPeriodos extends FormTemplate {
     }
 
     @Override
-      /**
+    /**
      * funcion para imprimir reporte de registros en el form. Periodos
      */
     public void imprimirJasper() {

@@ -14,7 +14,7 @@ import modelo.SuperTabla;
 
 /**
  *
- * periodo.
+ * Formulario de los periodos,
  *
  * @author Ricardo Aragon, email: <ricardoaragon12@hotmail.com>
  * @version 1.0
@@ -43,6 +43,12 @@ public class Periodo implements SuperTabla {
      */
     public Periodo(long id, long periodo, long lectura, long facturado) {
         this.id = id;
+        this.periodo = periodo;
+        this.lectura = lectura;
+        this.facturado = facturado;
+    }
+
+    public Periodo(long periodo, long lectura, long facturado) {
         this.periodo = periodo;
         this.lectura = lectura;
         this.facturado = facturado;
@@ -223,18 +229,17 @@ public class Periodo implements SuperTabla {
     }
 
     @Override
-    
+
     /**
-     * metodo para obtener el nombre del reporte en este caso,
-     * los reporte  de los periodos
+     * metodo para obtener el nombre del reporte en este caso, los reporte de
+     * los periodos
      */
     public String obtenerNombreReporte() {
         return "report/Lectura/ReportPeriodos.jrxml";
-        
+
     }
 
     @Override
-    
     /**
      * metodo para obtener parametros
      */
@@ -243,4 +248,5 @@ public class Periodo implements SuperTabla {
         // parametros.put("nombre", "valor");
         return parametros;
     }
+
 }

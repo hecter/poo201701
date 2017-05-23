@@ -37,10 +37,12 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="txt_id" alignment="0" min="-2" pref="213" max="-2" attributes="0"/>
-                  <Component id="txt_periodo" alignment="0" min="-2" pref="213" max="-2" attributes="0"/>
-                  <Component id="checkBoxLectura" min="-2" max="-2" attributes="0"/>
-                  <Component id="checkBoxFacturado" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="txt_id" alignment="0" pref="213" max="32767" attributes="0"/>
+                      <Component id="checkBoxLectura" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="txt_periodo" alignment="0" max="32767" attributes="0"/>
+                  </Group>
+                  <Component id="checkBoxFacturado" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="134" max="32767" attributes="0"/>
           </Group>
@@ -109,9 +111,9 @@
     </Component>
     <Component class="javax.swing.JTextField" name="txt_id">
     </Component>
-    <Component class="javax.swing.JTextField" name="txt_periodo">
-    </Component>
     <Component class="javax.swing.JCheckBox" name="checkBoxLectura">
+    </Component>
+    <Component class="javax.swing.JTextField" name="txt_periodo">
     </Component>
     <Component class="javax.swing.JCheckBox" name="checkBoxFacturado">
     </Component>
