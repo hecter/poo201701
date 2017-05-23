@@ -201,7 +201,7 @@ public class FormPeriodos extends FormTemplate {
 
     @Override
       /**
-     * funcion para obtener los nuevos registros en el form. Periodos
+     * funcion para  obtener los nuevos registros en el form. Periodos
      */
     public SuperTabla getNuevoRegistro() throws Exception {
         Periodo periodo;
