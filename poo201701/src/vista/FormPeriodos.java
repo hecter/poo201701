@@ -11,7 +11,7 @@ import modelo.lectura.Periodo;
 
 /**
  *
- * Formulario de los periodos,
+ * Formulario de los periodos.
  *
  * @author Ricardo Aragon, email: <ricardoaragon12@hotmail.com>
  * @version 1.0
@@ -26,6 +26,7 @@ public class FormPeriodos extends FormTemplate {
         initComponents();
         inicializar();
         mostrarRegistro(0);
+        
 
     }
 
