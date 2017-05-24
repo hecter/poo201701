@@ -18,7 +18,8 @@ import modelo.pagos.Usuario;
  *
  * @author 20111532577
  */
-public class Atencion implements SuperTabla{
+public class Atencion implements SuperTabla {
+
     private long id;
     private Casa casa;
     private Estado estado;
@@ -28,14 +29,13 @@ public class Atencion implements SuperTabla{
     private Usuario usuario;
 
     public Atencion() {
-    casa = new Casa();
-    estado = new Estado();
-    motivos  = new Motivo();
-    usuario = new Usuario();
-    
+        casa = new Casa();
+        estado = new Estado();
+        motivos = new Motivo();
+        usuario = new Usuario();
     }
-    
-    public Atencion(long id, Casa casa, Estado estado, Date fecha, 
+
+    public Atencion(long id, Casa casa, Estado estado, Date fecha,
             Date fecha_solucion, Motivo motivos, Usuario usuario) {
         this.id = id;
         this.casa = casa;
@@ -46,8 +46,9 @@ public class Atencion implements SuperTabla{
         this.usuario = usuario;
     }
 
-    public Atencion(Casa casa, Estado estado, Date fecha, 
-            Date fecha_solucion, Motivo motivos, Usuario usuario) {
+    public Atencion(Casa casa, Estado estado, Date fecha,
+            Date fecha_solucion, Motivo motivos, Usuario usuario) throws SQLException {
+        setId(getconsecutivo());
         this.casa = casa;
         this.estado = estado;
         this.fecha = fecha;
@@ -55,16 +56,15 @@ public class Atencion implements SuperTabla{
         this.motivos = motivos;
         this.usuario = usuario;
     }
-      
-  
+
     public String obtenerNombreSecuencia() {
         return "ATENCIONES_SEQ";
     }
-    
-    public long getconsecutivo() throws SQLException{
+
+    public long getconsecutivo() throws SQLException {
         return Secuencia.nextVal(obtenerNombreSecuencia());
     }
-    
+
     @Override
     public int insertar() throws SQLException {
         BaseDatosOracle basededatos;
@@ -132,7 +132,7 @@ public class Atencion implements SuperTabla{
         basededatos.cerrarSentencia();
         return ejecucion;
     }
-    
+
     public static Atencion buscar(long codigo) throws SQLException,
             Exception {
         Atencion atencion;
@@ -144,15 +144,15 @@ public class Atencion implements SuperTabla{
         ResultSet cursor;
         String sql;
         basededatos = BaseDatosOracle.getInstance();
-        sql = "SELECT ATN.ID, ATN.CASA_ID, ATN.ESTADOS_ID,ET.ESTADO, ATN.FECHA, ATN.FECHA_SOLUCION," +
-                "  ATN.MOTIVOS_ID,MT.MOTIVO, ATN.USUARIOS_ID,US.NOMBRE " +
-                "  FROM ATENCIONES ATN " +
-                "  INNER JOIN CASAS CS ON CS.ID = ATN.CASA_ID " +
-                "  INNER JOIN ESTADOS ET ON ET.ID = ATN.ESTADOS_ID " +
-                "  INNER JOIN MOTIVOS MT ON MT.ID = ATN.MOTIVOS_ID " +
-                "  INNER JOIN USUARIOS US ON US.ID = ATN.USUARIOS_ID " +
-                "  WHERE ATN.ID = ?";
-              
+        sql = "SELECT ATN.ID, ATN.CASA_ID, ATN.ESTADOS_ID,ET.ESTADO, ATN.FECHA, ATN.FECHA_SOLUCION,"
+                + "  ATN.MOTIVOS_ID,MT.MOTIVO, ATN.USUARIOS_ID,US.NOMBRE "
+                + "  FROM ATENCIONES ATN "
+                + "  INNER JOIN CASAS CS ON CS.ID = ATN.CASA_ID "
+                + "  INNER JOIN ESTADOS ET ON ET.ID = ATN.ESTADOS_ID "
+                + "  INNER JOIN MOTIVOS MT ON MT.ID = ATN.MOTIVOS_ID "
+                + "  INNER JOIN USUARIOS US ON US.ID = ATN.USUARIOS_ID "
+                + "  WHERE ATN.ID = ?";
+
         basededatos.conectar();
         basededatos.prepararSql(sql);
         basededatos.asignarParametro(1, codigo);
@@ -182,8 +182,8 @@ public class Atencion implements SuperTabla{
         }
         return atencion;
     }
-     
-     public static ArrayList<Atencion> buscar() throws SQLException,
+
+    public static ArrayList<Atencion> buscar() throws SQLException,
             Exception {
         ArrayList<Atencion> listaAtencion;
         Atencion atencion;
@@ -195,34 +195,34 @@ public class Atencion implements SuperTabla{
         ResultSet cursor;
         String sql;
         basededatos = BaseDatosOracle.getInstance();
-         sql = "SELECT ATN.ID, ATN.CASA_ID, ATN.ESTADOS_ID,ET.ESTADO, ATN.FECHA, ATN.FECHA_SOLUCION," +
-                "  ATN.MOTIVOS_ID,MT.MOTIVO, ATN.USUARIOS_ID,US.NOMBRE,CS.Direccion " +
-                "  FROM ATENCIONES ATN " +
-                "  INNER JOIN CASAS CS ON CS.ID = ATN.CASA_ID " +
-                "  INNER JOIN ESTADOS ET ON ET.ID = ATN.ESTADOS_ID " +
-                "  INNER JOIN MOTIVOS MT ON MT.ID = ATN.MOTIVOS_ID " +
-                "  INNER JOIN USUARIOS US ON US.ID = ATN.USUARIOS_ID " 
+        sql = "SELECT ATN.ID, ATN.CASA_ID, ATN.ESTADOS_ID,ET.ESTADO, ATN.FECHA, ATN.FECHA_SOLUCION,"
+                + "  ATN.MOTIVOS_ID,MT.MOTIVO, ATN.USUARIOS_ID,US.NOMBRE,CS.Direccion "
+                + "  FROM ATENCIONES ATN "
+                + "  INNER JOIN CASAS CS ON CS.ID = ATN.CASA_ID "
+                + "  INNER JOIN ESTADOS ET ON ET.ID = ATN.ESTADOS_ID "
+                + "  INNER JOIN MOTIVOS MT ON MT.ID = ATN.MOTIVOS_ID "
+                + "  INNER JOIN USUARIOS US ON US.ID = ATN.USUARIOS_ID "
                 + "ORDER BY ID";
-        
+
         basededatos.conectar();
         basededatos.prepararSql(sql);
         cursor = basededatos.ejecutarQuery(sql);
         listaAtencion = new ArrayList<>();
-        
+
         while (cursor.next()) {
-             casa = new Casa();
+            casa = new Casa();
             casa.setId(cursor.getInt("CASA_ID"));
             casa.setDireccion(cursor.getString("Direccion"));
             estado = new Estado();
             estado.setId(cursor.getInt("ESTADOS_ID"));
-           estado.setNombre(cursor.getString("ESTADO"));
+            estado.setNombre(cursor.getString("ESTADO"));
             motivo = new Motivo();
             motivo.setId(cursor.getInt("MOTIVOS_ID"));
-           motivo.setMotivos(cursor.getString("MOTIVO"));
+            motivo.setMotivos(cursor.getString("MOTIVO"));
             usuario = new Usuario();
             usuario.setId(cursor.getInt("USUARIOS_ID"));
-          usuario.setNombre(cursor.getString("NOMBRE"));
-            
+            usuario.setNombre(cursor.getString("NOMBRE"));
+
             listaAtencion.add(new Atencion(
                     cursor.getLong("ID"),
                     casa,
@@ -297,5 +297,4 @@ public class Atencion implements SuperTabla{
         this.usuario = usuario;
     }
 
-    
 }

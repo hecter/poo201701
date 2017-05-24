@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultComboBoxModel;
 import modelo.SuperTabla;
 import modelo.atencion.Atencion;
 import modelo.atencion.Casa;
@@ -36,6 +35,21 @@ private  Atencion atencion = new  Atencion();
             for (Casa listaDato : Casa.buscar()) {
               txt_casa.addItem(listaDato.getId()+" - "+listaDato.getDireccion());
             }
+            
+            txt_usuario.removeAllItems();
+            for (Usuario listaDato : Usuario.buscar()) {
+              txt_usuario.addItem(listaDato.getId()+" - "+listaDato.getNombre());
+            }
+            
+            txt_motivos.removeAllItems();
+            for (Motivo listaDato : Motivo.buscar()) {
+              txt_motivos.addItem(listaDato.getId()+" - "+listaDato.getMotivos());
+            }
+            
+            txt_estado.removeAllItems();
+            for (Estado listaDato : Estado.buscar()) {
+              txt_estado.addItem(listaDato.getId()+" - "+listaDato.getNombre());
+            }
            
         } catch (Exception ex) {
             mostrarException(ex);
@@ -45,11 +59,11 @@ private  Atencion atencion = new  Atencion();
     
       @Override
     public void limpiarFormulario() {
-       //  txt_codigo.setValue("");
-         txt_casa.setSelectedIndex(0);
-         txt_motivos.setSelectedIndex(0);
-         txt_usuario.setSelectedIndex(0);
-         txt_estado.setSelectedIndex(0);
+        // txt_codigo.setText("");
+       //  txt_casa.setSelectedIndex(0);
+       //  txt_motivos.setSelectedIndex(0);
+       //  txt_usuario.setSelectedIndex(0);
+       //  txt_estado.setSelectedIndex(0);
     }
 
     @Override
@@ -65,9 +79,9 @@ private  Atencion atencion = new  Atencion();
         if (aten != null) {
         
             System.out.println(aten);
-            txt_codigo.setValue(aten.getId());
-            txt_casa.addItem(String.valueOf(aten.getCasa().getId())+" - "+aten.getCasa().getDireccion());
-            txt_estado.addItem(aten.getEstado().getId()+" - "+String.valueOf(aten.getEstado().getNombre()));
+            txt_codigo.setText(aten.getId()+"");
+            txt_casa.setSelectedItem((aten.getCasa().getId())+" - "+aten.getCasa().getDireccion());
+            txt_estado.setSelectedItem(aten.getEstado().getId()+" - "+String.valueOf(aten.getEstado().getNombre()));
             //Fecha 1 
             String fecha = aten.getFecha().toString();
             String[] parts = fecha.split("-");
@@ -87,8 +101,8 @@ private  Atencion atencion = new  Atencion();
             jc_anio1.setSelectedItem(anio1+"");
             jc_meses1.setSelectedIndex(mes1-1);
             //txt_fechas.setDate(aten.getFecha_solucion());
-            txt_motivos.addItem(String.valueOf(aten.getMotivos().getId()+" - "+aten.getMotivos().getMotivos()));
-            txt_usuario.addItem(aten.getUsuario().getId()+" - "+aten.getUsuario().getNombre());
+            txt_motivos.setSelectedItem(String.valueOf(aten.getMotivos().getId()+" - "+aten.getMotivos().getMotivos()));
+            txt_usuario.setSelectedItem(aten.getUsuario().getId()+" - "+aten.getUsuario().getNombre());
             txt_codigo.requestFocus();
         }
     }
@@ -127,7 +141,7 @@ private  Atencion atencion = new  Atencion();
        aten.getEstado().setId(Long.parseLong(estado.substring(0,1)));
        aten.getMotivos().setId(Long.parseLong(motivos.substring(0,1)));
        aten.getUsuario().setId(Integer.parseInt(usuario.substring(0,1)));
-       aten.setId(Long.parseLong(txt_codigo.getText()));
+       //aten.setId(Long.parseLong(txt_codigo.getText()));
        aten.setFecha(fecha);
        aten.setFecha_solucion(fecha_solucion);
         return aten;
@@ -211,7 +225,6 @@ private  Atencion atencion = new  Atencion();
         txt_motivos = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
         txt_usuario = new javax.swing.JComboBox<>();
-        txt_codigo = new javax.swing.JFormattedTextField();
         jLabel8 = new javax.swing.JLabel();
         jc_dia = new javax.swing.JComboBox<>();
         jc_meses = new javax.swing.JComboBox<>();
@@ -224,6 +237,7 @@ private  Atencion atencion = new  Atencion();
         jc_meses1 = new javax.swing.JComboBox<>();
         jLabel13 = new javax.swing.JLabel();
         jc_anio1 = new javax.swing.JComboBox<>();
+        txt_codigo = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -289,10 +303,6 @@ private  Atencion atencion = new  Atencion();
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(txt_estado, javax.swing.GroupLayout.Alignment.LEADING, 0, 234, Short.MAX_VALUE)
-                            .addComponent(txt_casa, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txt_codigo, javax.swing.GroupLayout.Alignment.LEADING))
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(jLabel8)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -318,7 +328,11 @@ private  Atencion atencion = new  Atencion();
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jc_anio1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(txt_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txt_motivos, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txt_motivos, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(txt_estado, javax.swing.GroupLayout.Alignment.LEADING, 0, 234, Short.MAX_VALUE)
+                        .addComponent(txt_casa, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(txt_codigo, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(159, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -424,7 +438,7 @@ private  Atencion atencion = new  Atencion();
     private javax.swing.JComboBox<String> jc_meses;
     private javax.swing.JComboBox<String> jc_meses1;
     private javax.swing.JComboBox<String> txt_casa;
-    private javax.swing.JFormattedTextField txt_codigo;
+    private javax.swing.JTextField txt_codigo;
     private javax.swing.JComboBox<String> txt_estado;
     private javax.swing.JComboBox<String> txt_motivos;
     private javax.swing.JComboBox<String> txt_usuario;
