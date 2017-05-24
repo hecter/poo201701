@@ -9,13 +9,14 @@ import basededatos.BaseDatosOracle;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import modelo.SuperTabla;
 import report.facturacion.Concepto;
 
 /**
  *
  * @author 20111532577
  */
-public class Estado {
+public class Estado implements SuperTabla {
     private long id;
     private String nombre;
 
@@ -47,6 +48,28 @@ public class Estado {
         this.id = id;
     }
     
+    public static Estado buscar(long id) throws SQLException,
+            Exception {
+        Estado estado;
+         BaseDatosOracle basededatos;
+         ResultSet cursor;
+        String sql;
+        basededatos = BaseDatosOracle.getInstance();
+        sql = "SELECT ID, ESTADO "
+                + "FROM ESTADOS "
+                + "WHERE ID = ?";
+        basededatos.conectar();
+        basededatos.prepararSql(sql);
+        basededatos.asignarParametro(1, id);
+        cursor = basededatos.ejecutarQuery();
+        estado = null;
+        if (cursor.next()) {
+            estado = new Estado(cursor.getLong("ID"),
+                    cursor.getString("ESTADO"));
+        }
+        return estado;
+    }
+    
     public static ArrayList<Estado> buscar() throws SQLException,
             Exception {
         ArrayList<Estado> listaEstado;
@@ -70,6 +93,64 @@ public class Estado {
                    cursor.getString("Estado")));
         }
         return listaEstado;
+    }
+    @Override
+    public int insertar() throws SQLException {
+        BaseDatosOracle basededatos;
+        basededatos = BaseDatosOracle.getInstance();
+        String sql;
+        int ejecucion;
+        sql = "INSERT INTO ESTADOS "
+                + "(ID, ESTADO)"
+                + " VALUES "
+                + "(?, ?, ?, ? )";
+        basededatos.conectar();
+        basededatos.prepararSql(sql);
+        
+        System.out.println(this);
+        basededatos.asignarParametro(1, getId());
+        basededatos.asignarParametro(2, getNombre());
+        ejecucion = basededatos.ejecutar();
+        basededatos.cerrarSentencia();
+        return ejecucion;
+    }
+
+    @Override
+    public int eliminar() throws SQLException {
+        BaseDatosOracle basededatos;
+        basededatos = BaseDatosOracle.getInstance();
+        String sql;
+        int ejecucion;
+        sql = "DELETE ESTADOS WHERE ID = ?";
+        basededatos.conectar();
+        basededatos.prepararSql(sql);
+        basededatos.asignarParametro(1, getId());
+        ejecucion = basededatos.ejecutar();
+        basededatos.cerrarSentencia();
+        return ejecucion;
+    }
+
+    @Override
+    public int actualizar() throws SQLException {
+        BaseDatosOracle basededatos;
+        basededatos = BaseDatosOracle.getInstance();
+        String sql;
+        int ejecucion;
+        sql = "UPDATE ESTADOS "
+                + "SET NOMBRE = ?"
+                + "WHERE ID = ?";
+        basededatos.conectar();
+        basededatos.prepararSql(sql);
+        basededatos.asignarParametro(1, getId());
+        basededatos.asignarParametro(2, getNombre());
+        ejecucion = basededatos.ejecutar();
+        basededatos.cerrarSentencia();
+        return ejecucion;
+    }
+
+    @Override
+    public String obtenerNombreReporte() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
