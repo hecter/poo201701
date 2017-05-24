@@ -21,6 +21,8 @@ package vista;
 import java.awt.Frame;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import modelo.SuperTabla;
@@ -396,7 +398,12 @@ public abstract class FormTemplate extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonReloadActionPerformed
 
     private void buttonEjecutarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEjecutarActionPerformed
-        // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+            actualizar();
+        } catch (Exception ex) {
+            Logger.getLogger(FormTemplate.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_buttonEjecutarActionPerformed
 
     /**
