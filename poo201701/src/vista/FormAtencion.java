@@ -31,7 +31,15 @@ private  Atencion atencion = new  Atencion();
         initComponents();
          mostrarRegistro(0);
         txt_codigo.setEditable(false);
-  
+        try {
+             txt_casa.removeAllItems();
+            for (Casa listaDato : Casa.buscar()) {
+              txt_casa.addItem(listaDato.getId()+" - "+listaDato.getDireccion());
+            }
+           
+        } catch (Exception ex) {
+            mostrarException(ex);
+        }
     }
     
     
@@ -58,8 +66,8 @@ private  Atencion atencion = new  Atencion();
         
             System.out.println(aten);
             txt_codigo.setValue(aten.getId());
-            txt_casa.addItem(String.valueOf(aten.getCasa().getId())+" "+aten.getCasa().getDireccion());
-            txt_estado.addItem(aten.getEstado().getId()+" "+String.valueOf(aten.getEstado().getNombre()));
+            txt_casa.addItem(String.valueOf(aten.getCasa().getId())+" - "+aten.getCasa().getDireccion());
+            txt_estado.addItem(aten.getEstado().getId()+" - "+String.valueOf(aten.getEstado().getNombre()));
             //Fecha 1 
             String fecha = aten.getFecha().toString();
             String[] parts = fecha.split("-");
@@ -79,8 +87,8 @@ private  Atencion atencion = new  Atencion();
             jc_anio1.setSelectedItem(anio1+"");
             jc_meses1.setSelectedIndex(mes1-1);
             //txt_fechas.setDate(aten.getFecha_solucion());
-            txt_motivos.addItem(String.valueOf(aten.getMotivos().getId()+" "+aten.getMotivos().getMotivos()));
-            txt_usuario.addItem(aten.getUsuario().getId()+" "+aten.getUsuario().getNombre());
+            txt_motivos.addItem(String.valueOf(aten.getMotivos().getId()+" - "+aten.getMotivos().getMotivos()));
+            txt_usuario.addItem(aten.getUsuario().getId()+" - "+aten.getUsuario().getNombre());
             txt_codigo.requestFocus();
         }
     }
