@@ -74,24 +74,18 @@
                   <Component id="buttonAceptar" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                   <Component id="buttonAceptar2" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="48" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
     <Component class="javax.swing.JTextField" name="textUsuario">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="oraelectivapoo"/>
-      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textUsuarioActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JPasswordField" name="textPassword">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="oraelectivapoo"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
