@@ -10,10 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import modelo.SuperTabla;
-import modelo.atencion.Atencion;
-import modelo.atencion.Casa;
-import modelo.atencion.Estado;
-import modelo.atencion.Motivo;
+import modelo.lectura.Sector;
 
 /**
  *
@@ -21,14 +18,18 @@ import modelo.atencion.Motivo;
  */
 public class Usuario implements SuperTabla {
 
-    private long id;
+    private String id;
     private String nombre;
     private Rol rol;
 
     public Usuario() {
     }
+    
+    public Usuario(String id) {
+        this.id = id;
+    }
 
-    public Usuario(long id, String nombre, Rol rol) {
+    public Usuario(String id, String nombre, Rol rol) {
         this.id = id;
         this.nombre = nombre;
         this.rol = rol;
@@ -47,11 +48,11 @@ public class Usuario implements SuperTabla {
         this.rol = rol;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -108,11 +109,77 @@ public class Usuario implements SuperTabla {
             rol.setRol(cursor.getString("ROL"));
 
             listaUsuario.add(new Usuario(
-                    cursor.getLong("ID"),
+                    cursor.getString("ID"),
                     cursor.getString("NOMBRE"),
                     rol
             ));
         }
         return listaUsuario;
+    }
+    
+    public static Usuario listar(Sector sector) throws SQLException {
+        Usuario usuario =null;
+        BaseDatosOracle bd = BaseDatosOracle.getInstance();
+        bd.conectar();
+        bd.prepararSql("SELECT USUARIOS.ID FROM USUARIOS WHERE SECTOR_ID = ?");
+        bd.asignarParametro(1, sector.getId());
+        ResultSet reg = bd.ejecutarQuery();
+        if (reg.next()) {
+            usuario = new Usuario(reg.getString("ID"));
+        }
+        return usuario;
+    }
+    
+    public static ArrayList<String> listar() throws SQLException {
+        ArrayList<String> listado =new ArrayList<>();
+        BaseDatosOracle bd = BaseDatosOracle.getInstance();
+        bd.conectar();
+        bd.prepararSql("SELECT "
+                            + "USUARIOS.ID, "
+                            + "ROLES.ROL, "
+                            + "USUARIOS.NOMBRE, "
+                            + "USUARIOS.SECTOR_ID||':'||SECTORES.DET as SECTOR "
+                        + "FROM "
+                            + "USUARIOS "
+                            + "LEFT JOIN SECTORES "
+                                + "ON SECTORES.ID = USUARIOS.SECTOR_ID "
+                            + "INNER JOIN ROLES "
+                                + "ON ROLES.ID = USUARIOS.ROLES_ID");
+        ResultSet reg = bd.ejecutarQuery();
+        listado.clear();
+        while (reg.next()) {
+            if(reg.getString("SECTOR").equals(":")) listado.add(reg.getString("ID")+";"+reg.getString("ROL")+";"+reg.getString("NOMBRE")+";"+"POR ASIGNAR");
+            else listado.add(reg.getString("ID")+";"+reg.getString("ROL")+";"+reg.getString("NOMBRE")+";"+reg.getString("SECTOR"));
+        }
+        return listado;
+    }
+    /**
+     * utilizado para revisar cuando se asigne el sector al usuario
+     * @return 
+     * @throws java.sql.SQLException 
+     */
+    public boolean verificarLector() throws SQLException{
+        BaseDatosOracle bd = BaseDatosOracle.getInstance();
+        bd.conectar();
+        bd.prepararSql("SELECT USUARIOS.SECTOR_ID||':' AS SECTOR_ID FROM USUARIOS WHERE ID = ?");
+        bd.asignarParametro(1, getId());
+        ResultSet reg = bd.ejecutarQuery();
+        if(reg.next()){
+            if(reg.getString("SECTOR_ID").equals(":")){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public int asignarRol(long sector) throws SQLException{
+        BaseDatosOracle bd = BaseDatosOracle.getInstance();
+        bd.conectar();
+        bd.prepararSql("UPDATE USUARIOS SET SECTOR_ID = ? WHERE ID = ?");
+        bd.asignarParametro(1, sector);
+        bd.asignarParametro(2, getId());
+        int ejecucion = bd.ejecutar();
+        bd.cerrarSentencia();
+        return ejecucion;
     }
 }

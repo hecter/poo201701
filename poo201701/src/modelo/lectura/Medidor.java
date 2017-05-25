@@ -18,15 +18,30 @@ public class Medidor {
      private long id;
      private Casa casas;
      private String serial;
-     private long costo;
+     private double costo;
 
     public Medidor() {
     }
+    
+    public Medidor(long id) {
+        this.id = id;
+    }
 
 	
-    public Medidor(long id, Casa casas, String serial, long costo) {
+    public Medidor(long id, Casa casas, String serial, double costo) {
         this.id = id;
         this.casas = casas;
+        this.serial = serial;
+        this.costo = costo;
+    }
+    
+    public Medidor(long id, String serial, double costo) {
+        this.id = id;
+        this.serial = serial;
+        this.costo = costo;
+    }
+    
+    public Medidor(String serial, double costo) {
         this.serial = serial;
         this.costo = costo;
     }
@@ -52,7 +67,7 @@ public class Medidor {
     public void setSerial(String serial) {
         this.serial = serial;
     }
-    public long getCosto() {
+    public double getCosto() {
         return this.costo;
     }
     
@@ -63,15 +78,14 @@ public class Medidor {
     public int insertar() throws SQLException{
         long secuencia = nextVal("SECTORES_SEQ");
          BaseDatosOracle basededatos = BaseDatosOracle.getInstance();
-        String sql = "INSERT INTO MEDIDORES (ID,SERIAL,COSTO,CASA_ID) "
-                + "VALUES(?,?,?,?)";
+        String sql = "INSERT INTO MEDIDORES (ID,SERIAL,COSTO) "
+                + "VALUES(?,?,?)";
         int ejecucion;
         basededatos.conectar();
         basededatos.prepararSql(sql);
         basededatos.asignarParametro(1, secuencia);
         basededatos.asignarParametro(2, getSerial());
         basededatos.asignarParametro(3, getCosto());
-        basededatos.asignarParametro(4, getCasas().getId());
         ejecucion = basededatos.ejecutar();
         basededatos.cerrarSentencia();
         return ejecucion;
@@ -81,13 +95,26 @@ public class Medidor {
        BaseDatosOracle basededatos = BaseDatosOracle.getInstance();
         String sql;
         int ejecucion;
-        sql = "UPDATE MEDIDORES SET SERIAL = ?,COSTO = ?,CASA_ID = ? WHERE ID = ?";
+        sql = "UPDATE MEDIDORES SET SERIAL = ?,COSTO = ? WHERE ID = ?";
         basededatos.conectar();
         basededatos.prepararSql(sql);
         basededatos.asignarParametro(1, getSerial());
         basededatos.asignarParametro(2, getCosto());
-        basededatos.asignarParametro(3, getCasas().getId());
-        basededatos.asignarParametro(4, getId());
+        basededatos.asignarParametro(3, getId());
+        ejecucion = basededatos.ejecutar();
+        basededatos.cerrarSentencia();
+        return ejecucion;
+    }
+    
+    public int actualizarCosto() throws SQLException{
+       BaseDatosOracle basededatos = BaseDatosOracle.getInstance();
+        String sql;
+        int ejecucion;
+        sql = "UPDATE MEDIDORES SET COSTO = ? WHERE ID = ?";
+        basededatos.conectar();
+        basededatos.prepararSql(sql);
+        basededatos.asignarParametro(1, getCosto());
+        basededatos.asignarParametro(2, getId());
         ejecucion = basededatos.ejecutar();
         basededatos.cerrarSentencia();
         return ejecucion;
@@ -107,23 +134,63 @@ public class Medidor {
         return ejecucion;
     }
     
-    /*public ArrayList<Sector> listar() throws SQLException {
+    public ArrayList<Medidor> listar() throws SQLException {
         ArrayList<Medidor> datos = new ArrayList<>();
         BaseDatosOracle bd = BaseDatosOracle.getInstance();
-        String sql = "SELECT ID, SERIAL, COSTO, CASA_ID FROM MEDIDORES";
+        String sql = "SELECT ID, SERIAL, COSTO FROM MEDIDORES";
         bd.conectar();
         bd.prepararSql(sql);
         ResultSet cursor = bd.ejecutarQuery();
         datos.clear();
         while (cursor.next()) {
             datos.add(
-                    new Sector(
-                            cursor.getBigDecimal("ID"), 
-                            cursor.getString("DET")
+                    new Medidor(
+                            cursor.getLong("ID"), 
+                            cursor.getString("SERIAL"),
+                            cursor.getDouble("COSTO")
                     )
             );
         }
         return datos;
+    }
+    
+    public static boolean existe(String serial) throws SQLException {
+        ArrayList<Sector> datos = new ArrayList<>();
+        BaseDatosOracle bd = BaseDatosOracle.getInstance();
+        bd.conectar();
+        bd.prepararSql("SELECT MEDIDORES.ID FROM MEDIDORES WHERE SERIAL= ?");
+        bd.asignarParametro(1, serial);
+        ResultSet reg = bd.ejecutarQuery();
+        datos.clear();
+        return reg.next();
+    }
+    
+    /*public static ArrayList<Medidor> listarMedidoreInstalados() throws SQLException {
+        ArrayList<Medidor> datos = new ArrayList<>();
+        BaseDatosOracle db  = BaseDatosOracle.getInstance();
+        String sql = "SELECT MEDIDORES.ID,CASAS.SECTOR_ID FROM CASAS LEFT JOIN MEDIDORES ON CASAS.ID = MEDIDORES.CASA_ID";
+        db.conectar();
+        db.prepararSql(sql);
+        ResultSet reg = db.ejecutarQuery();
+        datos.clear();
+        while (reg.next()) {
+            datos.add(new Medidor(reg.getLong("ID")));
+        }
+        return datos;
     }*/
+    
+    public static ArrayList<String> listarMedidoreInstalados() throws SQLException {
+        ArrayList<String> datos = new ArrayList<>();
+        BaseDatosOracle db  = BaseDatosOracle.getInstance();
+        String sql = "SELECT MEDIDORES.ID,CASAS.SECTOR_ID FROM CASAS LEFT JOIN MEDIDORES ON CASAS.ID = MEDIDORES.CASA_ID";
+        db.conectar();
+        db.prepararSql(sql);
+        ResultSet reg = db.ejecutarQuery();
+        datos.clear();
+        while (reg.next()) {
+            datos.add(reg.getString("ID")+";"+reg.getString("SECTOR_ID"));
+        }
+        return datos;
+    }
 }
 

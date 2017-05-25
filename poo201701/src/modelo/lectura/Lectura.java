@@ -2,6 +2,12 @@ package modelo.lectura;
 // Generated May 12, 2017 7:15:35 PM by Hibernate Tools 4.3.1
 
 
+import basededatos.BaseDatosOracle;
+import static basededatos.Secuencia.nextVal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import modelo.pagos.Usuario;
 
@@ -15,7 +21,7 @@ public class Lectura {
      private Usuario usuarios;
      private Periodo periodos;
      private Medidor medidores;
-     private long lectura;
+     private int lectura;
      private Date fecha;
      private String causal;
      private long estado;
@@ -23,7 +29,24 @@ public class Lectura {
     public Lectura() {
     }
 
-    public Lectura(long id, Usuario usuarios, Periodo periodos, Medidor medidores, long lectura, Date fecha, String causal, long estado) {
+    public Lectura(Periodo periodos, Medidor medidores) {
+        this.periodos = periodos;
+        this.medidores = medidores;
+    }
+
+    public Lectura(long id, int lectura) {
+        this.id = id;
+        this.lectura = lectura;
+    }
+
+    public Lectura(long id, String causal) {
+        this.id = id;
+        this.causal = causal;
+    }
+    
+    
+    
+    public Lectura(long id, Usuario usuarios, Periodo periodos, Medidor medidores, int lectura, Date fecha, String causal, long estado) {
        this.id = id;
        this.usuarios = usuarios;
        this.periodos = periodos;
@@ -62,11 +85,11 @@ public class Lectura {
     public void setMedidores(Medidor medidores) {
         this.medidores = medidores;
     }
-    public long getLectura() {
+    public int getLectura() {
         return this.lectura;
     }
     
-    public void setLectura(long lectura) {
+    public void setLectura(int lectura) {
         this.lectura = lectura;
     }
     public Date getFecha() {
@@ -91,9 +114,240 @@ public class Lectura {
         this.estado = estado;
     }
 
-
-
-
+    /**
+     * utilizado cuando se insertan los periodos
+     * @param usuario
+     * @return
+     * @throws SQLException 
+     */
+    public int insertarLecturasVacias(Usuario usuario) throws SQLException{
+        long secuencia = nextVal("LECTURA_SEQ");
+        setId(secuencia);
+        BaseDatosOracle basededatos = BaseDatosOracle.getInstance();
+        String sql = "INSERT INTO LECTURA(ID, MEDIDORES_ID,PERIODOS_ID, USUARIOS_ID) VALUES(?,?,?,?)";
+        basededatos.conectar();
+        basededatos.prepararSql(sql);
+        basededatos.asignarParametro(1, getId());
+        basededatos.asignarParametro(2, getMedidores().getId());
+        basededatos.asignarParametro(3, getPeriodos().getId());
+        basededatos.asignarParametro(4, usuario.getId());
+        int ejecucion = basededatos.ejecutar();
+        basededatos.cerrarSentencia();
+        return ejecucion;
+    }
+    
+    /**
+     * utilizado en lectura, aqui se listan las casas que debe 
+     * leer el usuario de acuerdo al sector asignado
+     * @param usuario usuario 
+     * @param sector sector
+     * @param periodo periodo
+     * @return
+     * @throws SQLException 
+     */
+    public static ArrayList<String> ListarPorLeer(String usuario, String sector, String periodo) throws SQLException {
+        ArrayList<String> listado = new ArrayList<>();
+        BaseDatosOracle bd = BaseDatosOracle.getInstance();
+        String sql = "SELECT "
+                        + "LECTURA.ID, "
+                        + "MEDIDORES.SERIAL,"
+                        + "CASAS.DIRECCION,"
+                        + "SECTORES.DET AS SECTOR_NOMBRE "
+                    + "FROM LECTURA "
+                        + "INNER JOIN PERIODOS "
+                            + "ON PERIODOS.ID = LECTURA.PERIODOS_ID "
+                        + "INNER JOIN MEDIDORES "
+                            + "ON MEDIDORES.ID = LECTURA.MEDIDORES_ID "
+                        + "INNER JOIN CASAS "
+                            + "ON CASAS.ID = MEDIDORES.CASA_ID "
+                        + "INNER JOIN SECTORES "
+                            + "ON SECTORES.ID = CASAS.SECTOR_ID "
+                    + "WHERE "
+                        + "PERIODOS.PERIODO  = ? "
+                    + "AND "
+                        + "LECTURA.USUARIOS_ID = ? "
+                    + "AND "
+                        + "LECTURA.ESTADO = 0 "
+                    + "AND "
+                        + "PERIODOS.LECTURA = 0 "
+                    + "AND "
+                        + "CASAS.SECTOR_ID = ?";
+        bd.conectar();
+        bd.prepararSql(sql);
+        bd.asignarParametro(1, periodo);
+        bd.asignarParametro(2, usuario);
+        bd.asignarParametro(3, sector);
+        ResultSet cursor = bd.ejecutarQuery();
+        listado.clear();
+        while (cursor.next()) {
+            String id = cursor.getString("ID");
+            String ser = cursor.getString("SERIAL");
+            String dir = cursor.getString("DIRECCION");
+            String nombre_sector = cursor.getString("SECTOR_NOMBRE");
+            listado.add(id+";"+ser+";"+dir+";"+nombre_sector);
+        }
+        return listado;
+    }
+    
+    /**
+     * lista todos las lecturas de un periodo especifico
+     * @param suscriptor
+     * @param periodo
+     * @return
+     * @throws SQLException 
+     */
+    public static ArrayList<String> ListarPorCorregir(long suscriptor, long periodo) throws SQLException {
+        ArrayList<String> listado = new ArrayList<>();
+        BaseDatosOracle bd = BaseDatosOracle.getInstance();
+        String sql = "SELECT "
+                        + "LECTURA.ID, "
+                        + "LECTURA.LECTURA, "
+                        + "LECTURA.FECHA, "
+                        + "LECTURA.CAUSAL, "
+                        + "LECTURA.ESTADO AS ESTADO_LECTURA, "
+                        + "MEDIDORES.SERIAL AS MEDIDOR_SERIAL, "
+                        + "CASAS.DIRECCION, "
+                        + "SECTORES.DET AS SECTOR_DET, "
+                        + "SUSCRIPTORES.NOMBRES||' '||SUSCRIPTORES.APELLIDOS AS SUSCRIPTOR "
+                    + "FROM "
+                        + "LECTURA "
+                    + "INNER JOIN MEDIDORES "
+                        + "ON MEDIDORES.ID = LECTURA.MEDIDORES_ID "
+                    + "INNER JOIN PERIODOS "
+                        + "ON PERIODOS.ID = LECTURA.PERIODOS_ID "
+                    + "INNER JOIN CASAS "
+                        + "ON CASAS.ID = MEDIDORES.CASA_ID "
+                    + "INNER JOIN SECTORES "
+                        + "ON SECTORES.ID = CASAS.SECTOR_ID "
+                    + "INNER JOIN SUSCRIPTORES "
+                        + "ON SUSCRIPTORES.ID = CASAS.SUSCRIPTOR_ID "
+                    + "WHERE "
+                        + "PERIODOS.PERIODO = ? "
+                    + "AND "
+                        + "CASAS.SUSCRIPTOR_ID= ?";
+        bd.conectar();
+        bd.prepararSql(sql);
+        bd.asignarParametro(1, periodo);
+        bd.asignarParametro(2, suscriptor);
+        ResultSet cursor = bd.ejecutarQuery();
+        listado.clear();
+        while (cursor.next()) {
+            String id = cursor.getString("ID");
+            String lectura = cursor.getString("LECTURA");
+            if(lectura==null){
+                lectura = "POR ASIGNAR";
+            }
+            String fecha = cursor.getString("FECHA");
+            if(fecha==null){
+                fecha = "POR ASIGNAR";
+            }
+            String causal = cursor.getString("CAUSAL");
+            String estado = cursor.getString("ESTADO_LECTURA");
+            String serial = cursor.getString("MEDIDOR_SERIAL");
+            String direccion = cursor.getString("DIRECCION");
+            String sector = cursor.getString("SECTOR_DET");
+            String nsuscriptor = cursor.getString("SUSCRIPTOR");
+            listado.add( id+";"+lectura+";"+fecha+";"+causal+";"+estado+";"+
+                    serial+";"+direccion+";"+sector+";"+nsuscriptor);
+        }
+        return listado;
+    }
+    
+    /**
+     * utilizado en lectura para buscar el id de registro de la lectura
+     * @param usuario
+     * @param serial
+     * @return numero positivo en caso de que exista el registro o  en caso 
+     * contratio un numero negativo
+     * @throws SQLException 
+     */
+    public static long BuscarIdLectura(String usuario, String serial) throws SQLException {
+        ArrayList<String> listado = new ArrayList<>();
+        BaseDatosOracle bd = BaseDatosOracle.getInstance();
+        String sql = "SELECT "
+                        + "LECTURA.ID "
+                    + "FROM "
+                        + "LECTURA "
+                        + "INNER JOIN MEDIDORES "
+                            + "ON MEDIDORES.ID = LECTURA.MEDIDORES_ID "
+                        + "WHERE "
+                            + "LECTURA.USUARIOS_ID = ? "
+                        + "AND "
+                            + "MEDIDORES.SERIAL = ?";
+        bd.conectar();
+        bd.prepararSql(sql);
+        bd.asignarParametro(1, usuario);
+        bd.asignarParametro(2, serial);
+        ResultSet cursor = bd.ejecutarQuery();
+        listado.clear();
+        if (cursor.next()) {
+            return cursor.getLong("ID");
+        }
+        return -1;
+    }
+    
+    /**
+     * utilizado en lectura para que el usuario encargado de ese sector 
+     * lea la lectura del medidor
+     * @param usuario
+     * @return
+     * @throws SQLException 
+     */
+    public int leerLectura() throws SQLException{
+        BaseDatosOracle basededatos = BaseDatosOracle.getInstance();
+        Calendar fregistro = Calendar.getInstance();
+        String sql = "UPDATE LECTURA SET LECTURA = ?, FECHA = ?, ESTADO = 1 WHERE ID = ?";
+        basededatos.conectar();
+        basededatos.prepararSql(sql);        
+        basededatos.asignarParametro(1, getLectura());
+        basededatos.asignarParametro(2, fregistro);
+        basededatos.asignarParametro(3, getId());        
+        int ejecucion = basededatos.ejecutar();
+        basededatos.cerrarSentencia();
+        System.err.println("LECTURA: "+getLectura());
+        System.err.println("registro: "+getId());
+        return ejecucion;
+    }
+    
+    /**
+     * utilizado en lectura cuando por alguna causal no se pudo leer
+     * @return
+     * @throws SQLException 
+     */
+    public int leerLecturaExcepcion() throws SQLException{
+        BaseDatosOracle basededatos = BaseDatosOracle.getInstance();
+        Calendar fecha = Calendar.getInstance();
+        String sql = "UPDATE LECTURA SET CAUSAL = ?, FECHA = ?, ESTADO = 1 WHERE ID = ?";
+        basededatos.conectar();
+        basededatos.prepararSql(sql);
+        basededatos.asignarParametro(1, getCausal());
+        basededatos.asignarParametro(2, fecha);
+        basededatos.asignarParametro(3, getId());
+        int ejecucion = basededatos.ejecutar();
+        basededatos.cerrarSentencia();
+        return ejecucion;
+    }
+    
+    
+    /**
+     * utilizado en lectura para verificar si un registro fue leido o no
+     * @return true si no fue leido, false en caso contrario
+     * @throws SQLException 
+     */
+    public boolean esLeido() throws SQLException{
+        BaseDatosOracle basededatos = BaseDatosOracle.getInstance();
+        String sql = "SELECT LECTURA.ESTADO FROM LECTURA WHERE ID = ?";
+        basededatos.conectar();
+        basededatos.prepararSql(sql);
+        basededatos.asignarParametro(1, getId());
+        ResultSet cursor = basededatos.ejecutarQuery();
+        if(cursor.next()) {
+            if (cursor.getInt("ESTADO")==0) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
 
 

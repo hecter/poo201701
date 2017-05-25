@@ -14,38 +14,59 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import modelo.lectura.Sector;
-import static modelo.lectura.Sector.existe;
+import modelo.pagos.Rol;
+import modelo.pagos.Usuario;
 
 /**
  *
  * @author 20102122476
  */
-public class sector extends javax.swing.JFrame/*FormTemplate*/ {
+public class lectores extends javax.swing.JFrame/*FormTemplate*/ {
     /**
      * Creates new form sector
      */
-    public sector() {
+    public lectores() {
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
         loadTable();
+        loadSectores();
     }
     
     public void loadTable(){
         limpiarTabla(tablaDatos);
         try {
-            ArrayList<Sector> listado;
-                listado = Sector.listar();
+            ArrayList<String> listado;
+                listado = Usuario.listar();
                 if (!listado.isEmpty()) {
                     listado.stream().forEach((dato) -> {
                         DefaultTableModel tb = (DefaultTableModel) tablaDatos.getModel();
+                        String[] array = dato.split("\\;");
                         Vector datos = new Vector();
-                        datos.add(dato.getId());
-                        datos.add(dato.getDet());
+                        datos.add(array[0]);
+                        datos.add(array[1]);
+                        datos.add(array[2]);
+                        datos.add(array[3]);
                         tb.addRow(datos);
                 });
                 }        
         } catch (SQLException ex) {
-            Logger.getLogger(sector.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(lectores.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void loadSectores(){
+        txrol.removeAllItems();
+        ArrayList<Sector> listado;
+        try {
+            listado = Sector.listar();
+            if (!listado.isEmpty()) {
+                    listado.stream().forEach((dato) -> {
+                        String temp = dato.getId()+":"+dato.getDet();
+                        txrol.addItem(temp);
+                });
+                }   
+        } catch (SQLException ex) {
+            Logger.getLogger(lectores.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -64,13 +85,13 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         txid = new javax.swing.JTextField();
-        txdet = new javax.swing.JTextField();
         btinsertar = new javax.swing.JButton();
         btactualizar = new javax.swing.JButton();
-        bteliminar = new javax.swing.JButton();
         btlimpiar = new javax.swing.JButton();
+        txrol = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
+        btinsertar1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -79,14 +100,14 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
 
             },
             new String [] {
-                "ID", "DET"
+                "ID", "ROL", "NOMBRE", "SECTOR"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -111,7 +132,7 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Formulario Sectores");
+        jLabel1.setText("Formulario Lectores");
         jLabel1.setToolTipText("");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -125,31 +146,19 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
         );
 
-        jLabel2.setText("Id:");
+        jLabel2.setText("Id Usuario: ");
 
-        jLabel3.setText("Det: ");
-
-        txid.setEditable(false);
-        txid.setBackground(new java.awt.Color(204, 255, 204));
-
-        btinsertar.setText("INSERTAR");
+        btinsertar.setText("ASIGNAR");
         btinsertar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btinsertarActionPerformed(evt);
             }
         });
 
-        btactualizar.setText("ACTUALIZAR");
+        btactualizar.setText("RE - ASIGNAR");
         btactualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btactualizarActionPerformed(evt);
-            }
-        });
-
-        bteliminar.setText("ELIMINAR");
-        bteliminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bteliminarActionPerformed(evt);
             }
         });
 
@@ -157,6 +166,15 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
         btlimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btlimpiarActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Sectores: ");
+
+        btinsertar1.setText("Recargar");
+        btinsertar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btinsertar1ActionPerformed(evt);
             }
         });
 
@@ -170,19 +188,19 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txdet)
-                            .addComponent(txid)))
+                            .addComponent(txid)
+                            .addComponent(txrol, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btinsertar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btlimpiar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(bteliminar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btactualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btinsertar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(btactualizar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btinsertar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -190,22 +208,22 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txid, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txid, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txdet, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txrol, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btinsertar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btactualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bteliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btlimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btinsertar1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -235,23 +253,32 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btinsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btinsertarActionPerformed
-        if (txdet.getText().length() != 0) {
-            try {
-                if(!existe(txdet.getText())){
-                    Sector sector = new Sector(Long.parseLong(txid.getText()), txdet.getText());
-                    int insertados = sector.insertar();
-                    msn(this, "SE INSERTÓ " + insertados + " REGISTROS", "MENSAJE", 1);
-                    if (insertados > 0) {
+        Usuario usuario = new Usuario(txid.getText());
+        try {
+            if(usuario.verificarLector()){
+                String[] array = txrol.getSelectedItem().toString().split("\\:");
+                long rol = Long.parseLong(array[0]);
+                if (!Sector.estaAsignado(rol)) {//PUEDE SER ASIGNADO
+                    int updates = usuario.asignarRol(Long.parseLong(array[0]));
+                    if(updates > 0){
                         loadTable();
+                        msn(this, "REGISTRO ACTUALIZADO", "MENSAJE", 1);
+                    }else{
+                        msn(this, "NO SE ACTUALIZO EL REGISTRO", "ERROR", 0);
                     }
                 }else{
-                    msn(this, "REGISTRO EXISTENTE", "ERROR", 0);
+                    msn(this, "NO SE PUEDE ASIGNAR EL SECTOR, "
+                            + "\n(ESTA SIENDO UTILIZADO POR OTRO USUARIO "
+                            + "O NO EXISTE","ERROR", 0);
                 }
-            } catch (SQLException ex) {
-                msn(this, ex.getMessage(), "ERROR", 0);
             }
-        }else{
-            msn(this, "DEBES DIGITAR UN SECTOR", "ERROR", 0);
+            else{
+                msn(this, "NO SE PUEDE ASIGNAR ROL, "
+                        + "(ROL YA ASIGNADO O USUARIO INEXISTENTE)", 
+                        "ERROR", 0);
+            }
+        } catch (SQLException ex) {
+            msn(this, ex.getMessage(), "ERROR", 0);
         }
     }//GEN-LAST:event_btinsertarActionPerformed
 
@@ -260,57 +287,64 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
         try{
             int fila = tablaDatos.getSelectedRow();
             txid.setText(tablaDatos.getValueAt(fila, 0).toString());
-            txdet.setText(tablaDatos.getValueAt(fila, 1).toString());
+            txrol.setSelectedItem(tablaDatos.getValueAt(fila, 3));
         }catch(Exception ex){}
         
     }//GEN-LAST:event_tablaDatosMouseClicked
 
     private void btactualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btactualizarActionPerformed
-        // TODO add your handling code here:
-        if (txid.getText().length() != 0 & txdet.getText().length() != 0) {
-                try {
-                    if (!existe(txdet.getText())) {
-                        Sector sector = new Sector(Long.parseLong(txid.getText()), txdet.getText());
-                        int eliminados = sector.actualizar();
-                        msn(this, "SE ACTUALIZO " + eliminados + " REGISTRO(S)", "MENSAJE", 1);
-                        if (eliminados > 0) {
-                            loadTable();
-                        }
-                    } else {
-                        msn(this, "REGISTRO EXISTENTE", "ERROR", 0);
-                    }
-                } catch (SQLException ex) {
-                    msn(this, ex.getMessage(), "ERROR", 0);
-                }            
-        }else{
+        try {
+            // TODO add your handling code here:
+            String[] array = txrol.getSelectedItem().toString().split("\\:");
+            long rol = Long.parseLong(array[0]);
+            if (!Sector.estaAsignado(rol)) {//PUEDE SER ASIGNADO
+                Usuario usuario = new Usuario(txid.getText());
+                int updates = usuario.asignarRol(Long.parseLong(array[0]));
+                if (updates > 0) {
+                    loadTable();
+                    msn(this, "REGISTRO ACTUALIZADO", "MENSAJE", 1);
+                } else {
+                    msn(this, "NO SE ACTUALIZO EL REGISTRO", "ERROR", 0);
+                }
+            }else{
+                msn(this, "NO SE PUEDE RE-ASIGNAR EL SECTOR, "
+                        + "\n(ESTA SIENDO UTILIZADO POR OTRO USUARIO O NO EXISTE","ERROR", 0);
+            }
+            /*if (txid.getText().length() != 0 & txdet.getText().length() != 0) {
+            try {
+            if (!existe(txdet.getText())) {
+            Sector sector = new Sector(Long.parseLong(txid.getText()), txdet.getText());
+            int eliminados = sector.actualizar();
+            msn(this, "SE ACTUALIZO " + eliminados + " REGISTRO(S)", "MENSAJE", 1);
+            if (eliminados > 0) {
+            loadTable();
+            }
+            } else {
+            msn(this, "REGISTRO EXISTENTE", "ERROR", 0);
+            }
+            } catch (SQLException ex) {
+            msn(this, ex.getMessage(), "ERROR", 0);
+            }
+            }else{
             msn(this, "NO SE ADMITEN CAMPOS VACIOS", "ERROR", 0);
+            }*/
+        } catch (SQLException ex) {
+            msn(this, ex.getMessage(), "ERROR", 0);
         }
     }//GEN-LAST:event_btactualizarActionPerformed
-
-    private void bteliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bteliminarActionPerformed
-        // TODO add your handling code here:
-        if (txid.getText().length() != 0) {
-            try {
-                Sector sector = new Sector(Long.parseLong(txid.getText()));
-                int eliminados = sector.eliminar();
-                msn(this, "SE ELIMINO " + eliminados + " REGISTRO(S)", "MENSAJE", 1);
-                if (eliminados > 0) {
-                    loadTable();
-                }
-            } catch (SQLException ex) {
-                msn(this, ex.getMessage(), "ERROR", 0);
-            }
-        }else{
-            msn(this, "DEBES DIGITAR UN ID", "ERROR", 0);
-        }
-    }//GEN-LAST:event_bteliminarActionPerformed
 
     private void btlimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btlimpiarActionPerformed
         // TODO add your handling code here:
         txid.setText("");
-        txdet.setText("");
+        txrol.setSelectedIndex(0);
         txid.requestFocus();
     }//GEN-LAST:event_btlimpiarActionPerformed
+
+    private void btinsertar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btinsertar1ActionPerformed
+        // TODO add your handling code here:
+        loadTable();
+        loadSectores();
+    }//GEN-LAST:event_btinsertar1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -329,8 +363,12 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(sector.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(lectores.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -340,23 +378,23 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new sector().setVisible(true);
+            new lectores().setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btactualizar;
-    private javax.swing.JButton bteliminar;
     private javax.swing.JButton btinsertar;
+    private javax.swing.JButton btinsertar1;
     private javax.swing.JButton btlimpiar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tablaDatos;
-    private javax.swing.JTextField txdet;
     private javax.swing.JTextField txid;
+    private javax.swing.JComboBox<String> txrol;
     // End of variables declaration//GEN-END:variables
 }

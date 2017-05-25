@@ -1,144 +1,116 @@
 package modelo.lectura;
 // Generated May 12, 2017 7:15:35 PM by Hibernate Tools 4.3.1
 
+
 import basededatos.BaseDatosOracle;
 import static basededatos.Secuencia.nextVal;
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import modelo.SuperTabla;
+//import modelo.SuperTabla;
 
 /**
- *
- * Formulario de los periodos,
- *
- * @author Ricardo Aragon, email: <ricardoaragon12@hotmail.com>
- * @version 1.0
- * @since 2017
+ * Luis Rueda
  */
-public class Periodo implements SuperTabla {
+public class Periodo /*implements SuperTabla*/{
+     private long id;
+     private long periodo;
+     private int lectura;
+     private int facturado;
 
-    private long id;
-    private long periodo;
-    private long lectura;
-    private long facturado;
-
-    /**
-     * constructor vacio
-     */
     public Periodo() {
     }
 
-    /**
-     * constructor con todoss los parametros de la clase
-     *
-     * @param id
-     * @param periodo
-     * @param lectura
-     * @param facturado
-     */
-    public Periodo(long id, long periodo, long lectura, long facturado) {
+	
+    public Periodo(long id, long periodo, int lectura, int facturado) {
         this.id = id;
         this.periodo = periodo;
         this.lectura = lectura;
         this.facturado = facturado;
     }
-
-    public Periodo(long periodo, long lectura, long facturado) {
+    
+    public Periodo(long id, long periodo) {
+        this.id = id;
+        this.periodo = periodo;
+    }
+    
+    public Periodo(long periodo, int lectura, int facturado) {
         this.periodo = periodo;
         this.lectura = lectura;
         this.facturado = facturado;
     }
-
-    /**
-     * retorna id del regstro
-     *
-     * @return la id del registro
-     */
+   
     public long getId() {
         return this.id;
     }
-
-    /**
-     * asigna un valor a el atributo Id
-     *
-     * @param id
-     */
+    
     public void setId(long id) {
         this.id = id;
     }
-
-    /**
-     * retorna el periodo del regstro
-     *
-     * @return el periodo del registro
-     */
     public long getPeriodo() {
         return this.periodo;
     }
-
-    /**
-     * asigna un valor a periodo
-     *
-     * @param periodo
-     */
+    
     public void setPeriodo(long periodo) {
         this.periodo = periodo;
     }
-
-    /**
-     * retorna la lectura del regstro
-     *
-     * @return la lectura del registro
-     */
     public long getLectura() {
         return this.lectura;
     }
-
-    /**
-     * asigna un valor a lectura
-     *
-     * @param lectura
-     */
-    public void setLectura(long lectura) {
+    
+    public void setLectura(int lectura) {
         this.lectura = lectura;
     }
-
-    /**
-     * retorna el facturado del regstro
-     *
-     * @return el facturado del registro
-     */
     public long getFacturado() {
         return this.facturado;
     }
-
-    /**
-     * asigna un valor a facturado
-     *
-     * @param facturado
-     */
-    public void setFacturado(long facturado) {
+    
+    public void setFacturado(int facturado) {
         this.facturado = facturado;
     }
-
-    @Override
-    /**
-     * metodo para lograr INSERT los registros en la base de datos
-     */
-    public int insertar() throws SQLException {
+    
+    public static ArrayList<Periodo> listar() throws SQLException {
+        ArrayList<Periodo> datos = new ArrayList<>();
+        BaseDatosOracle db  = BaseDatosOracle.getInstance();
+        String sql = "SELECT ID, PERIODO, LECTURA, FACTURADO FROM PERIODOS";
+        db.conectar();
+        db.prepararSql(sql);
+        ResultSet reg = db.ejecutarQuery();
+        datos.clear();
+        while (reg.next()) {
+            datos.add(new Periodo(reg.getLong("ID"),reg.getLong("PERIODO"),reg.getInt("LECTURA"),reg.getInt("FACTURADO")
+            ));
+        }
+        return datos;
+    }
+ 
+    
+    public static Periodo listar(long id) throws SQLException {
+        Periodo dato = null;
+        BaseDatosOracle db  = BaseDatosOracle.getInstance();
+        String sql = "SELECT PERIODO,LECTURA,FACTURADO FROM PERIODOS";
+        db.conectar();
+        db.prepararSql(sql);
+        db.asignarParametro(1, id);
+        ResultSet reg = db.ejecutarQuery();
+        long periodo = reg.getLong("PERIODO");
+        int lectura = reg.getInt("LECTURA");
+        int facturado = reg.getInt("FACTURADO");
+        while (reg.next()) {
+            dato = new Periodo(id,periodo,lectura,facturado);
+        }
+        return dato;
+    }
+    
+    public int insertar() throws SQLException{
         long secuencia = nextVal("PERIODOS_SEQ");
+        setId(secuencia);
         BaseDatosOracle db = BaseDatosOracle.getInstance();
-        String sql = "INSERT INTO PERIODOS (ID,PERIODO,LECTURA,FACTURADO) "
-                + "VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO PERIODOS(ID, PERIODO, LECTURA, FACTURADO) VALUES (?,?, ?, ?)";
         int ejecucion;
         db.conectar();
         db.prepararSql(sql);
-        db.asignarParametro(1, secuencia);
+        db.asignarParametro(1, getId());
         db.asignarParametro(2, getPeriodo());
         db.asignarParametro(3, getLectura());
         db.asignarParametro(4, getFacturado());
@@ -146,20 +118,12 @@ public class Periodo implements SuperTabla {
         db.cerrarSentencia();
         return ejecucion;
     }
-
-    @Override
-    /**
-     * metodo para lograr un UPDATE de registros en la base de datos
-     */
-    public int actualizar() throws SQLException {
-        BaseDatosOracle db = BaseDatosOracle.getInstance();
+    
+    public int actualizar() throws SQLException{
+       BaseDatosOracle db = BaseDatosOracle.getInstance();
         String sql;
         int ejecucion;
-        sql = "UPDATE PERIODOS "
-                + "SET PERIODO = ?, "
-                + "LECTURA = ? ,"
-                + "FACTURADO = ? "
-                + "WHERE ID = ?";
+        sql = "UPDATE PERIODOS SET PERIODO = ?, LECTURA = ?, FACTURADO = ? WHERE ID = ?";
         db.conectar();
         db.prepararSql(sql);
         db.asignarParametro(1, getPeriodo());
@@ -170,13 +134,25 @@ public class Periodo implements SuperTabla {
         db.cerrarSentencia();
         return ejecucion;
     }
-
-    @Override
-    /**
-     * metodo para lograr un DELETE de registros en la base de datos
-     */
-    public int eliminar() throws SQLException {
+    
+    public int actualizarLecturaFacturado() throws SQLException{
+       BaseDatosOracle db = BaseDatosOracle.getInstance();
+        String sql;
+        int ejecucion;
+        sql = "UPDATE PERIODOS SET LECTURA = ?, FACTURADO = ? WHERE ID = ?";
+        db.conectar();
+        db.prepararSql(sql);
+        db.asignarParametro(1, getLectura());
+        db.asignarParametro(2, getFacturado());
+        db.asignarParametro(3, getId());
+        ejecucion = db.ejecutar();
+        db.cerrarSentencia();
+        return ejecucion;
+    }
+    
+    public int eliminar() throws SQLException{
         BaseDatosOracle db = BaseDatosOracle.getInstance();
+        System.err.println(getId());
         String sql = "DELETE FROM PERIODOS WHERE ID = ?";
         int ejecucion;
         db.conectar();
@@ -186,67 +162,22 @@ public class Periodo implements SuperTabla {
         db.cerrarSentencia();
         return ejecucion;
     }
-
-    /**
-     * metodo para lograr listar o Buscar registros en la base de datos
-     */
-    public static ArrayList<Periodo> listar() throws SQLException {
-        ArrayList<Periodo> datos = new ArrayList<>();
-        BaseDatosOracle db = BaseDatosOracle.getInstance();
-        String sql = "SELECT ID, PERIODO,LECTURA,FACTURADO FROM PERIODOS";
-        db.conectar();
-        db.prepararSql(sql);
-        ResultSet reg = db.ejecutarQuery();
+    
+    public static boolean existe(long periodo) throws SQLException {
+        ArrayList<Sector> datos = new ArrayList<>();
+        BaseDatosOracle bd = BaseDatosOracle.getInstance();
+        bd.conectar();
+        bd.prepararSql("SELECT PERIODOS.ID FROM PERIODOS WHERE PERIODO = ?");
+        bd.asignarParametro(1, periodo);
+        ResultSet reg = bd.ejecutarQuery();
         datos.clear();
-        while (reg.next()) {
-            datos.add(new Periodo(reg.getLong("ID"), reg.getLong("PERIODO"),
-                    reg.getLong("LECTURA"),
-                    reg.getLong("FACTURADO")
-            ));
-        }
-        return datos;
+        return reg.next();
     }
 
-    /**
-     * metodo para lograr listar o Buscar registros en la base de datos pero con
-     * un filtro, en este caso por la Id del registro
-     */
-    public static Periodo listar(long id) throws SQLException {
-        Periodo dato = null;
-        BaseDatosOracle db = BaseDatosOracle.getInstance();
-        String sql = "SELECT PERIODO,LECTURA,FACTURADO FROM PERIODOS";
-        db.conectar();
-        db.prepararSql(sql);
-        db.asignarParametro(1, id);
-        ResultSet reg = db.ejecutarQuery();
-        long periodo = reg.getLong("PERIODO");
-        long lectura = reg.getLong("LECTURA");
-        long facturado = reg.getLong("FACTURADO");
-        while (reg.next()) {
-            dato = new Periodo(id, periodo, lectura, facturado);
-        }
-        return dato;
-    }
-
-    @Override
-
-    /**
-     * metodo para obtener el nombre del reporte en este caso, los reporte de
-     * los periodos
-     */
+    /*@Override
     public String obtenerNombreReporte() {
-        return "report/Lectura/ReportPeriodos.jrxml";
-
-    }
-
-    @Override
-    /**
-     * metodo para obtener parametros
-     */
-    public Map<String, Object> obtenerParametros() {
-        Map parametros = new HashMap<String, Object>();
-        // parametros.put("nombre", "valor");
-        return parametros;
-    }
-
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }*/
 }
+
+

@@ -7,45 +7,55 @@ package vista.lectura;
 
 import static JTable.Tablas.limpiarTabla;
 import static Messages.Mensajes.msn;
+import Money.Dinero;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
+import modelo.lectura.Medidor;
 import modelo.lectura.Sector;
-import static modelo.lectura.Sector.existe;
 
 /**
  *
  * @author 20102122476
  */
-public class sector extends javax.swing.JFrame/*FormTemplate*/ {
+public class medidor extends javax.swing.JFrame/*FormTemplate*/ {
     /**
      * Creates new form sector
      */
-    public sector() {
+    public medidor() {
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
         loadTable();
+        limpiar();
+    }
+    
+    public void limpiar(){
+        txid.setText("");
+        txserial.setText("");
+        txcosto.setText("");
+        txid.requestFocus();
     }
     
     public void loadTable(){
         limpiarTabla(tablaDatos);
         try {
-            ArrayList<Sector> listado;
-                listado = Sector.listar();
+            Medidor medidor = new Medidor();
+            ArrayList<Medidor> listado;
+                listado = medidor.listar();
                 if (!listado.isEmpty()) {
                     listado.stream().forEach((dato) -> {
                         DefaultTableModel tb = (DefaultTableModel) tablaDatos.getModel();
                         Vector datos = new Vector();
                         datos.add(dato.getId());
-                        datos.add(dato.getDet());
+                        datos.add(dato.getSerial());
+                        datos.add(Dinero.formatearDinero(new BigDecimal(dato.getCosto()), 2));
                         tb.addRow(datos);
                 });
                 }        
         } catch (SQLException ex) {
-            Logger.getLogger(sector.class.getName()).log(Level.SEVERE, null, ex);
+            msn(this, ex.getMessage(), "ERROR", 0);
         }
     }
 
@@ -66,11 +76,13 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txid = new javax.swing.JTextField();
-        txdet = new javax.swing.JTextField();
+        txserial = new javax.swing.JTextField();
         btinsertar = new javax.swing.JButton();
         btactualizar = new javax.swing.JButton();
         bteliminar = new javax.swing.JButton();
         btlimpiar = new javax.swing.JButton();
+        txcosto = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -79,14 +91,14 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
 
             },
             new String [] {
-                "ID", "DET"
+                "ID", "SERIAL", "COSTO"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -111,7 +123,7 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Formulario Sectores");
+        jLabel1.setText("Formulario Medidores");
         jLabel1.setToolTipText("");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -127,7 +139,7 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
 
         jLabel2.setText("Id:");
 
-        jLabel3.setText("Det: ");
+        jLabel3.setText("Serial:");
 
         txid.setEditable(false);
         txid.setBackground(new java.awt.Color(204, 255, 204));
@@ -160,6 +172,8 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
             }
         });
 
+        jLabel4.setText("Costo: ");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -169,20 +183,22 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txdet)
-                            .addComponent(txid)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btlimpiar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(bteliminar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btactualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btinsertar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(btinsertar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txcosto, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
+                            .addComponent(txid)
+                            .addComponent(txserial))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -195,8 +211,12 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txdet, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txserial, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txcosto, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btinsertar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -205,7 +225,7 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
                 .addComponent(bteliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btlimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -224,7 +244,7 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 451, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -235,12 +255,13 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btinsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btinsertarActionPerformed
-        if (txdet.getText().length() != 0) {
+        if (txserial.getText().length() != 0 & txcosto.getText().length() != 0) {
             try {
-                if(!existe(txdet.getText())){
-                    Sector sector = new Sector(Long.parseLong(txid.getText()), txdet.getText());
-                    int insertados = sector.insertar();
+                if(!Medidor.existe(txserial.getText())){
+                    Medidor medidor = new Medidor(txserial.getText(), Double.parseDouble(txcosto.getText()));
+                    int insertados = medidor.insertar();
                     msn(this, "SE INSERTÓ " + insertados + " REGISTROS", "MENSAJE", 1);
+                    limpiar();
                     if (insertados > 0) {
                         loadTable();
                     }
@@ -251,7 +272,7 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
                 msn(this, ex.getMessage(), "ERROR", 0);
             }
         }else{
-            msn(this, "DEBES DIGITAR UN SECTOR", "ERROR", 0);
+            msn(this, "DEBES DIGITAR UN SERIAL Y UN COSTO", "ERROR", 0);
         }
     }//GEN-LAST:event_btinsertarActionPerformed
 
@@ -260,25 +281,32 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
         try{
             int fila = tablaDatos.getSelectedRow();
             txid.setText(tablaDatos.getValueAt(fila, 0).toString());
-            txdet.setText(tablaDatos.getValueAt(fila, 1).toString());
+            txserial.setText(tablaDatos.getValueAt(fila, 1).toString());
+            txcosto.setText(tablaDatos.getValueAt(fila, 2).toString().replace("$ ","").replace(".", "").replace(",", "."));
         }catch(Exception ex){}
         
     }//GEN-LAST:event_tablaDatosMouseClicked
 
     private void btactualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btactualizarActionPerformed
         // TODO add your handling code here:
-        if (txid.getText().length() != 0 & txdet.getText().length() != 0) {
+        if (txid.getText().length() != 0 & txserial.getText().length() != 0 & txcosto.getText().length() != 0) {
                 try {
-                    if (!existe(txdet.getText())) {
-                        Sector sector = new Sector(Long.parseLong(txid.getText()), txdet.getText());
-                        int eliminados = sector.actualizar();
-                        msn(this, "SE ACTUALIZO " + eliminados + " REGISTRO(S)", "MENSAJE", 1);
-                        if (eliminados > 0) {
+                    if (!Medidor.existe(txserial.getText())) {
+                        Medidor medidor = new Medidor(Long.parseLong(txid.getText()), txserial.getText(), Double.parseDouble(txcosto.getText()));
+                        int actualizados = medidor.actualizar();
+                        msn(this, "SE ACTUALIZO " + actualizados + " REGISTRO(S)", "MENSAJE", 1);
+                        if (actualizados > 0) {
                             loadTable();
                         }
                     } else {
-                        msn(this, "REGISTRO EXISTENTE", "ERROR", 0);
+                        Medidor medidor = new Medidor(Long.parseLong(txid.getText()), txserial.getText(), Double.parseDouble(txcosto.getText()));
+                        int actualizados = medidor.actualizarCosto();
+                        msn(this, "SE ACTUALIZO " + actualizados + " REGISTRO(S)", "MENSAJE", 1);
+                        if (actualizados > 0) {
+                            loadTable();
+                        }
                     }
+                    limpiar();
                 } catch (SQLException ex) {
                     msn(this, ex.getMessage(), "ERROR", 0);
                 }            
@@ -291,9 +319,10 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
         // TODO add your handling code here:
         if (txid.getText().length() != 0) {
             try {
-                Sector sector = new Sector(Long.parseLong(txid.getText()));
-                int eliminados = sector.eliminar();
+                Medidor medidor = new Medidor(Long.parseLong(txid.getText()));
+                int eliminados = medidor.eliminar();
                 msn(this, "SE ELIMINO " + eliminados + " REGISTRO(S)", "MENSAJE", 1);
+                limpiar();
                 if (eliminados > 0) {
                     loadTable();
                 }
@@ -307,9 +336,7 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
 
     private void btlimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btlimpiarActionPerformed
         // TODO add your handling code here:
-        txid.setText("");
-        txdet.setText("");
-        txid.requestFocus();
+        limpiar();
     }//GEN-LAST:event_btlimpiarActionPerformed
 
     /**
@@ -329,8 +356,12 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(sector.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(medidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -340,7 +371,7 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new sector().setVisible(true);
+            new medidor().setVisible(true);
         });
     }
 
@@ -352,11 +383,13 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tablaDatos;
-    private javax.swing.JTextField txdet;
+    private javax.swing.JTextField txcosto;
     private javax.swing.JTextField txid;
+    private javax.swing.JTextField txserial;
     // End of variables declaration//GEN-END:variables
 }
