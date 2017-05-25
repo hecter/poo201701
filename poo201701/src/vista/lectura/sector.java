@@ -238,7 +238,7 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
         if (txdet.getText().length() != 0) {
             try {
                 if(!existe(txdet.getText())){
-                    Sector sector = new Sector(Long.parseLong(txid.getText()), txdet.getText());
+                    Sector sector = new Sector(txdet.getText());
                     int insertados = sector.insertar();
                     msn(this, "SE INSERTÓ " + insertados + " REGISTROS", "MENSAJE", 1);
                     if (insertados > 0) {

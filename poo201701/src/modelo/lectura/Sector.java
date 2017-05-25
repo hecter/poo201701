@@ -23,6 +23,10 @@ public class Sector{
         this.id = id;
     }
 
+    public Sector(String det) {
+        this.det = det;
+    }
+
     public Sector(long id, String det) {
         this.id = id;
         this.det = det;
