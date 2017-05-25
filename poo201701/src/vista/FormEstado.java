@@ -61,28 +61,27 @@ public class FormEstado extends FormTemplate {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(128, 128, 128)
+                        .addGap(118, 118, 118)
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
                             .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel2))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(37, 37, 37)
+                                .addGap(27, 27, 27)
                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txt_id, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
-                            .addComponent(txt_estado))))
-                .addContainerGap(58, Short.MAX_VALUE))
+                            .addComponent(txt_id)
+                            .addComponent(txt_estado, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(348, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(33, 33, 33)
+                .addGap(118, 118, 118)
                 .addComponent(jLabel1)
                 .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -92,7 +91,7 @@ public class FormEstado extends FormTemplate {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txt_estado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addContainerGap(172, Short.MAX_VALUE))
         );
 
         pack();
@@ -140,6 +139,7 @@ public class FormEstado extends FormTemplate {
     @Override
     public void limpiarFormulario() {
         txt_estado.setText("");
+        txt_id.setText("");
     }
 
     @Override
@@ -152,6 +152,7 @@ public class FormEstado extends FormTemplate {
         estado = (Estado) listaDatos.get(indice);
         if (estado != null) {
             txt_estado.setText(estado.getNombre());
+            txt_id.setText(estado.getId()+"");
          
         }
     }
@@ -172,7 +173,7 @@ public class FormEstado extends FormTemplate {
     @Override
     public SuperTabla getNuevoRegistro() throws Exception {
         Estado estado;
-        estado = new Estado(Long.parseLong(txt_id.getText()), txt_estado.getText());
+        estado = new Estado(txt_estado.getText());
         return estado;
     }
 
