@@ -252,7 +252,7 @@ public class Suscriptor implements SuperTabla{
      */
     @Override
     public String obtenerNombreReporte() {
-       return "Ni idea";
+       return "/report/atencion/ReportSuscriptor.jrxml";
     }
     
     /**
