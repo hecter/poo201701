@@ -108,7 +108,8 @@ public class Suscriptor implements SuperTabla{
         String sql;
         int ejecucion;
         sql = "INSERT INTO SUSCRIPTORES "
-                + "(ID, NOMBRES, APELLIDOS, TIPO_DOCUMENTO, DOCUMENTO, F_EXPEDICION,CIUDAD_EXPEDICION)"
+                + "(ID, NOMBRES, APELLIDOS, TIPO_DOCUMENTO, DOCUMENTO, "
+                + " F_EXPEDICION,CIUDAD_EXPEDICION)"
                 + " VALUES "
                 + "(?, ?, ?, ?, ?, ?, ?)";
         basededatos.conectar();
