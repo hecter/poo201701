@@ -6,7 +6,6 @@
 package vista;
 
 import basededatos.BaseDatosOracle;
-import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,9 +13,6 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.SpinnerListModel;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
 import modelo.SuperTabla;
 import modelo.atencion.Suscriptor;
 
@@ -58,13 +54,11 @@ Calendar calendar = Calendar.getInstance();//Variable de Objeto Calendar
         susc = (Suscriptor) listaDatos.get(indice);
        
         if (susc != null) {
-            System.out.println(susc);
             txt_codigo.setText(susc.getId()+"");
             txt_nombres.setText(susc.getNombre());
             txt_apellidos.setText(susc.getApellidos());
             txt_tipodocumento.setSelectedItem(susc.getTipo_documento());
             txt_documento.setText(susc.getDocumento());
-            System.err.println(susc.getF_expedicion()+"");
             String fecha = susc.getF_expedicion().toString();
             String[] parts = fecha.split("-");
                 int anio = Integer.parseInt(parts[0]); // 2017
@@ -73,7 +67,6 @@ Calendar calendar = Calendar.getInstance();//Variable de Objeto Calendar
             jc_dia.setSelectedItem(dia+"");
             jc_anio.setSelectedItem(anio+"");
             jc_meses.setSelectedIndex(mes-1);           
-            //txt_fechaexp.setDate(susc.getF_expedicion());
             txt_ciudad_ex.setText(susc.getCiudad_expedicion());
             txt_codigo.requestFocus();
         }
@@ -98,8 +91,11 @@ Calendar calendar = Calendar.getInstance();//Variable de Objeto Calendar
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         Date parsed = format.parse(fecha);
         java.sql.Date sqlDate = new java.sql.Date(parsed.getTime());
-        sub = new Suscriptor(txt_nombres.getText(), txt_apellidos.getText(),
-                txt_tipodocumento.getSelectedItem().toString(),txt_documento.getText(), sqlDate, txt_ciudad_ex.getText());
+        
+        sub = new Suscriptor(
+                txt_nombres.getText(), txt_apellidos.getText(),
+                txt_tipodocumento.getSelectedItem().toString(),
+                txt_documento.getText(), sqlDate, txt_ciudad_ex.getText());
         return sub;
     }
 
