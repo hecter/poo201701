@@ -29,32 +29,33 @@ public class Atencion implements SuperTabla {
     private Usuario usuario;
 
     public Atencion() {
-        casa = new Casa();
-        estado = new Estado();
-        motivos = new Motivo();
-        usuario = new Usuario();
+      //  casa = new Casa();
+       // estado = new Estado();
+       // motivos = new Motivo();
+       // usuario = new Usuario();
     }
 
     public Atencion(long id, Casa casa, Estado estado, Date fecha,
             Date fecha_solucion, Motivo motivos, Usuario usuario) {
-        this.id = id;
-        this.casa = casa;
-        this.estado = estado;
-        this.fecha = fecha;
-        this.fecha_solucion = fecha_solucion;
-        this.motivos = motivos;
-        this.usuario = usuario;
+        setId(id);
+        setCasa(casa);
+        setEstado(estado);
+        setFecha(fecha);
+        setFecha_solucion(fecha_solucion);
+        setMotivos(motivos);
+        setUsuario(usuario);
+       
     }
 
     public Atencion(Casa casa, Estado estado, Date fecha,
             Date fecha_solucion, Motivo motivos, Usuario usuario) throws SQLException {
         setId(getconsecutivo());
-        this.casa = casa;
-        this.estado = estado;
-        this.fecha = fecha;
-        this.fecha_solucion = fecha_solucion;
-        this.motivos = motivos;
-        this.usuario = usuario;
+        setCasa(casa);
+        setEstado(estado);
+        setFecha(fecha);
+        setFecha_solucion(fecha_solucion);
+        setMotivos(motivos);
+        setUsuario(usuario);
     }
 
     public String obtenerNombreSecuencia() {
@@ -73,7 +74,7 @@ public class Atencion implements SuperTabla {
         int ejecucion;
         sql = "INSERT INTO ATENCIONES "
                 + "(ID, CASA_ID, ESTADOS_ID, FECHA, FECHA_SOLUCION,"
-                + "MOTIVOS_ID, USUARIOS_ID )"
+                + " MOTIVOS_ID, USUARIOS_ID )"
                 + " VALUES "
                 + "(?, ?, ?, ?, ?, ?, ? )";
         basededatos.conectar();
@@ -113,12 +114,12 @@ public class Atencion implements SuperTabla {
         int ejecucion;
         sql = "UPDATE ATENCIONES SET "
                 + "CASA_ID = ?, "
-                + "ESTADO_ID = ? "
+                + "ESTADOS_ID = ?, "
                 + "FECHA = ?, "
-                + "FECHA_SOLUCION = ? "
-                + "MOTIVOS_ID = ? "
+                + "FECHA_SOLUCION = ?, "
+                + "MOTIVOS_ID = ?, "
                 + "USUARIOS_ID = ? "
-                + "WHERE ID = ?";
+                + "WHERE ID = ? ";
         basededatos.conectar();
         basededatos.prepararSql(sql);
         basededatos.asignarParametro(1, getCasa().getId());
