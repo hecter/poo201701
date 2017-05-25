@@ -79,7 +79,7 @@ public class Estado implements SuperTabla {
         ResultSet cursor;
         String sql;
         basededatos = BaseDatosOracle.getInstance();
-        sql = " select ES.ID, ES.Estado "
+        sql = " SELECT ES.ID, ES.ESTADO "
                 + "from ESTADOS ES"
                 + " ORDER BY ID ";
 
@@ -90,7 +90,7 @@ public class Estado implements SuperTabla {
 
         while (cursor.next()) {
            listaEstado.add(new Estado(cursor.getLong("ID"), 
-                   cursor.getString("Estado")));
+                   cursor.getString("ESTADO")));
         }
         return listaEstado;
     }
@@ -103,7 +103,7 @@ public class Estado implements SuperTabla {
         sql = "INSERT INTO ESTADOS "
                 + "(ID, ESTADO)"
                 + " VALUES "
-                + "(?, ?, ?, ? )";
+                + "(?, ?)";
         basededatos.conectar();
         basededatos.prepararSql(sql);
         
@@ -136,13 +136,13 @@ public class Estado implements SuperTabla {
         basededatos = BaseDatosOracle.getInstance();
         String sql;
         int ejecucion;
-        sql = "UPDATE ESTADOS "
-                + "SET NOMBRE = ?"
-                + "WHERE ID = ?";
+        sql = " UPDATE ESTADOS "
+                + " SET ESTADO = ? "
+                + " WHERE ID = ? ";
         basededatos.conectar();
         basededatos.prepararSql(sql);
-        basededatos.asignarParametro(1, getId());
-        basededatos.asignarParametro(2, getNombre());
+        basededatos.asignarParametro(1, getNombre());
+        basededatos.asignarParametro(2, getId());
         ejecucion = basededatos.ejecutar();
         basededatos.cerrarSentencia();
         return ejecucion;
