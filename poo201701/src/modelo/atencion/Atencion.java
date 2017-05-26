@@ -15,8 +15,8 @@ import modelo.SuperTabla;
 import modelo.pagos.Usuario;
 
 /**
- *
- * @author 20111532577
+ * Clase Atención
+ * @author Leonardo
  */
 public class Atencion implements SuperTabla {
 
@@ -28,13 +28,22 @@ public class Atencion implements SuperTabla {
     private Motivo motivos;
     private Usuario usuario;
 
+    /**
+     * Constructor vacio de la clase Atencion 
+     */
     public Atencion() {
-      //  casa = new Casa();
-       // estado = new Estado();
-       // motivos = new Motivo();
-       // usuario = new Usuario();
+      
     }
-
+    /**
+     * Constructor de la clase Atencion
+     * @param id codigo de la atencion
+     * @param casa casa a la que se le hace la atencion
+     * @param estado estado de la atencion
+     * @param fecha fecha en la que se hace la atencion
+     * @param fecha_solucion fecha en la que se le da solucion a la atencion
+     * @param motivos motivos de la atencion prestada
+     * @param usuario usuario que atendio la atencion
+     */
     public Atencion(long id, Casa casa, Estado estado, Date fecha,
             Date fecha_solucion, Motivo motivos, Usuario usuario) {
         setId(id);
@@ -46,7 +55,16 @@ public class Atencion implements SuperTabla {
         setUsuario(usuario);
        
     }
-
+    /**
+     * Constructor de la clase Atencion
+     * @param casa casa a la que se le hace la atencion
+     * @param estado estado de la atencion
+     * @param fecha fecha en la que se hace la atencion
+     * @param fecha_solucion fecha en la que se le da solucion a la atencion
+     * @param motivos motivos de la atencion prestada
+     * @param usuario usuario que atendio la atencion
+     * @throws SQLException 
+     */
     public Atencion(Casa casa, Estado estado, Date fecha,
             Date fecha_solucion, Motivo motivos, Usuario usuario) throws SQLException {
         setId(getconsecutivo());
@@ -57,15 +75,27 @@ public class Atencion implements SuperTabla {
         setMotivos(motivos);
         setUsuario(usuario);
     }
-
+    /**
+     * Nombre de la secuencia
+     * @return el nombre de la secuencia
+     */
     public String obtenerNombreSecuencia() {
         return "ATENCIONES_SEQ";
     }
-
+    /**
+     * Obtiene el consecutivo de la secuencia
+     * @return secuencia
+     * @throws SQLException 
+     */
     public long getconsecutivo() throws SQLException {
         return Secuencia.nextVal(obtenerNombreSecuencia());
     }
-
+    
+    /**
+     * Insertar los datos de la atencion
+     * @return un entero
+     * @throws SQLException 
+     */
     @Override
     public int insertar() throws SQLException {
         BaseDatosOracle basededatos;
@@ -90,7 +120,12 @@ public class Atencion implements SuperTabla {
         basededatos.cerrarSentencia();
         return ejecucion;
     }
-
+    
+    /**
+     * metodo eliminar atencion por codigo
+     * @return entero
+     * @throws SQLException 
+     */
     @Override
     public int eliminar() throws SQLException {
         BaseDatosOracle basededatos;
@@ -105,7 +140,12 @@ public class Atencion implements SuperTabla {
         basededatos.cerrarSentencia();
         return ejecucion;
     }
-
+    
+    /**
+     * metodo actualizar
+     * @return entero
+     * @throws SQLException 
+     */
     @Override
     public int actualizar() throws SQLException {
         BaseDatosOracle basededatos;
@@ -134,6 +174,13 @@ public class Atencion implements SuperTabla {
         return ejecucion;
     }
 
+    /**
+     * Metodo buscar atencion
+     * @param codigo codigo de la atencion
+     * @return clase atencion
+     * @throws SQLException
+     * @throws Exception 
+     */
     public static Atencion buscar(long codigo) throws SQLException,
             Exception {
         Atencion atencion;
@@ -183,7 +230,13 @@ public class Atencion implements SuperTabla {
         }
         return atencion;
     }
-
+    
+    /**
+     * Metodo buscar sin parametro 
+     * @return lista de atencion
+     * @throws SQLException
+     * @throws Exception 
+     */
     public static ArrayList<Atencion> buscar() throws SQLException,
             Exception {
         ArrayList<Atencion> listaAtencion;
@@ -236,64 +289,124 @@ public class Atencion implements SuperTabla {
         }
         return listaAtencion;
     }
-
+    
+    /**
+     * obtiene el nombre del reporte
+     * @return  nombre del reporte
+     */
     @Override
     public String obtenerNombreReporte() {
         return "/report/atencion/ReportAtencion.jrxml";   
     }
-
+    /**
+     * Metodo que retorna id
+     * @return  id 
+     */
     public long getId() {
         return id;
     }
-
+    
+    /**
+     * Metodo que recibe el id 
+     * @param id id de la atencion
+     */
     public void setId(long id) {
         this.id = id;
     }
-
+    
+    /**
+     * Metodo que retorna clase Casa
+     * @return clase Casa 
+     */
     public Casa getCasa() {
         return casa;
     }
-
+    
+    /**
+     * Metodo que recibe el casa 
+     * @param casa casa de la atencion
+     */
     public void setCasa(Casa casa) {
         this.casa = casa;
     }
-
+    
+    /**
+     * Metodo que retorna clase Estado
+     * @return clase  Estado 
+     */
     public Estado getEstado() {
         return estado;
     }
-
+    
+    /**
+     * Metodo que recibe el estado 
+     * @param estado  estado de la atencion
+     */
     public void setEstado(Estado estado) {
         this.estado = estado;
     }
-
+    
+    /**
+     * Metodo que retorna la fecha
+     * @return  fecha 
+     */
     public Date getFecha() {
         return fecha;
     }
-
+    
+    /**
+     * Metodo que recibe fecha
+     * @param fecha  fecha de atencion
+     */ 
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
-
+    
+    /**
+     * Metodo que retorna la fecha de solucion
+     * @return  fecha de solucion 
+     */
     public Date getFecha_solucion() {
         return fecha_solucion;
     }
-
+    
+    
+    /**
+     * Metodo que recibe la fecha solucion 
+     * @param fecha_solucion  fecha solucion
+     */
     public void setFecha_solucion(Date fecha_solucion) {
         this.fecha_solucion = fecha_solucion;
     }
-
+    
+    /**
+     * Metodo que retorna clase  motivo
+     * @return  clase motivo 
+     */
     public Motivo getMotivos() {
         return motivos;
     }
-
+    
+    /**
+     * Metodo que recibe el motivo 
+     * @param motivos  clase motivos
+     */
     public void setMotivos(Motivo motivos) {
         this.motivos = motivos;
     }
-
+    
+    /**
+     * Metodo que retorna clase usuario
+     * @return clase usuario 
+     */
     public Usuario getUsuario() {
         return usuario;
     }
-
+    
+    /**
+     * Metodo que recibe el usuario 
+     * @param usuario clase usuario
+     */
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }

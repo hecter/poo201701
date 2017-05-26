@@ -226,9 +226,9 @@ import modelo.lectura.Sector;
         sql = " SELECT CS.ID, CS.DIRECCION, CS.TELEFONO, CS.ESTRATO,CS.CIUDAD, " +
             "   CS.SUSCRIPTOR_ID, CS.SECTOR_ID, SEC.DET, SUP.NOMBRES " +
             "   FROM CASAS CS " +
-            "   INNER JOIN SECTOR SEC ON SEC.ID = CS.SECTOR_ID " +
-            "   INNER JOIN SUSCRIPTORES SUP ON CS.SUSCRIPTOR_ID = SUP.ID"
-                + "ORDER BY CS.ID ";
+            "   INNER JOIN SECTORES SEC ON SEC.ID = CS.SECTOR_ID " +
+            "   INNER JOIN SUSCRIPTORES SUP ON CS.SUSCRIPTOR_ID = SUP.ID "
+                + " ORDER BY CS.ID ";
         basededatos.conectar();
         basededatos.prepararSql(sql);
         cursor = basededatos.ejecutarQuery(sql);
