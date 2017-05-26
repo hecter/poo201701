@@ -85,7 +85,7 @@ public class Motivo implements SuperTabla{
         System.out.println(this);
         basededatos.asignarParametro(1, getId());
         basededatos.asignarParametro(2, getMotivos());
-        basededatos.asignarParametro(3, getConcepto.getId());
+        basededatos.asignarParametro(3, getConcepto().getId());
         ejecucion = basededatos.ejecutar();
         basededatos.cerrarSentencia();
         return ejecucion;      }
@@ -117,7 +117,7 @@ public class Motivo implements SuperTabla{
         basededatos.conectar();
         basededatos.prepararSql(sql);
         basededatos.asignarParametro(1, getMotivos());
-        basededatos.asignarParametro(2, getConcepto.getId());
+        basededatos.asignarParametro(2, getConcepto().getId());
         ejecucion = basededatos.ejecutar();
         basededatos.cerrarSentencia();
         return ejecucion;     
