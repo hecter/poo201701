@@ -7,19 +7,37 @@ package modelo.lectura;
 
 import basededatos.BaseDatosOracle;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import modelo.pagos.Rol;
+import modelo.pagos.Usuario;
 
 /**
  *
  * @author 20102122476
  */
 public class Login {
+    public static ArrayList<Login> login;
     private String usuario;
     private String clave;
+    private String nombre;
+    private Sector sector;
+    private Rol rol;
 
     public Login(String usuario, String clave) {
+        login=null;
         this.usuario = usuario;
         this.clave = clave;
     }
+
+    public Login(String usuario, String nombre, Sector sector, Rol rol) {
+        this.usuario = usuario;
+        this.nombre = nombre;
+        this.sector = sector;
+        this.rol = rol;
+    }
+    
+    
 
     public String getClave() {
         return clave;
@@ -37,16 +55,75 @@ public class Login {
         this.usuario = usuario;
     }
     
-    public void autenticar(){
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public Sector getSector() {
+        return sector;
+    }
+
+    public void setSector(Sector sector) {
+        this.sector = sector;
+    }
+
+    public Rol getRol() {
+        return rol;
+    }
+
+    public void setRol(Rol rol) {
+        this.rol = rol;
+    }
+    
+    public void autenticar() throws SQLException{
         BaseDatosOracle bd = BaseDatosOracle.getInstance();
-        String sql = "";
+        String sql = "SELECT "
+                        + "USUARIOS.ID, "
+                        + "USUARIOS.ROLES_ID, "
+                        + "ROLES.ID AS ROLES_DET, "
+                        + "USUARIOS.NOMBRE, "
+                        + "USUARIOS.SECTOR_ID, "
+                        + "SECTORES.DET AS SECTOR_DET "
+                    + "FROM "
+                        + "USUARIOS "
+                    + "INNER JOIN SECTORES "
+                        + "ON SECTORES.ID = USUARIOS.SECTOR_ID "
+                    + "INNER JOIN ROLES "
+                        + "ON ROLES.ID = USUARIOS.ROLES_ID "
+                    + "WHERE "
+                        + "USUARIOS.ID = ? "
+                    + "AND "
+                        + "USUARIOS.PASSWORD = ?";
         bd.conectar();
         bd.prepararSql(sql);
-        bd.asignarParametro(1, "%" + det + "%");
+        bd.asignarParametro(1, getUsuario());
+        bd.asignarParametro(2, getClave());
         ResultSet reg = bd.ejecutarQuery();
-        datos.clear();
         while (reg.next()) {
-            datos.add(new Sector(reg.getLong("ID"), reg.getString("DET")));
+            if(reg.getLong("ROLES_ID")>=5 & reg.getLong("ROLES_ID") <=7){
+                int rol_id = reg.getInt("ROLES_ID");
+                String rol_det = reg.getString("ROLES_DET");
+                int sector_id = reg.getInt("SECTOR_ID");
+                String sector_det = reg.getString("SECTOR_DET");
+                Rol r = new Rol(rol_id, rol_det);
+                Sector s = new Sector(sector_id, sector_det);
+                Login l = new Login(reg.getString("ID"), reg.getString("NOMBRE"), s, r);
+                login.clear();
+                login.add(l);
+                if(rol_id==5){//LECTURA -
+                    
+                }else{
+                    if(rol_id==6){//TECNICO_LECTURA
+                        
+                    }else{//ADMIN_LECTURA
+                        
+                    }
+                }
+            }
         }
     }
 }

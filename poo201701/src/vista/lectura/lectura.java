@@ -10,8 +10,6 @@ import static Messages.Mensajes.msn;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import modelo.lectura.Lectura;
 import static modelo.lectura.Lectura.BuscarIdLectura;
