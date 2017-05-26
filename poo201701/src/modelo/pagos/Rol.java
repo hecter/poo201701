@@ -25,6 +25,11 @@ public class Rol implements SuperTabla {
     public Rol() {
     }
 
+    public Rol(int id, String rol) {
+        this.id = id;
+        this.rol = rol;
+    }
+
     public int getId() {
         return id;
     }

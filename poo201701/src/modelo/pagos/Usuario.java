@@ -18,15 +18,30 @@ import modelo.lectura.Sector;
  */
 public class Usuario implements SuperTabla{
 
-    private int id;
+    private String id;
     private String nombre;
     private String password;
     private Rol rol;
     private Sector sector;
 
+    public Usuario() {
+    }
+
     
      public Rol getRol() {
         return rol;
+    }
+     
+     public Usuario(String id, Rol rol, String nombre, Sector sector, String password) {
+        this.id = id;
+        this.rol = rol;
+        this.nombre = nombre;
+        this.sector = sector;
+        this.password = password;
+    }
+     
+     public Usuario(String id) {
+        this.id = id;
     }
 
     public void setRol(Rol rol) {
@@ -50,11 +65,11 @@ public String getPassword() {
         this.password = password;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -162,7 +177,7 @@ public String getPassword() {
         basededatos.asignarParametro(1, codigo);
         cursor = basededatos.ejecutarQuery();
         if (cursor.next()) {
-            usuario.setId(cursor.getInt("ID"));
+            usuario.setId(cursor.getString("ID"));
             usuario.setNombre(cursor.getString("NOMBRE"));
             usuario.setPassword(cursor.getString("PASSWORD"));
             Rol rol=new Rol();
@@ -201,7 +216,7 @@ public String getPassword() {
         Sector sec;
         while (cursor.next()) {
             usuario=new Usuario();
-            usuario.setId(cursor.getInt("ID"));
+            usuario.setId(cursor.getString("ID"));
             usuario.setNombre(cursor.getString("NOMBRE"));
             usuario.setPassword(cursor.getString("PASSWORD"));
             rol=new Rol();
@@ -220,6 +235,72 @@ public String getPassword() {
     @Override
     public String obtenerNombreReporte() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public static Usuario listar(Sector sector) throws SQLException {
+        Usuario usuario =null;
+        BaseDatosOracle bd = BaseDatosOracle.getInstance();
+        bd.conectar();
+        bd.prepararSql("SELECT USUARIOS.ID FROM USUARIOS WHERE SECTOR_ID = ?");
+        bd.asignarParametro(1, sector.getId());
+        ResultSet reg = bd.ejecutarQuery();
+        if (reg.next()) {
+            usuario = new Usuario(reg.getString("ID"));
+        }
+        return usuario;
+    }
+    
+    public static ArrayList<String> listar() throws SQLException {
+        ArrayList<String> listado =new ArrayList<>();
+        BaseDatosOracle bd = BaseDatosOracle.getInstance();
+        bd.conectar();
+        bd.prepararSql("SELECT "
+                            + "USUARIOS.ID, "
+                            + "ROLES.ROL, "
+                            + "USUARIOS.NOMBRE, "
+                            + "USUARIOS.SECTOR_ID||':'||SECTORES.DET as SECTOR "
+                        + "FROM "
+                            + "USUARIOS "
+                            + "LEFT JOIN SECTORES "
+                                + "ON SECTORES.ID = USUARIOS.SECTOR_ID "
+                            + "INNER JOIN ROLES "
+                                + "ON ROLES.ID = USUARIOS.ROLES_ID");
+        ResultSet reg = bd.ejecutarQuery();
+        listado.clear();
+        while (reg.next()) {
+            if(reg.getString("SECTOR").equals(":")) listado.add(reg.getString("ID")+";"+reg.getString("ROL")+";"+reg.getString("NOMBRE")+";"+"POR ASIGNAR");
+            else listado.add(reg.getString("ID")+";"+reg.getString("ROL")+";"+reg.getString("NOMBRE")+";"+reg.getString("SECTOR"));
+        }
+        return listado;
+    }
+    /**
+     * utilizado para revisar cuando se asigne el sector al usuario
+     * @return 
+     * @throws java.sql.SQLException 
+     */
+    public boolean verificarLector() throws SQLException{
+        BaseDatosOracle bd = BaseDatosOracle.getInstance();
+        bd.conectar();
+        bd.prepararSql("SELECT USUARIOS.SECTOR_ID||':' AS SECTOR_ID FROM USUARIOS WHERE ID = ?");
+        bd.asignarParametro(1, getId());
+        ResultSet reg = bd.ejecutarQuery();
+        if(reg.next()){
+            if(reg.getString("SECTOR_ID").equals(":")){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public int asignarRol(long sector) throws SQLException{
+        BaseDatosOracle bd = BaseDatosOracle.getInstance();
+        bd.conectar();
+        bd.prepararSql("UPDATE USUARIOS SET SECTOR_ID = ? WHERE ID = ?");
+        bd.asignarParametro(1, sector);
+        bd.asignarParametro(2, getId());
+        int ejecucion = bd.ejecutar();
+        bd.cerrarSentencia();
+        return ejecucion;
     }
 
 }
