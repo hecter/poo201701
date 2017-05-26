@@ -6,9 +6,11 @@
 package modelo.atencion;
 
 import basededatos.BaseDatosOracle;
+import basededatos.Secuencia;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import modelo.SuperTabla;
 import modelo.pagos.Rol;
 import modelo.pagos.Usuario;
 import report.facturacion.Concepto;
@@ -17,7 +19,7 @@ import report.facturacion.Concepto;
  *
  * @author 20111532577
  */
-public class Motivo {
+public class Motivo implements SuperTabla{
     private long id;
     private String motivos;
     private Concepto concepto;
@@ -60,7 +62,67 @@ public class Motivo {
         this.id = id;
     }
     
+     public String obtenerNombreSecuencia() {
+        return "MOTIVOS_SEQ";
+    }
+      public long getconsecutivo() throws SQLException{
+        return Secuencia.nextVal(obtenerNombreSecuencia());
+    }
     
+    @Override
+    public int insertar() throws SQLException {
+        BaseDatosOracle basededatos;
+        basededatos = BaseDatosOracle.getInstance();
+        String sql;
+        int ejecucion;
+        sql = "INSERT INTO MOTIVOS "
+                + "(ID, MOTIVO, CONCEPTOS_ID)"
+                + " VALUES "
+                + "(?, ?, ?, ?, ?, ?, ?)";
+        basededatos.conectar();
+        basededatos.prepararSql(sql);
+        
+        System.out.println(this);
+        basededatos.asignarParametro(1, getId());
+        basededatos.asignarParametro(2, getMotivos());
+        basededatos.asignarParametro(3, getConcepto.getId());
+        ejecucion = basededatos.ejecutar();
+        basededatos.cerrarSentencia();
+        return ejecucion;      }
+
+    @Override
+    public int eliminar() throws SQLException {
+        BaseDatosOracle basededatos;
+        basededatos = BaseDatosOracle.getInstance();
+        String sql;
+        int ejecucion;
+        sql = "DELETE MOTIVOS WHERE ID = ?";
+        basededatos.conectar();
+        basededatos.prepararSql(sql);
+        basededatos.asignarParametro(1, getId());
+        ejecucion = basededatos.ejecutar();
+        basededatos.cerrarSentencia();
+        return ejecucion;    }
+
+    @Override
+    public int actualizar() throws SQLException {
+        BaseDatosOracle basededatos;
+        basededatos = BaseDatosOracle.getInstance();
+        String sql;
+        int ejecucion;
+        sql = "UPDATE MOTIVOS "
+                + "SET MOTIVO = ?, "
+                + "CONCEPTOS_ID = ?, "
+                + "WHERE ID = ?";
+        basededatos.conectar();
+        basededatos.prepararSql(sql);
+        basededatos.asignarParametro(1, getMotivos());
+        basededatos.asignarParametro(2, getConcepto.getId());
+        ejecucion = basededatos.ejecutar();
+        basededatos.cerrarSentencia();
+        return ejecucion;     
+    }
+
     public static ArrayList<Motivo> buscar() throws SQLException,
             Exception {
         ArrayList<Motivo> listaMotivo;
@@ -91,6 +153,11 @@ public class Motivo {
             ));
         }
         return listaMotivo;
+    }
+    
+    @Override
+    public String obtenerNombreReporte() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
