@@ -33,8 +33,8 @@ import modelo.SuperTabla;
  */
 public abstract class FormTemplate extends javax.swing.JFrame {
 
-    ArrayList<SuperTabla> listaDatos;
-    int indiceActual;
+    public ArrayList<SuperTabla> listaDatos;
+    public int indiceActual;
 
     public abstract void limpiarFormulario();
 
