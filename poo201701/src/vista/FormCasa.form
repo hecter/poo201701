@@ -39,10 +39,10 @@
                   <Component id="txt_direccion" alignment="0" max="32767" attributes="0"/>
                   <Component id="txt_telefono" alignment="0" max="32767" attributes="0"/>
                   <Component id="txt_estrato" alignment="0" max="32767" attributes="0"/>
-                  <Component id="txt_ciudad" alignment="0" max="32767" attributes="0"/>
                   <Component id="suscriptor" pref="87" max="32767" attributes="0"/>
                   <Component id="sector" max="32767" attributes="0"/>
                   <Component id="txt_codigo" max="32767" attributes="0"/>
+                  <Component id="txt_ciudad" max="32767" attributes="0"/>
               </Group>
               <EmptySpace pref="283" max="32767" attributes="0"/>
           </Group>
@@ -144,8 +144,6 @@
     </Component>
     <Component class="javax.swing.JTextField" name="txt_estrato">
     </Component>
-    <Component class="javax.swing.JTextField" name="txt_ciudad">
-    </Component>
     <Component class="javax.swing.JComboBox" name="suscriptor">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
@@ -182,6 +180,8 @@
           <Format subtype="0" type="0"/>
         </Property>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="txt_ciudad">
     </Component>
   </SubComponents>
 </Form>

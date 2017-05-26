@@ -28,31 +28,28 @@ import modelo.lectura.Sector;
 
     public Casa(long id, String direccion, String telefono, long estrato, 
             String ciudad, Suscriptor suscriptor, Sector sector) {
-        this.id = id;
-        this.direccion = direccion;
-        this.telefono = telefono;
-        this.estrato = estrato;
-        this.ciudad = ciudad;
-        this.suscriptor = suscriptor;
-        this.sector = sector;
+        setId(id);
+        setDireccion(direccion);
+        setTelefono(telefono);
+        setEstrato(estrato);
+        setCiudad(ciudad);
+        setSuscriptor(suscriptor);
+        setSector(sector);
     }
 
     public Casa() {
     }
 
     public Casa(String direccion, String telefono, long estrato, 
-            String ciudad, Suscriptor suscriptor, Sector sector) {
-        this.direccion = direccion;
-        this.telefono = telefono;
-        this.estrato = estrato;
-        this.ciudad = ciudad;
-        this.suscriptor = suscriptor;
-        this.sector = sector;
+            String ciudad, Suscriptor suscriptor, Sector sector) throws SQLException {
+          setId(getconsecutivo());
+         setDireccion(direccion);
+        setTelefono(telefono);
+        setEstrato(estrato);
+        setCiudad(ciudad);
+        setSuscriptor(suscriptor);
+        setSector(sector);
     }
-
-   
-
-    
 
     public long getId() {
         return id;
@@ -152,7 +149,8 @@ import modelo.lectura.Sector;
         basededatos.asignarParametro(1, getId());
         ejecucion = basededatos.ejecutar();
         basededatos.cerrarSentencia();
-        return ejecucion;    }
+        return ejecucion;    
+    }
 
     @Override
     public int actualizar() throws SQLException {
@@ -163,9 +161,9 @@ import modelo.lectura.Sector;
         sql = "UPDATE CASAS "
                 + "SET DIRECCION = ?, "
                 + "TELEFONO = ?, "
-                + "ESTRATO = ? "
-                + "CIUDAD = ? "
-                + "SUSCRIPTOR_ID = ? "
+                + "ESTRATO = ?, "
+                + "CIUDAD = ?, "
+                + "SUSCRIPTOR_ID = ?, "
                 + "SECTOR_ID = ? "
                 + "WHERE ID = ?";
         basededatos.conectar();
@@ -176,6 +174,7 @@ import modelo.lectura.Sector;
         basededatos.asignarParametro(4, getCiudad());
         basededatos.asignarParametro(5, getSuscriptor().getId());
         basededatos.asignarParametro(6, getSector().getId());
+        basededatos.asignarParametro(7, getId());
         ejecucion = basededatos.ejecutar();
         basededatos.cerrarSentencia();
         return ejecucion;    }
@@ -228,7 +227,8 @@ import modelo.lectura.Sector;
             "   CS.SUSCRIPTOR_ID, CS.SECTOR_ID, SEC.DET, SUP.NOMBRES " +
             "   FROM CASAS CS " +
             "   INNER JOIN SECTOR SEC ON SEC.ID = CS.SECTOR_ID " +
-            "   INNER JOIN SUSCRIPTORES SUP ON CS.SUSCRIPTOR_ID = SUP.ID ";
+            "   INNER JOIN SUSCRIPTORES SUP ON CS.SUSCRIPTOR_ID = SUP.ID"
+                + "ORDER BY CS.ID ";
         basededatos.conectar();
         basededatos.prepararSql(sql);
         cursor = basededatos.ejecutarQuery(sql);
@@ -257,7 +257,7 @@ import modelo.lectura.Sector;
     }
     @Override
     public String obtenerNombreReporte() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "/report/atencion/ReportCasa.jrxml";    
     }
     
     

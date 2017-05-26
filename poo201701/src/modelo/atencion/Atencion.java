@@ -239,7 +239,7 @@ public class Atencion implements SuperTabla {
 
     @Override
     public String obtenerNombreReporte() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "/report/atencion/ReportAtencion.jrxml";   
     }
 
     public long getId() {

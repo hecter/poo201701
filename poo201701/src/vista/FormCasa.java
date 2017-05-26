@@ -5,11 +5,15 @@
  */
 package vista;
 
+import basededatos.BaseDatosOracle;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import modelo.SuperTabla;
+import modelo.atencion.Atencion;
 import modelo.atencion.Casa;
 import modelo.atencion.Suscriptor;
 import modelo.lectura.Sector;
@@ -24,12 +28,21 @@ public class FormCasa extends FormTemplate {
      * Creates new form FormCasa
      */
     public FormCasa() {
-         try {
-            initComponents();
-             mostrarRegistro(0);
+          initComponents();
+          mostrarRegistro(0);
           txt_codigo.setEditable(false);
-        suscriptor.setModel((new DefaultComboBoxModel(Suscriptor.buscar().toArray()))); 
-          sector.setModel((new DefaultComboBoxModel(Sector.listar().toArray()))); 
+          
+          try {
+           suscriptor.removeAllItems();
+            for (Suscriptor listaDato : Suscriptor.buscar()) {
+              suscriptor.addItem(listaDato.getId()+" - "+listaDato.getNombre());
+            }
+            
+            sector.removeAllItems();
+            for (Sector listaDato : Sector.listar()) {
+              sector.addItem(listaDato.getId()+" - "+listaDato.getDet());
+            }
+           
         } catch (Exception e) {
         }
         
@@ -66,7 +79,7 @@ public class FormCasa extends FormTemplate {
 
     @Override
     public void inicializar() {
-try {
+        try {
             listaDatos = new ArrayList<>();
             listaDatos.addAll(Casa.buscar());
             indiceActual = 0;
@@ -76,30 +89,72 @@ try {
         }    }
 
     @Override
-    public SuperTabla getNuevoRegistro() throws Exception {    
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-
+    public SuperTabla getNuevoRegistro() throws Exception {   
+         Casa casa;
+        
+       
+        String suscript = String.valueOf(suscriptor.getSelectedItem());
+        String sect = String.valueOf(sector.getSelectedItem());
+        String direcc = String.valueOf(txt_direccion.getText());
+        String tel = String.valueOf(txt_telefono.getText());
+        long estra = Long.parseLong(txt_estrato.getText());
+        String ciudad = String.valueOf(txt_ciudad.getText());
+        
+        
+        Suscriptor sus = new Suscriptor();
+        sus.setId(Long.parseLong(suscript.substring(0,1)));
+        Sector sec = new Sector();
+        sec.setId(Long.parseLong(sect.substring(0,1)));
+        
+        casa = new Casa( direcc, tel,estra,ciudad,sus,sec);             
+        return casa;
+        
     }
 
     @Override
     public void setRegistroActual(SuperTabla registro) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        String suscript = String.valueOf(suscriptor.getSelectedItem());
+        String sect = String.valueOf(sector.getSelectedItem());
+        Casa casa;
+        casa = (Casa) registro;
+        casa.setDireccion(String.valueOf(txt_direccion.getText()));
+        casa.setTelefono(String.valueOf(txt_telefono.getText()));
+        casa.setEstrato(Long.parseLong(txt_estrato.getText()));
+         casa.setCiudad(String.valueOf(txt_ciudad.getText()));
+        casa.getSuscriptor().setId(Long.parseLong(suscript.substring(0,1)));
+        casa.getSector().setId(Long.parseLong(sect.substring(0,1)));
+        
+        casa.setId(Long.parseLong(txt_codigo.getText()));
+           }
 
     @Override
     public void ejecutarBusqueda() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+          long codigo = 0;
+        codigo = (txt_codigo.getText().isEmpty()) 
+                ? -1 
+                : Long.parseLong(txt_codigo.getText());
+        listaDatos = new ArrayList<>();
+        if(codigo == -1){
+           listaDatos.addAll(Casa.buscar());
+        }else{
+          listaDatos.add(Casa.buscar(codigo));  
+        }
+        txt_codigo.setEditable(false);    }
 
     @Override
     public void habilitarBusqueda() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+     txt_codigo.setEditable(true);
+     txt_codigo.requestFocus();    }
 
     @Override
     public void imprimirJasper() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+            try {
+            listaDatos.get(indiceActual)
+                    .abrirReporte(BaseDatosOracle.getInstance().getConexion());
+
+        } catch (Exception ex) {
+            mostrarException(ex);
+        }    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -120,10 +175,10 @@ try {
         txt_direccion = new javax.swing.JTextField();
         txt_telefono = new javax.swing.JTextField();
         txt_estrato = new javax.swing.JTextField();
-        txt_ciudad = new javax.swing.JTextField();
-        suscriptor = new javax.swing.JComboBox<>();
-        sector = new javax.swing.JComboBox<>();
+        suscriptor = new javax.swing.JComboBox<String>();
+        sector = new javax.swing.JComboBox<String>();
         txt_codigo = new javax.swing.JFormattedTextField();
+        txt_ciudad = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -153,9 +208,9 @@ try {
             }
         });
 
-        suscriptor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        suscriptor.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        sector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        sector.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         txt_codigo.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter()));
 
@@ -178,10 +233,10 @@ try {
                     .addComponent(txt_direccion)
                     .addComponent(txt_telefono)
                     .addComponent(txt_estrato)
-                    .addComponent(txt_ciudad)
                     .addComponent(suscriptor, 0, 87, Short.MAX_VALUE)
                     .addComponent(sector, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txt_codigo))
+                    .addComponent(txt_codigo)
+                    .addComponent(txt_ciudad))
                 .addContainerGap(283, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
