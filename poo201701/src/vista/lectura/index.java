@@ -5,6 +5,8 @@
  */
 package vista.lectura;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author 20102122476
@@ -15,9 +17,29 @@ public class index extends javax.swing.JFrame {
      * Creates new form index
      */
     public index() {
+        setDefaultCloseOperation(
+                javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE
+        );
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                close();
+            }
+        });
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
     }
+    
+    private void close(){
+        int respuesta =  JOptionPane.showConfirmDialog(
+                this, 
+                "¿ Realmente Deseas Salir ?", "GAS COLOMBIA", 
+                JOptionPane.YES_NO_OPTION
+        ); 
+        if(respuesta==0){
+            System.exit(0);
+        }
+    }   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -39,7 +61,7 @@ public class index extends javax.swing.JFrame {
         jMenu4 = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         jMenu1.setText("Sectores");
 

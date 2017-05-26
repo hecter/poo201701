@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.lectura.Sector;
 import modelo.pagos.Rol;
@@ -26,10 +27,30 @@ public class lectores extends javax.swing.JFrame/*FormTemplate*/ {
      * Creates new form sector
      */
     public lectores() {
+        setDefaultCloseOperation(
+                javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE
+        );
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                close();
+            }
+        });
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
         loadTable();
         loadSectores();
+    }
+    
+    private void close(){
+        int respuesta =  JOptionPane.showConfirmDialog(
+                this, 
+                "¿ Realmente Deseas Salir ?", "GAS COLOMBIA", 
+                JOptionPane.YES_NO_OPTION
+        ); 
+        if(respuesta==0){
+            System.exit(0);
+        }
     }
     
     public void loadTable(){
@@ -93,7 +114,7 @@ public class lectores extends javax.swing.JFrame/*FormTemplate*/ {
         jLabel4 = new javax.swing.JLabel();
         btinsertar1 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         tablaDatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

@@ -10,6 +10,7 @@ import static Messages.Mensajes.msn;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.lectura.Lectura;
 import static modelo.lectura.Lectura.BuscarIdLectura;
@@ -23,11 +24,31 @@ public class lectura extends javax.swing.JFrame/*FormTemplate*/ {
      * Creates new form sector
      */
     public lectura() {
+        setDefaultCloseOperation(
+                javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE
+        );
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                close();
+            }
+        });
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
         loadTable();
         limpiar();
     }
+    
+    private void close(){
+        int respuesta =  JOptionPane.showConfirmDialog(
+                this, 
+                "¿ Realmente Deseas Salir ?", "GAS COLOMBIA", 
+                JOptionPane.YES_NO_OPTION
+        ); 
+        if(respuesta==0){
+            System.exit(0);
+        }
+    }     
     
     public void limpiar(){
         txserial.setText("");
@@ -89,12 +110,7 @@ public class lectura extends javax.swing.JFrame/*FormTemplate*/ {
         jLabel7 = new javax.swing.JLabel();
         btreload = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                formWindowClosing(evt);
-            }
-        });
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         tablaDatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -382,55 +398,6 @@ public class lectura extends javax.swing.JFrame/*FormTemplate*/ {
         loadTable();
         limpiar();
     }//GEN-LAST:event_btreloadActionPerformed
-
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        // TODO add your handling code here:
-        msn(this, "ADIOS", "MENSAJE", 0);
-    }//GEN-LAST:event_formWindowClosing
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(lectura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> {
-            new lectura().setVisible(true);
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btinsertar;

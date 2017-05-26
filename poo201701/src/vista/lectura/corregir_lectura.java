@@ -10,6 +10,7 @@ import static Messages.Mensajes.msn;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.lectura.Lectura;
 import modelo.lectura.Periodo;
@@ -23,11 +24,31 @@ public class corregir_lectura extends javax.swing.JFrame/*FormTemplate*/ {
      * Creates new form sector
      */
     public corregir_lectura() {
+        setDefaultCloseOperation(
+                javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE
+        );
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                close();
+            }
+        });
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
         loadPeriodos();
         limpiar();
     }
+    
+    private void close(){
+        int respuesta =  JOptionPane.showConfirmDialog(
+                this, 
+                "¿ Realmente Deseas Salir ?", "GAS COLOMBIA", 
+                JOptionPane.YES_NO_OPTION
+        ); 
+        if(respuesta==0){
+            System.exit(0);
+        }
+    }   
     
     public void limpiar(){
         txserial.setText("");
@@ -119,7 +140,7 @@ public class corregir_lectura extends javax.swing.JFrame/*FormTemplate*/ {
         txidregistro = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         tablaDatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

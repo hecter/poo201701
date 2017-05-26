@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.lectura.Sector;
 import static modelo.lectura.Sector.existe;
@@ -25,9 +26,29 @@ public class sector extends javax.swing.JFrame/*FormTemplate*/ {
      * Creates new form sector
      */
     public sector() {
+        setDefaultCloseOperation(
+                javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE
+        );
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                close();
+            }
+        });
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
         loadTable();
+    }
+    
+    private void close(){
+        int respuesta =  JOptionPane.showConfirmDialog(
+                this, 
+                "¿ Realmente Deseas Salir ?", "GAS COLOMBIA", 
+                JOptionPane.YES_NO_OPTION
+        ); 
+        if(respuesta==0){
+            System.exit(0);
+        }
     }
     
     public void loadTable(){
