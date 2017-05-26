@@ -23,6 +23,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import modelo.lectura.Login;
 
 /**
  *
@@ -55,8 +56,8 @@ public class FormLogin extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel3 = new javax.swing.JLabel();
-        textUsuario = new javax.swing.JTextField();
-        textPassword = new javax.swing.JPasswordField();
+        txusuario = new javax.swing.JTextField();
+        txclave = new javax.swing.JPasswordField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         buttonAceptar = new javax.swing.JButton();
@@ -70,22 +71,22 @@ public class FormLogin extends javax.swing.JFrame {
         setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
         setResizable(false);
 
-        textUsuario.addActionListener(new java.awt.event.ActionListener() {
+        txusuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textUsuarioActionPerformed(evt);
+                txusuarioActionPerformed(evt);
             }
         });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/user.png"))); // NOI18N
-        jLabel1.setLabelFor(textUsuario);
+        jLabel1.setLabelFor(txusuario);
         jLabel1.setText("Usuario");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/candado.png"))); // NOI18N
-        jLabel2.setLabelFor(textPassword);
+        jLabel2.setLabelFor(txclave);
         jLabel2.setText("Contraseña");
 
         buttonAceptar.setMnemonic('A');
@@ -121,8 +122,8 @@ public class FormLogin extends javax.swing.JFrame {
                         .addComponent(buttonAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(buttonAceptar2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(textUsuario)
-                    .addComponent(textPassword))
+                    .addComponent(txusuario)
+                    .addComponent(txclave))
                 .addContainerGap())
         );
 
@@ -134,11 +135,11 @@ public class FormLogin extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(textUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txusuario, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(textPassword))
+                    .addComponent(txclave))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -146,18 +147,24 @@ public class FormLogin extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {textPassword, textUsuario});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {txclave, txusuario});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void textUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textUsuarioActionPerformed
+    private void txusuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txusuarioActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_textUsuarioActionPerformed
+    }//GEN-LAST:event_txusuarioActionPerformed
 
     private void buttonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAceptarActionPerformed
         // TODO add your handling code here:
-        iniciarSesion();
+        //iniciarSesion();
+        String usuario=txusuario.getText();
+        String clave = txclave.getText();
+        if (usuario.length() != 0 & clave.length() != 0) {
+            Login login = new Login(usuario, clave);
+            login.autenticar();
+        }
     }//GEN-LAST:event_buttonAceptarActionPerformed
 
     private void buttonAceptar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAceptar2ActionPerformed
@@ -192,8 +199,8 @@ public class FormLogin extends javax.swing.JFrame {
     public void iniciarSesion() {
         try {
             Usuario usuario;
-            usuario = Usuario.getInstance(textUsuario.getText(),
-                    textPassword.getText());
+            usuario = Usuario.getInstance(txusuario.getText(),
+                    txclave.getText());
             usuario.iniciarSesion();
             mostrarMensaje("Llamar al formulario Principal...");
             new FormPais().setVisible(true);
@@ -217,27 +224,21 @@ public class FormLogin extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FormLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FormLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FormLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(FormLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        
+        //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FormLogin().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new FormLogin().setVisible(true);
         });
     }
 
@@ -247,7 +248,7 @@ public class FormLogin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JPasswordField textPassword;
-    private javax.swing.JTextField textUsuario;
+    private javax.swing.JPasswordField txclave;
+    private javax.swing.JTextField txusuario;
     // End of variables declaration//GEN-END:variables
 }

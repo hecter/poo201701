@@ -49,8 +49,8 @@
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="buttonAceptar2" min="-2" pref="89" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="textUsuario" alignment="0" max="32767" attributes="0"/>
-                  <Component id="textPassword" alignment="0" max="32767" attributes="0"/>
+                  <Component id="txusuario" alignment="0" max="32767" attributes="0"/>
+                  <Component id="txclave" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
@@ -62,12 +62,12 @@
               <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="textUsuario" linkSize="3" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
+                  <Component id="txusuario" linkSize="3" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="textPassword" linkSize="3" alignment="3" max="32767" attributes="0"/>
+                  <Component id="txclave" linkSize="3" alignment="3" max="32767" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -80,12 +80,12 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JTextField" name="textUsuario">
+    <Component class="javax.swing.JTextField" name="txusuario">
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textUsuarioActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txusuarioActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JPasswordField" name="textPassword">
+    <Component class="javax.swing.JPasswordField" name="txclave">
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
@@ -97,7 +97,7 @@
           <Image iconType="3" name="/image/user.png"/>
         </Property>
         <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-          <ComponentRef name="textUsuario"/>
+          <ComponentRef name="txusuario"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Usuario"/>
       </Properties>
@@ -112,7 +112,7 @@
           <Image iconType="3" name="/image/candado.png"/>
         </Property>
         <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-          <ComponentRef name="textPassword"/>
+          <ComponentRef name="txclave"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Contrase&#xf1;a"/>
       </Properties>
