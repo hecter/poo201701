@@ -19,13 +19,14 @@ import modelo.atencion.Motivo;
 import modelo.pagos.Usuario;
 
 /**
- *
- * @author LEo
+ * Formulario de atencion
+ * @author Leonardo
  */
 public class FormAtencion extends FormTemplate {
 private  Atencion atencion = new  Atencion();
+
     /**
-     * Creates new form FormAtencion
+     * se creo nuevo Formulario FormAtencion
      */
     public FormAtencion() {
         initComponents();
@@ -57,7 +58,9 @@ private  Atencion atencion = new  Atencion();
         }
     }
     
-    
+    /**
+     * Metodo para limpiar formulario
+     */
       @Override
     public void limpiarFormulario() {
          txt_codigo.setText("");
@@ -66,7 +69,11 @@ private  Atencion atencion = new  Atencion();
          txt_usuario.setSelectedIndex(0);
          txt_estado.setSelectedIndex(0);
     }
-
+    
+    /**
+     * Metodo mostrar registro en las cajas de texto
+     * @param indice indice de la lista
+     */
     @Override
     public void mostrarRegistro(int indice) {
          txt_codigo.requestFocus();
@@ -106,6 +113,10 @@ private  Atencion atencion = new  Atencion();
         }
     }
 
+    /**
+     * Busca todos los datos en el metodo buscar
+     * y los agrega a una lista
+     */
     @Override
     public void inicializar() {
         try {
@@ -117,7 +128,12 @@ private  Atencion atencion = new  Atencion();
             Logger.getLogger(FormPais.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
+    /**
+     * nuevo registro que guarda en la base de datos
+     * @return la clase atencion
+     * @throws Exception 
+     */
     @Override
     public SuperTabla getNuevoRegistro() throws Exception {
         Atencion aten;
@@ -144,19 +160,16 @@ private  Atencion atencion = new  Atencion();
         mt.setId(Long.parseLong(motivos.substring(0,1)));
         Usuario us = new Usuario();
         us.setId(usuario.substring(0,1));
-        
-        
-      // aten.getCasa().setId(Long.parseLong(casa.substring(0,1)));
-      // aten.getEstado().setId(Long.parseLong(estado.substring(0,1)));
-      // aten.getMotivos().setId(Long.parseLong(motivos.substring(0,1)));
-      // aten.getUsuario().setId(Integer.parseInt(usuario.substring(0,1)));
-      // aten.setFecha(fecha);
-      // aten.setFecha_solucion(fecha_solucion);
        
        aten = new Atencion(cs, es, fecha,fecha_solucion,mt,us);             
         return aten;
     }
-
+    
+    /**
+     * Muestra el registro actual
+     * @param registro
+     * @throws Exception 
+     */
     @Override
     public void setRegistroActual(SuperTabla registro) throws Exception {
          String casa = String.valueOf(txt_casa.getSelectedItem());
@@ -185,13 +198,15 @@ private  Atencion atencion = new  Atencion();
         ate.setFecha(fecha);
         ate.setFecha_solucion(fecha_solucion);
      
-//To change body of generated methods, choose Tools | Templates.
     }
-
+    
+    /**
+     * Metodo que ejecuta una busqueda por el codigo
+     * @throws Exception 
+     */
     @Override
     public void ejecutarBusqueda() throws Exception {
-        
-            long codigo = 0;
+        long codigo = 0;
         codigo = (txt_codigo.getText().isEmpty()) 
                 ? -1 
                 : Long.parseLong(txt_codigo.getText());
@@ -202,15 +217,20 @@ private  Atencion atencion = new  Atencion();
           listaDatos.add(Atencion.buscar(codigo));  
         }
         txt_codigo.setEditable(false);
-    //To change body of generated methods, choose Tools | Templates.
     }
-
+    
+    /**
+     * Metodo habilitar busqueda
+     */
     @Override
     public void habilitarBusqueda() {
-         txt_codigo.setEditable(true);
-     txt_codigo.requestFocus();//To change body of generated methods, choose Tools | Templates.
+     txt_codigo.setEditable(true);
+     txt_codigo.requestFocus();
     }
-
+    
+    /**
+     * Imprime el reporte
+     */
     @Override
     public void imprimirJasper() {
          try {

@@ -14,7 +14,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 /**
- *
+ * Clase suscriptor 
  * @author Atención
  */
 public class Suscriptor implements SuperTabla{

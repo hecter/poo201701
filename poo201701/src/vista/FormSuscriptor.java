@@ -17,11 +17,11 @@ import modelo.SuperTabla;
 import modelo.atencion.Suscriptor;
 
 /**
- *
+ *  Formulario para ingresar los datos del suscriptor
  * @author leydi
  */
 public class FormSuscriptor extends FormTemplate {
-Calendar calendar = Calendar.getInstance();//Variable de Objeto Calendar
+
     /**
      * Creates new form FormSuscriptor
      */
@@ -29,10 +29,12 @@ Calendar calendar = Calendar.getInstance();//Variable de Objeto Calendar
         initComponents();
         mostrarRegistro(0);
         txt_codigo.setEditable(false);
-        //inicio();
     }
 
-    
+    /**
+     * Metodo limpiar formulario.
+     * Deja los campos en blanco o vacios
+     */
     @Override
     public void limpiarFormulario() {
             txt_codigo.setText(null);
@@ -43,6 +45,10 @@ Calendar calendar = Calendar.getInstance();//Variable de Objeto Calendar
             txt_ciudad_ex.setText(null);
     }
 
+    /**
+     * Muestra los registros en los campos de texto
+     * @param indice id del arraylist 
+     */
     @Override
     public void mostrarRegistro(int indice) {
         txt_codigo.requestFocus();
@@ -71,7 +77,11 @@ Calendar calendar = Calendar.getInstance();//Variable de Objeto Calendar
             txt_codigo.requestFocus();
         }
     }
-
+    
+    /**
+     * Metodo inicializar 
+     * carga los datos en el arraylist
+     */
     @Override
     public void inicializar() {
          try {
@@ -83,7 +93,13 @@ Calendar calendar = Calendar.getInstance();//Variable de Objeto Calendar
             Logger.getLogger(FormPais.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
+    /**
+     * Metodo obtener nuevo registro
+     * guarda un nuevo registro en la BD
+     * @return la clase suscriptor con los datos 
+     * @throws Exception 
+     */
     @Override
     public SuperTabla getNuevoRegistro() throws Exception {
         Suscriptor sub;
@@ -98,10 +114,17 @@ Calendar calendar = Calendar.getInstance();//Variable de Objeto Calendar
                 txt_documento.getText(), sqlDate, txt_ciudad_ex.getText());
         return sub;
     }
-
+    
+    /**
+     *  Metodo registro actual
+     *  Obtiene el registro que esta en pantalla
+     * para  guardarlo en la clase
+     * @param registro
+     * @throws Exception 
+     */
     @Override
     public void setRegistroActual(SuperTabla registro) throws Exception {
-         String fecha = jc_dia.getSelectedItem()+"-"+jc_meses.getSelectedIndex()+"-"+jc_anio.getSelectedItem();
+        String fecha = jc_dia.getSelectedItem()+"-"+jc_meses.getSelectedIndex()+"-"+jc_anio.getSelectedItem();
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         Date parsed = format.parse(fecha);
         java.sql.Date sqlDate = new java.sql.Date(parsed.getTime());
@@ -116,7 +139,12 @@ Calendar calendar = Calendar.getInstance();//Variable de Objeto Calendar
         sub.setCiudad_expedicion(txt_ciudad_ex.getText());
         sub.setF_expedicion(sqlDate);
     }
-
+    
+    /**
+     * Metodo ejecutar busqueda
+     * busca de acuerdo al id el suscriptor
+     * @throws Exception 
+     */
     @Override
     public void ejecutarBusqueda() throws Exception {
         txt_codigo.setEditable(true); 
@@ -132,13 +160,20 @@ Calendar calendar = Calendar.getInstance();//Variable de Objeto Calendar
         }
         
     }
-
+    
+    /**
+     * Metodo habilitar busqueda
+     * habilita el codigo para realizar la busqueda
+     */
     @Override
     public void habilitarBusqueda() {
      txt_codigo.setEditable(true);
-     txt_codigo.requestFocus(); //To change body of generated methods, choose Tools | Templates.
+     txt_codigo.requestFocus(); 
     }
 
+    /**
+     * Metodo imprimir reporte
+     */
     @Override
     public void imprimirJasper() {
         try {
@@ -150,27 +185,7 @@ Calendar calendar = Calendar.getInstance();//Variable de Objeto Calendar
         }
     }
        
-    /* private void inicio(){
-        //El array mes puede contener un registro vacío, se puede corregir con un pequeño ajuste...
-        //String[] mes = new java.text.DateFormatSymbols().getMonths();
-        //Tipo entero para año
-        int an = calendar.get(Calendar.YEAR);
-        int ms = calendar.get(Calendar.MONTH);
-        int di = calendar.get(Calendar.DATE);
-        
-        //Especificando modelos para cada Spinner
-        SpinnerModel modelDias = new SpinnerNumberModel(di,1,31,1);
-        SpinnerModel modelMes = new SpinnerNumberModel(ms,1,12,1);
-        //Parámetro numéricos
-        //public SpinnerNumberModel(int value, int minimum, int maximum, int stepSize)
-        //Valor inicial - valor mínimo - valor máximo - incremento a 1
-         SpinnerModel modelAnyo = new SpinnerNumberModel(an, an - 100, an + 100, 1);
-        //Agregamos el modelo a cada Spinner
-        dia.setModel(modelDias);
-        meses.setModel(modelMes);
-        anio.setModel(modelAnyo);
-    }
-    */
+   
     
     /**
      * This method is called from within the constructor to initialize the form.
