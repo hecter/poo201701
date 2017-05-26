@@ -200,7 +200,8 @@ public class Periodo implements SuperTabla {
         long secuencia = nextVal("PERIODOS_SEQ");
         setId(secuencia);
         BaseDatosOracle db = BaseDatosOracle.getInstance();
-        String sql = "INSERT INTO PERIODOS(ID, PERIODO, LECTURA, FACTURADO) VALUES (?,?, ?, ?)";
+        String sql = "INSERT INTO PERIODOS(ID, PERIODO, LECTURA, FACTURADO) "
+                + "VALUES (?,?, ?, ?)";
         int ejecucion;
         db.conectar();
         db.prepararSql(sql);
@@ -223,7 +224,8 @@ public class Periodo implements SuperTabla {
         BaseDatosOracle db = BaseDatosOracle.getInstance();
         String sql;
         int ejecucion;
-        sql = "UPDATE PERIODOS SET PERIODO = ?, LECTURA = ?, FACTURADO = ? WHERE ID = ?";
+        sql = "UPDATE PERIODOS SET PERIODO = ?, LECTURA = ?, "
+                + "FACTURADO = ? WHERE ID = ?";
         db.conectar();
         db.prepararSql(sql);
         db.asignarParametro(1, getPeriodo());
@@ -297,6 +299,6 @@ public class Periodo implements SuperTabla {
      */
     @Override
     public String obtenerNombreReporte() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
 }
