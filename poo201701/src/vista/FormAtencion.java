@@ -5,6 +5,7 @@
  */
 package vista;
 
+import basededatos.BaseDatosOracle;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -212,7 +213,13 @@ private  Atencion atencion = new  Atencion();
 
     @Override
     public void imprimirJasper() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         try {
+            listaDatos.get(indiceActual)
+                    .abrirReporte(BaseDatosOracle.getInstance().getConexion());
+
+        } catch (Exception ex) {
+            mostrarException(ex);
+        }
     }
     /**
      * This method is called from within the constructor to initialize the form.
