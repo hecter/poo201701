@@ -169,7 +169,7 @@ public class Atencion implements SuperTabla {
             motivo.setId(cursor.getInt("MOTIVOS_ID"));
             motivo.setMotivos(cursor.getString("MOTIVO"));
             usuario = new Usuario();
-            usuario.setId(cursor.getInt("USUARIOS_ID"));
+            usuario.setId(cursor.getString("USUARIOS_ID"));
             usuario.setNombre(cursor.getString("NOMBRE"));
             atencion = new Atencion(
                     cursor.getLong("ID"),
@@ -221,7 +221,7 @@ public class Atencion implements SuperTabla {
             motivo.setId(cursor.getInt("MOTIVOS_ID"));
             motivo.setMotivos(cursor.getString("MOTIVO"));
             usuario = new Usuario();
-            usuario.setId(cursor.getInt("USUARIOS_ID"));
+            usuario.setId(cursor.getString("USUARIOS_ID"));
             usuario.setNombre(cursor.getString("NOMBRE"));
 
             listaAtencion.add(new Atencion(

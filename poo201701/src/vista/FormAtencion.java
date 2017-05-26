@@ -28,7 +28,7 @@ private  Atencion atencion = new  Atencion();
      */
     public FormAtencion() {
         initComponents();
-         mostrarRegistro(0);
+        mostrarRegistro(0);
         txt_codigo.setEditable(false);
         try {
              txt_casa.removeAllItems();
@@ -59,11 +59,11 @@ private  Atencion atencion = new  Atencion();
     
       @Override
     public void limpiarFormulario() {
-        // txt_codigo.setText("");
-       //  txt_casa.setSelectedIndex(0);
-       //  txt_motivos.setSelectedIndex(0);
-       //  txt_usuario.setSelectedIndex(0);
-       //  txt_estado.setSelectedIndex(0);
+         txt_codigo.setText("");
+         txt_casa.setSelectedIndex(0);
+         txt_motivos.setSelectedIndex(0);
+         txt_usuario.setSelectedIndex(0);
+         txt_estado.setSelectedIndex(0);
     }
 
     @Override
@@ -77,8 +77,6 @@ private  Atencion atencion = new  Atencion();
         aten = (Atencion) listaDatos.get(indice);
        
         if (aten != null) {
-        
-            System.out.println(aten);
             txt_codigo.setText(aten.getId()+"");
             txt_casa.setSelectedItem((aten.getCasa().getId())+" - "+aten.getCasa().getDireccion());
             txt_estado.setSelectedItem(aten.getEstado().getId()+" - "+String.valueOf(aten.getEstado().getNombre()));
@@ -121,7 +119,7 @@ private  Atencion atencion = new  Atencion();
 
     @Override
     public SuperTabla getNuevoRegistro() throws Exception {
-        Atencion aten = new Atencion();
+        Atencion aten;
         String casa = String.valueOf(txt_casa.getSelectedItem());
         String estado = String.valueOf(txt_estado.getSelectedItem());
         String motivos = String.valueOf(txt_motivos.getSelectedItem());
@@ -137,13 +135,24 @@ private  Atencion atencion = new  Atencion();
         Date parsed2 = format2.parse(fecha2_combo);
         java.sql.Date fecha_solucion = new java.sql.Date(parsed2.getTime());
         
-       aten.getCasa().setId(Long.parseLong(casa.substring(0,1)));
-       aten.getEstado().setId(Long.parseLong(estado.substring(0,1)));
-       aten.getMotivos().setId(Long.parseLong(motivos.substring(0,1)));
-       aten.getUsuario().setId(Integer.parseInt(usuario.substring(0,1)));
-       //aten.setId(Long.parseLong(txt_codigo.getText()));
-       aten.setFecha(fecha);
-       aten.setFecha_solucion(fecha_solucion);
+        Casa cs = new Casa();
+        cs.setId(Long.parseLong(casa.substring(0,1)));
+        Estado es = new Estado();
+        es.setId(Long.parseLong(estado.substring(0,1)));
+        Motivo mt = new Motivo();
+        mt.setId(Long.parseLong(motivos.substring(0,1)));
+        Usuario us = new Usuario();
+        us.setId(usuario.substring(0,1));
+        
+        
+      // aten.getCasa().setId(Long.parseLong(casa.substring(0,1)));
+      // aten.getEstado().setId(Long.parseLong(estado.substring(0,1)));
+      // aten.getMotivos().setId(Long.parseLong(motivos.substring(0,1)));
+      // aten.getUsuario().setId(Integer.parseInt(usuario.substring(0,1)));
+      // aten.setFecha(fecha);
+      // aten.setFecha_solucion(fecha_solucion);
+       
+       aten = new Atencion(cs, es, fecha,fecha_solucion,mt,us);             
         return aten;
     }
 
@@ -170,7 +179,7 @@ private  Atencion atencion = new  Atencion();
         ate.getCasa().setId(Long.parseLong(casa.substring(0,1)));
         ate.getEstado().setId(Long.parseLong(estado.substring(0,1)));
         ate.getMotivos().setId(Long.parseLong(motivos.substring(0,1)));
-        ate.getUsuario().setId(Integer.parseInt(usuario.substring(0,1)));
+        ate.getUsuario().setId(usuario.substring(0,1));
         ate.setId(Long.parseLong(txt_codigo.getText()));
         ate.setFecha(fecha);
         ate.setFecha_solucion(fecha_solucion);

@@ -7,12 +7,13 @@ import static basededatos.Secuencia.nextVal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import modelo.SuperTabla;
 //import modelo.SuperTabla;
 
 /**
  * Luis Rueda
  */
-public class Periodo /*implements SuperTabla*/{
+public class Periodo implements SuperTabla{
      private long id;
      private long periodo;
      private int lectura;
@@ -101,7 +102,7 @@ public class Periodo /*implements SuperTabla*/{
         }
         return dato;
     }
-    
+    @Override
     public int insertar() throws SQLException{
         long secuencia = nextVal("PERIODOS_SEQ");
         setId(secuencia);
@@ -118,7 +119,7 @@ public class Periodo /*implements SuperTabla*/{
         db.cerrarSentencia();
         return ejecucion;
     }
-    
+    @Override
     public int actualizar() throws SQLException{
        BaseDatosOracle db = BaseDatosOracle.getInstance();
         String sql;
@@ -149,7 +150,7 @@ public class Periodo /*implements SuperTabla*/{
         db.cerrarSentencia();
         return ejecucion;
     }
-    
+    @Override
     public int eliminar() throws SQLException{
         BaseDatosOracle db = BaseDatosOracle.getInstance();
         System.err.println(getId());
@@ -174,10 +175,10 @@ public class Periodo /*implements SuperTabla*/{
         return reg.next();
     }
 
-    /*@Override
+    @Override
     public String obtenerNombreReporte() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }*/
+    }
 }
 
 
