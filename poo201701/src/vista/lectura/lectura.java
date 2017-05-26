@@ -89,7 +89,12 @@ public class lectura extends javax.swing.JFrame/*FormTemplate*/ {
         jLabel7 = new javax.swing.JLabel();
         btreload = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         tablaDatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -148,7 +153,6 @@ public class lectura extends javax.swing.JFrame/*FormTemplate*/ {
 
         txusuario.setEditable(false);
         txusuario.setBackground(new java.awt.Color(204, 255, 204));
-        txusuario.setText("1");
 
         btinsertar.setText("LEER");
         btinsertar.addActionListener(new java.awt.event.ActionListener() {
@@ -174,7 +178,6 @@ public class lectura extends javax.swing.JFrame/*FormTemplate*/ {
 
         txsector.setEditable(false);
         txsector.setBackground(new java.awt.Color(204, 255, 204));
-        txsector.setText("1");
 
         txperiodo.setEditable(false);
         txperiodo.setBackground(new java.awt.Color(204, 255, 204));
@@ -380,6 +383,11 @@ public class lectura extends javax.swing.JFrame/*FormTemplate*/ {
         limpiar();
     }//GEN-LAST:event_btreloadActionPerformed
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        msn(this, "ADIOS", "MENSAJE", 0);
+    }//GEN-LAST:event_formWindowClosing
+
     /**
      * @param args the command line arguments
      */
@@ -442,8 +450,8 @@ public class lectura extends javax.swing.JFrame/*FormTemplate*/ {
     private javax.swing.JTextField txcausal;
     private javax.swing.JTextField txlectura;
     private javax.swing.JTextField txperiodo;
-    private javax.swing.JTextField txsector;
+    public static javax.swing.JTextField txsector;
     private javax.swing.JTextField txserial;
-    private javax.swing.JTextField txusuario;
+    public static javax.swing.JTextField txusuario;
     // End of variables declaration//GEN-END:variables
 }

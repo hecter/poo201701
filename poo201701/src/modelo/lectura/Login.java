@@ -5,12 +5,17 @@
  */
 package modelo.lectura;
 
+import Messages.Mensajes;
+import static Messages.Mensajes.msn;
 import basededatos.BaseDatosOracle;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.swing.JFrame;
 import modelo.pagos.Rol;
-import modelo.pagos.Usuario;
+import vista.FormLogin;
+import vista.lectura.index;
+import vista.lectura.lectura;
 
 /**
  *
@@ -25,7 +30,7 @@ public class Login {
     private Rol rol;
 
     public Login(String usuario, String clave) {
-        login=null;
+        login = new ArrayList<>();
         this.usuario = usuario;
         this.clave = clave;
     }
@@ -37,6 +42,11 @@ public class Login {
         this.rol = rol;
     }
     
+    public Login(String usuario, String nombre, Rol rol) {
+        this.usuario = usuario;
+        this.nombre = nombre;
+        this.rol = rol;
+    }
     
 
     public String getClave() {
@@ -79,7 +89,7 @@ public class Login {
         this.rol = rol;
     }
     
-    public void autenticar() throws SQLException{
+    public void autenticar(JFrame ventana) throws SQLException{
         BaseDatosOracle bd = BaseDatosOracle.getInstance();
         String sql = "SELECT "
                         + "USUARIOS.ID, "
@@ -90,7 +100,7 @@ public class Login {
                         + "SECTORES.DET AS SECTOR_DET "
                     + "FROM "
                         + "USUARIOS "
-                    + "INNER JOIN SECTORES "
+                    + "LEFT JOIN  SECTORES "
                         + "ON SECTORES.ID = USUARIOS.SECTOR_ID "
                     + "INNER JOIN ROLES "
                         + "ON ROLES.ID = USUARIOS.ROLES_ID "
@@ -103,27 +113,53 @@ public class Login {
         bd.asignarParametro(1, getUsuario());
         bd.asignarParametro(2, getClave());
         ResultSet reg = bd.ejecutarQuery();
-        while (reg.next()) {
+        bd.cerrarSentencia();
+        if (reg.next()) {
+            ventana.setVisible(false);
             if(reg.getLong("ROLES_ID")>=5 & reg.getLong("ROLES_ID") <=7){
                 int rol_id = reg.getInt("ROLES_ID");
                 String rol_det = reg.getString("ROLES_DET");
-                int sector_id = reg.getInt("SECTOR_ID");
-                String sector_det = reg.getString("SECTOR_DET");
                 Rol r = new Rol(rol_id, rol_det);
-                Sector s = new Sector(sector_id, sector_det);
-                Login l = new Login(reg.getString("ID"), reg.getString("NOMBRE"), s, r);
-                login.clear();
-                login.add(l);
+                if(reg.getString("SECTOR_ID")!=null){
+                    int sector_id = reg.getInt("SECTOR_ID");
+                    String sector_det = reg.getString("SECTOR_DET");
+                    Sector s = new Sector(sector_id, sector_det);
+                    Login l = new Login(reg.getString("ID"), reg.getString("NOMBRE"), s, r);
+                    login.clear();
+                    login.add(l);
+                }else{
+                    Login l = new Login(reg.getString("ID"), reg.getString("NOMBRE"), r);
+                    login.clear();
+                    login.add(l);
+                }
                 if(rol_id==5){//LECTURA -
                     
                 }else{
                     if(rol_id==6){//TECNICO_LECTURA
-                        
+                        if(reg.getString("SECTOR_DET")!=null){
+                            lectura l = new lectura();
+                            l.txusuario.setText(login.get(0).getUsuario());
+                            l.txsector.setText(String.valueOf(login.get(0).getSector().getId()));
+                            FormLogin.limpiar();
+                            l.setVisible(true);
+                        }else{
+                            msn(ventana, "NO PUEDES INGRESAR AL "
+                                    + "SISTEMA\n ACERCATE AL AREA ENCARGADA "
+                                    + "\nPARA QUE TE ASIGNE UN SECTOR",
+                                    "ERROR", 0);
+                            FormLogin.limpiar();
+                            ventana.setVisible(true);
+                        }
                     }else{//ADMIN_LECTURA
-                        
+                        FormLogin.limpiar();
+                        new index().setVisible(true);
                     }
                 }
             }
+        }else{
+            FormLogin.limpiar();
+            ventana.setVisible(true);
+            msn(ventana, "USAURIO O CLAVE ERRADOS", "ERROR", 0);
         }
     }
 }

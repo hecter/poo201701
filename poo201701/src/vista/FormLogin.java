@@ -22,8 +22,11 @@ import basededatos.Usuario;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelo.lectura.Login;
+import vista.lectura.lectura;
 
 /**
  *
@@ -44,6 +47,12 @@ public class FormLogin extends javax.swing.JFrame {
                 screenSize.height / 2 - HEIGHT / 2);
         setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(0);
+    }
+    
+    public static void limpiar(){
+        txusuario.setText("");
+        txclave.setText("");
+        txusuario.requestFocus();
     }
 
     /**
@@ -162,8 +171,12 @@ public class FormLogin extends javax.swing.JFrame {
         String usuario=txusuario.getText();
         String clave = txclave.getText();
         if (usuario.length() != 0 & clave.length() != 0) {
-            Login login = new Login(usuario, clave);
-            login.autenticar();
+            try {
+                Login login = new Login(usuario, clave);
+                login.autenticar(this);
+            } catch (SQLException ex) {
+                Logger.getLogger(FormLogin.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_buttonAceptarActionPerformed
 
@@ -248,7 +261,7 @@ public class FormLogin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JPasswordField txclave;
-    private javax.swing.JTextField txusuario;
+    public static javax.swing.JPasswordField txclave;
+    public static javax.swing.JTextField txusuario;
     // End of variables declaration//GEN-END:variables
 }
