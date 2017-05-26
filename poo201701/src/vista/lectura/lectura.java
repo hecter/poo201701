@@ -62,7 +62,10 @@ public class lectura extends javax.swing.JFrame/*FormTemplate*/ {
         try {
             //Medidor medidor = new Medidor();
             ArrayList<String> listado;
-                listado = Lectura.ListarPorLeer(txusuario.getText(), txsector.getText(), txperiodo.getText());
+                String u = txusuario.getText();
+                String s = txsector.getText();
+                String p = txperiodo.getText();
+                listado = Lectura.ListarPorLeer(u, s, p);
                 if (!listado.isEmpty()) {
                     listado.stream().forEach((dato) -> {
                         String[] array = dato.split("\\;");
