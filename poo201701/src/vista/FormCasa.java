@@ -50,6 +50,7 @@ public class FormCasa extends FormTemplate {
     }
     @Override
     public void limpiarFormulario() {
+        txt_codigo.setValue(null);
             txt_direccion.setText(null);
             txt_ciudad.setText(null);
             txt_estrato.setText(null);

@@ -107,7 +107,7 @@ import modelo.lectura.Sector;
         this.sector = sector;
     }
       public String obtenerNombreSecuencia() {
-        return "CASAS_SEQ";
+        return "CASA_SEQ";
     }
       public long getconsecutivo() throws SQLException{
         return Secuencia.nextVal(obtenerNombreSecuencia());
