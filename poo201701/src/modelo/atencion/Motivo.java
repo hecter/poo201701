@@ -17,7 +17,7 @@ import report.facturacion.Concepto;
 
 /**
  *
- * @author 20111532577
+ * @author Yera
  */
 public class Motivo implements SuperTabla{
     private long id;
@@ -78,14 +78,14 @@ public class Motivo implements SuperTabla{
         sql = "INSERT INTO MOTIVOS "
                 + "(ID, MOTIVO, CONCEPTOS_ID)"
                 + " VALUES "
-                + "(?, ?, ?, ?, ?, ?, ?)";
+                + "(?, ?, ?)";
         basededatos.conectar();
         basededatos.prepararSql(sql);
         
         System.out.println(this);
         basededatos.asignarParametro(1, getId());
         basededatos.asignarParametro(2, getMotivos());
-        basededatos.asignarParametro(3, getConcepto().getId());
+///        basededatos.asignarParametro(3, getConcepto.getId());
         ejecucion = basededatos.ejecutar();
         basededatos.cerrarSentencia();
         return ejecucion;      }
@@ -112,17 +112,41 @@ public class Motivo implements SuperTabla{
         int ejecucion;
         sql = "UPDATE MOTIVOS "
                 + "SET MOTIVO = ?, "
-                + "CONCEPTOS_ID = ?, "
+                + "CONCEPTOS_ID = ? "
                 + "WHERE ID = ?";
         basededatos.conectar();
         basededatos.prepararSql(sql);
         basededatos.asignarParametro(1, getMotivos());
-        basededatos.asignarParametro(2, getConcepto().getId());
+//        basededatos.asignarParametro(2, getConcepto.getId());
         ejecucion = basededatos.ejecutar();
         basededatos.cerrarSentencia();
         return ejecucion;     
     }
 
+        public static Motivo buscar(long codigo) throws SQLException,
+            Exception {
+        Motivo mot;
+         BaseDatosOracle basededatos;
+         ResultSet cursor;
+        String sql;
+        basededatos = BaseDatosOracle.getInstance();
+       sql = " SELECT MT.ID,MT.MOTIVO,MT.CONCEPTOS_ID,CON.DESCRIPCION " +
+                " FROM MOTIVOS MT " +
+                " INNER JOIN CONCEPTOS CON ON CON.ID=MT.CONCEPTOS_ID "
+                + "WHERE ID=? ORDER BY ID ";
+        basededatos.conectar();
+        basededatos.prepararSql(sql);
+        basededatos.asignarParametro(1, codigo);
+        cursor = basededatos.ejecutarQuery();
+        mot = null;
+        if (cursor.next()) {
+            Concepto c = new Concepto();
+            mot = new Motivo(cursor.getLong("ID"),
+                    cursor.getString("MOTIVO"),c);
+        }
+        return mot;
+    }
+    
     public static ArrayList<Motivo> buscar() throws SQLException,
             Exception {
         ArrayList<Motivo> listaMotivo;

@@ -5,7 +5,11 @@
  */
 package vista;
 
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import modelo.SuperTabla;
+import modelo.atencion.Motivo;
 
 /**
  *
@@ -152,37 +156,73 @@ public class FormMotivo extends FormTemplate {
     @Override
     public void limpiarFormulario() {
         tx_codigo.setText("");
-        tx_motivo.setText("");    
+        tx_motivo.setText(""); 
+        cb_concepto.setSelectedIndex(0);
     }
 
     @Override
     public void mostrarRegistro(int indice) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       if (indice < 0 || listaDatos.isEmpty()) {
+            limpiarFormulario();
+            return;
+        }
+        Motivo mot;
+        mot = (Motivo) listaDatos.get(indice);
+        if (mot != null) {
+            tx_motivo.setText(mot.getMotivos());
+            tx_codigo.setText(mot.getId()+"");
+         
+        }
     }
 
     @Override
     public void inicializar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            listaDatos = new ArrayList<>();
+            listaDatos.addAll(Motivo.buscar());
+            indiceActual = 0;
+
+            habilitarNavegacion();
+        } catch (Exception ex) {
+            Logger.getLogger(FormEstado.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     public SuperTabla getNuevoRegistro() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Motivo motivo;
+        motivo = new Motivo();
+        return motivo;
     }
 
     @Override
     public void setRegistroActual(SuperTabla registro) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Motivo mot;
+        mot = (Motivo) registro;
+        mot.setId(Long.parseLong(tx_codigo.getText()));
+        mot.setMotivos(tx_motivo.getText()); 
     }
 
     @Override
     public void ejecutarBusqueda() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        long codigo = 0;
+        codigo = (tx_codigo.getText().isEmpty()) ? 0 : Long.parseLong(tx_codigo.getText());
+        listaDatos = new ArrayList<>();
+        if(codigo == 0){
+           listaDatos.addAll(Motivo.buscar());
+        }else{
+          listaDatos.add(Motivo.buscar(codigo));  
+        }
+        tx_codigo.setEditable(false);
+        
+        
     }
-
+//
     @Override
     public void habilitarBusqueda() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       tx_codigo.setEditable(true);
+       tx_codigo.requestFocus();
     }
 
     @Override
