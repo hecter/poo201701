@@ -116,47 +116,48 @@ public class Login {
         bd.cerrarSentencia();
         if (reg.next()) {
             ventana.setVisible(false);
-            if(reg.getLong("ROLES_ID")>=5 & reg.getLong("ROLES_ID") <=7){
+            if (reg.getLong("ROLES_ID") >= 6 & reg.getLong("ROLES_ID") <= 7) {
                 int rol_id = reg.getInt("ROLES_ID");
                 String rol_det = reg.getString("ROLES_DET");
                 Rol r = new Rol(rol_id, rol_det);
-                if(reg.getString("SECTOR_ID")!=null){
+                if (reg.getString("SECTOR_ID") != null) {
                     int sector_id = reg.getInt("SECTOR_ID");
                     String sector_det = reg.getString("SECTOR_DET");
                     Sector s = new Sector(sector_id, sector_det);
                     Login l = new Login(reg.getString("ID"), reg.getString("NOMBRE"), s, r);
                     login.clear();
                     login.add(l);
-                }else{
+                } else {
                     Login l = new Login(reg.getString("ID"), reg.getString("NOMBRE"), r);
                     login.clear();
                     login.add(l);
                 }
-                if(rol_id==5){//LECTURA -
-                    
-                }else{
-                    if(rol_id==6){//TECNICO_LECTURA
-                        if(reg.getString("SECTOR_DET")!=null){
-                            lectura l = new lectura();
-                            l.txusuario.setText(login.get(0).getUsuario());
-                            l.txsector.setText(String.valueOf(login.get(0).getSector().getId()));
-                            FormLogin.limpiar();
-                            l.setVisible(true);
-                        }else{
-                            msn(ventana, "NO PUEDES INGRESAR AL "
-                                    + "SISTEMA\n ACERCATE AL AREA ENCARGADA "
-                                    + "\nPARA QUE TE ASIGNE UN SECTOR",
-                                    "ERROR", 0);
-                            FormLogin.limpiar();
-                            ventana.setVisible(true);
-                        }
-                    }else{//ADMIN_LECTURA
+                if (rol_id == 6) {//TECNICO_LECTURA
+                    if (reg.getString("SECTOR_DET") != null) {
+                        lectura l = new lectura();
+                        l.txusuario.setText(login.get(0).getUsuario());
+                        l.txsector.setText(String.valueOf(login.get(0).getSector().getId()));
                         FormLogin.limpiar();
-                        new index().setVisible(true);
+                        l.setVisible(true);
+                    } else {
+                        msn(ventana, "NO PUEDES INGRESAR AL "
+                                + "SISTEMA\n ACERCATE AL AREA ENCARGADA "
+                                + "\nPARA QUE TE ASIGNE UN SECTOR",
+                                "ERROR", 0);
+                        FormLogin.limpiar();
+                        ventana.setVisible(true);
                     }
+                } else {//ADMIN_LECTURA
+                    FormLogin.limpiar();
+                    new index().setVisible(true);
                 }
+            } else {
+                /**
+                 * *
+                 * cada modulo coloque su codigo aqui dependiendo de su rol
+                 */
             }
-        }else{
+        } else {
             FormLogin.limpiar();
             ventana.setVisible(true);
             msn(ventana, "USAURIO O CLAVE ERRADOS", "ERROR", 0);

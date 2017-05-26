@@ -26,7 +26,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelo.lectura.Login;
-import vista.lectura.lectura;
 
 /**
  *
