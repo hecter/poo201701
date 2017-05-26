@@ -207,7 +207,7 @@ public class lectura extends javax.swing.JFrame/*FormTemplate*/ {
             }
         });
 
-        jLabel7.setText("Periodo Actual: ");
+        jLabel7.setText("Periodo A Leer: ");
 
         btreload.setText("Reload");
         btreload.addActionListener(new java.awt.event.ActionListener() {
@@ -298,7 +298,7 @@ public class lectura extends javax.swing.JFrame/*FormTemplate*/ {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(

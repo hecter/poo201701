@@ -27,7 +27,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="427" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" pref="426" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -296,7 +296,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel7">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Periodo Actual: "/>
+            <Property name="text" type="java.lang.String" value="Periodo A Leer: "/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="btreload">
