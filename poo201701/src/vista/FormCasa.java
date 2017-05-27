@@ -48,6 +48,9 @@ public class FormCasa extends FormTemplate {
         
         
     }
+    /**
+     * 
+     */
     @Override
     public void limpiarFormulario() {
         txt_codigo.setValue(null);
@@ -55,7 +58,10 @@ public class FormCasa extends FormTemplate {
             txt_ciudad.setText(null);
             txt_estrato.setText(null);
             txt_telefono.setText(null);    }
-
+     /**
+      * 
+      * @param indice 
+      */
     @Override
     public void mostrarRegistro(int indice) {
           txt_codigo.requestFocus();
@@ -77,7 +83,9 @@ public class FormCasa extends FormTemplate {
             sector.setSelectedItem(casa.getSector());
             txt_codigo.requestFocus();
         }    }
-
+     /**
+      * 
+      */
     @Override
     public void inicializar() {
         try {
@@ -88,7 +96,11 @@ public class FormCasa extends FormTemplate {
         } catch (Exception ex) {
             Logger.getLogger(FormPais.class.getName()).log(Level.SEVERE, null, ex);
         }    }
-
+      /**
+       * 
+       * @return
+       * @throws Exception 
+       */
     @Override
     public SuperTabla getNuevoRegistro() throws Exception {   
          Casa casa;
@@ -111,7 +123,11 @@ public class FormCasa extends FormTemplate {
         return casa;
         
     }
-
+     /**
+      * 
+      * @param registro
+      * @throws Exception 
+      */
     @Override
     public void setRegistroActual(SuperTabla registro) throws Exception {
         String suscript = String.valueOf(suscriptor.getSelectedItem());
@@ -127,7 +143,10 @@ public class FormCasa extends FormTemplate {
         
         casa.setId(Long.parseLong(txt_codigo.getText()));
            }
-
+      /**
+       * 
+       * @throws Exception 
+       */
     @Override
     public void ejecutarBusqueda() throws Exception {
           long codigo = 0;
@@ -141,12 +160,16 @@ public class FormCasa extends FormTemplate {
           listaDatos.add(Casa.buscar(codigo));  
         }
         txt_codigo.setEditable(false);    }
-
+   /**
+    * 
+    */
     @Override
     public void habilitarBusqueda() {
      txt_codigo.setEditable(true);
      txt_codigo.requestFocus();    }
-
+     /**
+      * 
+      */
     @Override
     public void imprimirJasper() {
             try {

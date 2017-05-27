@@ -25,7 +25,16 @@ import modelo.lectura.Sector;
     private String ciudad;
     private Suscriptor  suscriptor;
     private Sector sector;
-
+ /**
+  *    constructor
+  * @param id
+  * @param direccion
+  * @param telefono
+  * @param estrato
+  * @param ciudad
+  * @param suscriptor
+  * @param sector 
+  */
     public Casa(long id, String direccion, String telefono, long estrato, 
             String ciudad, Suscriptor suscriptor, Sector sector) {
         setId(id);
@@ -36,10 +45,21 @@ import modelo.lectura.Sector;
         setSuscriptor(suscriptor);
         setSector(sector);
     }
-
+ /**
+  * constructor vacio
+  */
     public Casa() {
     }
-
+ /**
+  * constructor para guardar
+  * @param direccion
+  * @param telefono
+  * @param estrato
+  * @param ciudad
+  * @param suscriptor
+  * @param sector
+  * @throws SQLException 
+  */
     public Casa(String direccion, String telefono, long estrato, 
             String ciudad, Suscriptor suscriptor, Sector sector) throws SQLException {
           setId(getconsecutivo());
@@ -50,68 +70,124 @@ import modelo.lectura.Sector;
         setSuscriptor(suscriptor);
         setSector(sector);
     }
-
+  /**
+   * 
+   * @return id
+   */
     public long getId() {
         return id;
     }
-
+ /** 
+  * 
+  * @param id 
+  */
     public void setId(long id) {
         this.id = id;
     }
-
+/**
+ * 
+ * @return direccion
+ */
     public String getDireccion() {
         return direccion;
     }
-
+/**
+ * 
+ * @param direccion 
+ */
     public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
-
+/**
+ * 
+ * @return telefono
+ */
     public String getTelefono() {
         return telefono;
     }
-
+/**
+ * 
+ * @param telefono 
+ */
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
-
+/**
+ * 
+ * @return estrato
+ */
     public long getEstrato() {
         return estrato;
     }
-
+/**
+ * 
+ * @param estrato 
+ */
     public void setEstrato(long estrato) {
         this.estrato = estrato;
     }
-
+/**
+ * 
+ * @return ciudad
+ */
     public String getCiudad() {
         return ciudad;
     }
-
+/**
+ * 
+ * @param ciudad 
+ */
     public void setCiudad(String ciudad) {
         this.ciudad = ciudad;
     }
-
+/**
+ * 
+ * @return suscriptor
+ */
     public Suscriptor getSuscriptor() {
         return suscriptor;
     }
-
+/**
+ * 
+ * @param suscriptor 
+ */
     public void setSuscriptor(Suscriptor suscriptor) {
         this.suscriptor = suscriptor;
     }
-
+/**
+ * 
+ * @return sector
+ */
     public Sector getSector() {
         return sector;
     }
-
+/**
+ * 
+ * @param sector 
+ */
     public void setSector(Sector sector) {
         this.sector = sector;
     }
+    /**
+     * 
+     * @return secuencia
+     */
       public String obtenerNombreSecuencia() {
         return "CASA_SEQ";
     }
+      /**
+       * 
+       * @return
+       * @throws SQLException 
+       */
       public long getconsecutivo() throws SQLException{
         return Secuencia.nextVal(obtenerNombreSecuencia());
     }
+      /**
+       * 
+       * @return
+       * @throws SQLException 
+       */
     @Override
     public int insertar() throws SQLException {
        BaseDatosOracle basededatos;
@@ -136,7 +212,11 @@ import modelo.lectura.Sector;
         ejecucion = basededatos.ejecutar();
         basededatos.cerrarSentencia();
         return ejecucion;    }
-
+ /**
+  * 
+  * @return
+  * @throws SQLException 
+  */
     @Override
     public int eliminar() throws SQLException {
         BaseDatosOracle basededatos;
@@ -151,7 +231,11 @@ import modelo.lectura.Sector;
         basededatos.cerrarSentencia();
         return ejecucion;    
     }
-
+/**
+ * 
+ * @return
+ * @throws SQLException 
+ */
     @Override
     public int actualizar() throws SQLException {
       BaseDatosOracle basededatos;
@@ -179,7 +263,13 @@ import modelo.lectura.Sector;
         basededatos.cerrarSentencia();
         return ejecucion;    }
 
-    
+    /**
+     * 
+     * @param codigo
+     * @return
+     * @throws SQLException
+     * @throws Exception 
+     */
     public static Casa buscar(long codigo) throws SQLException,
             Exception {
         Casa cas;
@@ -215,7 +305,12 @@ import modelo.lectura.Sector;
         }
         return cas;
     }
-     
+     /**
+      * 
+      * @return
+      * @throws SQLException
+      * @throws Exception 
+      */
      public static ArrayList<Casa> buscar() throws SQLException,
             Exception {
         ArrayList<Casa> listaCas;
@@ -255,6 +350,10 @@ import modelo.lectura.Sector;
         }
         return listaCas;
     }
+     /**
+      * 
+      * @return 
+      */
     @Override
     public String obtenerNombreReporte() {
         return "/report/atencion/ReportCasa.jrxml";    
