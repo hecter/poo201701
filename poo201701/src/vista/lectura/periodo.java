@@ -444,7 +444,7 @@ public class periodo extends javax.swing.JFrame/*FormTemplate*/ {
             } else {
                 txlno.setSelected(true);
             }
-            if (tablaDatos.getValueAt(fila, 3).toString().equals("NO")) {
+            if (tablaDatos.getValueAt(fila, 3).toString().equals("SI")) {
                 txfsi.setSelected(true);
             } else {
                 txfno.setSelected(true);
