@@ -25,6 +25,7 @@ import modelo.pagos.Usuario;
  * @author 20102122476
  */
 public class periodo extends javax.swing.JFrame/*FormTemplate*/ {
+
     /**
      * Creates new form sector
      */
@@ -43,55 +44,70 @@ public class periodo extends javax.swing.JFrame/*FormTemplate*/ {
         loadTable();
         limpiar();
     }
-    
-    private void close(){
-        int respuesta =  JOptionPane.showConfirmDialog(
-                this, 
-                "¿ Realmente Deseas Salir ?", "GAS COLOMBIA", 
+
+    private void close() {
+        int respuesta = JOptionPane.showConfirmDialog(
+                this,
+                "¿ Realmente Deseas Salir ?", "GAS COLOMBIA",
                 JOptionPane.YES_NO_OPTION
-        ); 
-        if(respuesta==0){
+        );
+        if (respuesta == 0) {
             dispose();
         }
     }
-    
-    public void limpiar(){
+
+    public void limpiar() {
         txid.setText("");
         txperiodo.setText("");
         txlno.setSelected(true);
         txfno.setSelected(true);
         txid.requestFocus();
     }
-    
-    public void loadTable(){
+
+    public void loadTable() {
         limpiarTabla(tablaDatos);
         try {
             Periodo periodo = new Periodo();
             ArrayList<Periodo> listado;
-                listado = periodo.listar();
-                if (!listado.isEmpty()) {
-                    listado.stream().forEach((dato) -> {
-                        DefaultTableModel tb = (DefaultTableModel) tablaDatos.getModel();
-                        Vector datos = new Vector();
-                        datos.add(dato.getId());
-                        datos.add(dato.getPeriodo());
-                        datos.add(dato.getLectura());
-                        datos.add(dato.getFacturado());
-                        tb.addRow(datos);
+            listado = periodo.listar();
+            if (!listado.isEmpty()) {
+                listado.stream().forEach((dato) -> {
+                    DefaultTableModel tb = (DefaultTableModel) tablaDatos.getModel();
+                    Vector datos = new Vector();
+                    datos.add(dato.getId());
+                    datos.add(dato.getPeriodo());
+                    int l = Integer.parseInt(dato.getLectura() + "");
+                    if (l == 0) {
+                        datos.add("NO");
+                    } else {
+                        datos.add("SI");
+                    }
+                    int f = Integer.parseInt(dato.getFacturado() + "");
+                    if (f == 0) {
+                        datos.add("NO");
+                    } else {
+                        datos.add("SI");
+                    }
+
+                    tb.addRow(datos);
                 });
-                }        
+            }
         } catch (SQLException ex) {
             msn(this, ex.getMessage(), "ERROR", 0);
         }
     }
-    
-    public void insertar(){
-        if (txperiodo.getText().length() != 0 ) {
+
+    public void insertar() {
+        if (txperiodo.getText().length() != 0) {
             try {
-                if(!Periodo.existe(Long.parseLong(txperiodo.getText()))){
-                    int lectura=0, facturado = 0;
-                    if(txlsi.isSelected()) lectura = 1;
-                    if(txfsi.isSelected()) facturado = 1;                    
+                if (!Periodo.existe(Long.parseLong(txperiodo.getText()))) {
+                    int lectura = 0, facturado = 0;
+                    if (txlsi.isSelected()) {
+                        lectura = 1;
+                    }
+                    if (txfsi.isSelected()) {
+                        facturado = 1;
+                    }
                     Periodo periodo = new Periodo(Long.parseLong(txperiodo.getText()), lectura, facturado);
                     int insertados = periodo.insertar();
                     limpiar();
@@ -117,7 +133,7 @@ public class periodo extends javax.swing.JFrame/*FormTemplate*/ {
                                     Logger.getLogger(periodo.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             });
-                            msn(this, "SE INSERTÓ "+(1+medidores.size())+" REGISTROS", "MENSAJE", 1);
+                            msn(this, "SE INSERTÓ " + (1 + medidores.size()) + " REGISTROS", "MENSAJE", 1);
                         } catch (SQLException ex) {
                             Logger.getLogger(periodo.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -159,13 +175,13 @@ public class periodo extends javax.swing.JFrame/*FormTemplate*/ {
                             Logger.getLogger(periodo.class.getName()).log(Level.SEVERE, null, ex);
                         }*/
                     }
-                }else{
+                } else {
                     msn(this, "REGISTRO EXISTENTE", "ERROR", 0);
                 }
             } catch (SQLException ex) {
                 msn(this, ex.getMessage(), "ERROR", 0);
             }
-        }else{
+        } else {
             msn(this, "DEBES DIGITAR UN SERIAL Y UN COSTO", "ERROR", 0);
         }
     }
@@ -419,57 +435,60 @@ public class periodo extends javax.swing.JFrame/*FormTemplate*/ {
 
     private void tablaDatosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaDatosMouseClicked
         // TODO add your handling code here:
-        try{
+        try {
             int fila = tablaDatos.getSelectedRow();
             txid.setText(tablaDatos.getValueAt(fila, 0).toString());
             txperiodo.setText(tablaDatos.getValueAt(fila, 1).toString());
-            if(tablaDatos.getValueAt(fila, 2).toString().equals("1")){
+            if (tablaDatos.getValueAt(fila, 2).toString().equals("SI")) {
                 txlsi.setSelected(true);
-            }
-            else{
+            } else {
                 txlno.setSelected(true);
             }
-            if(tablaDatos.getValueAt(fila, 3).toString().equals("1")){
+            if (tablaDatos.getValueAt(fila, 3).toString().equals("NO")) {
                 txfsi.setSelected(true);
-            }
-            else{
+            } else {
                 txfno.setSelected(true);
             }
-        }catch(Exception ex){}
-        
+        } catch (Exception ex) {
+        }
+
     }//GEN-LAST:event_tablaDatosMouseClicked
 
     private void btactualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btactualizarActionPerformed
         // TODO add your handling code here:
         if (txid.getText().length() != 0 & txperiodo.getText().length() != 0) {
-                try {
-                    if (!Periodo.existe(Long.parseLong(txperiodo.getText()))) {
-                        long id = Long.parseLong(txid.getText());
-                        long per = Long.parseLong(txperiodo.getText());
-                        Periodo periodo = new Periodo(id, per);
-                        int actualizados = periodo.actualizar();
-                        msn(this, "SE ACTUALIZO " + actualizados + " REGISTRO(S)", "MENSAJE", 1);
-                        if (actualizados > 0) {
-                            loadTable();
-                        }
-                    } else {
-                        long id = Long.parseLong(txid.getText());
-                        long per = Long.parseLong(txperiodo.getText());
-                        int lectura=0, facturado = 0;
-                        if(txlsi.isSelected()) lectura = 1;
-                        if(txfsi.isSelected()) facturado = 1;
-                        Periodo periodo = new Periodo(id, per, lectura, facturado);
-                        int actualizados = periodo.actualizarLecturaFacturado();
-                        msn(this, "SE ACTUALIZO " + actualizados + " REGISTRO(S)", "MENSAJE", 1);
-                        if (actualizados > 0) {
-                            loadTable();
-                        }
+            try {
+                if (!Periodo.existe(Long.parseLong(txperiodo.getText()))) {
+                    long id = Long.parseLong(txid.getText());
+                    long per = Long.parseLong(txperiodo.getText());
+                    Periodo periodo = new Periodo(id, per);
+                    int actualizados = periodo.actualizar();
+                    msn(this, "SE ACTUALIZO " + actualizados + " REGISTRO(S)", "MENSAJE", 1);
+                    if (actualizados > 0) {
+                        loadTable();
                     }
-                    limpiar();
-                } catch (SQLException ex) {
-                    msn(this, ex.getMessage(), "ERROR", 0);
-                }            
-        }else{
+                } else {
+                    long id = Long.parseLong(txid.getText());
+                    long per = Long.parseLong(txperiodo.getText());
+                    int lectura = 0, facturado = 0;
+                    if (txlsi.isSelected()) {
+                        lectura = 1;
+                    }
+                    if (txfsi.isSelected()) {
+                        facturado = 1;
+                    }
+                    Periodo periodo = new Periodo(id, per, lectura, facturado);
+                    int actualizados = periodo.actualizarLecturaFacturado();
+                    msn(this, "SE ACTUALIZO " + actualizados + " REGISTRO(S)", "MENSAJE", 1);
+                    if (actualizados > 0) {
+                        loadTable();
+                    }
+                }
+                limpiar();
+            } catch (SQLException ex) {
+                msn(this, ex.getMessage(), "ERROR", 0);
+            }
+        } else {
             msn(this, "NO SE ADMITEN CAMPOS VACIOS", "ERROR", 0);
         }
     }//GEN-LAST:event_btactualizarActionPerformed
@@ -478,7 +497,7 @@ public class periodo extends javax.swing.JFrame/*FormTemplate*/ {
         // TODO add your handling code here:
         if (txid.getText().length() != 0) {
             try {
-                Periodo periodo = new Periodo(Long.parseLong(txid.getText()),0);
+                Periodo periodo = new Periodo(Long.parseLong(txid.getText()), 0);
                 int eliminados = periodo.eliminar();
                 msn(this, "SE ELIMINO " + eliminados + " REGISTRO(S)", "MENSAJE", 1);
                 limpiar();
@@ -488,7 +507,7 @@ public class periodo extends javax.swing.JFrame/*FormTemplate*/ {
             } catch (SQLException ex) {
                 msn(this, ex.getMessage(), "ERROR", 0);
             }
-        }else{
+        } else {
             msn(this, "DEBES DIGITAR UN ID", "ERROR", 0);
         }
     }//GEN-LAST:event_bteliminarActionPerformed
