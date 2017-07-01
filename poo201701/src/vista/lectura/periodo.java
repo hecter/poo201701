@@ -82,12 +82,12 @@ public class periodo extends javax.swing.JFrame/*FormTemplate*/ {
                     } else {
                         datos.add("SI");
                     }
-                  /*  int f = Integer.parseInt(dato.getFacturado() + "");
+                      int f = Integer.parseInt(dato.getFacturado() + "");
                     if (f == 0) {
                         datos.add("NO");
                     } else {
                         datos.add("SI");
-                    }*/
+                    }
 
                     tb.addRow(datos);
                 });
